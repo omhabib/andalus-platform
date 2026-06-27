@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>منصة الأندلس | إدارة المدرسة</title>
+<meta name="theme-color" content="#1E3A6E" />
+<link rel="icon" href="Logo.jpeg" />
+
+<!-- ============================================================
+     خطوط جوجل (عربي عصري)
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   الهوية اللونية (مستوحاة من شعار مدارس الأندلس)
+   ============================================================ */
+:root{
+  --navy:#1E3A6E;        /* الأزرق الكحلي - اللون الرئيسي */
+  --navy-deep:#152A52;
+  --blue:#3B7DC4;        /* الأزرق السماوي */
+  --blue-soft:#6FA8DC;
+  --purple:#8E4B9E;      /* البنفسجي */
+  --red:#C0504D;         /* الأحمر المرجاني */
+  --ink:#22293A;
+  --muted:#6B7280;
+  --line:#E6E9F0;
+  --bg:#F4F6FB;
+  --card:#FFFFFF;
+  --shadow:0 10px 30px -12px rgba(30,58,110,.25);
+  --shadow-sm:0 4px 14px -8px rgba(30,58,110,.30);
+  --radius:18px;
+  --grad:linear-gradient(135deg,var(--navy) 0%,var(--blue) 55%,var(--purple) 100%);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Tajawal','Cairo',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============================================================
+   الترويسة العلوية
+   ============================================================ */
+.topbar{
+  background:var(--grad);
+  color:#fff;
+  padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 6px 24px -10px rgba(21,42,82,.6);
+}
+.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.brand .logo{
+  width:52px;height:52px;border-radius:14px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px -8px rgba(0,0,0,.4);flex-shrink:0;overflow:hidden;
+}
+.brand .logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.brand .titles{min-width:0}
+.brand .titles h1{font-family:'Cairo';font-size:18px;font-weight:900;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .titles p{margin:2px 0 0;font-size:12px;opacity:.85;font-weight:500}
+
+.topbar-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sync-pill{
+  display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+  background:rgba(255,255,255,.15);padding:7px 12px;border-radius:30px;
+  backdrop-filter:blur(4px);
+}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:#f1c40f;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.sync-dot.on{background:#34d399}
+.sync-dot.off{background:#ef4444}
+.sync-pill .txt{display:none}
+@media(min-width:520px){.sync-pill .txt{display:inline}}
+
+.btn{
+  border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;
+  padding:9px 16px;border-radius:30px;display:inline-flex;align-items:center;gap:7px;
+  transition:.18s;white-space:nowrap;
+}
+.btn-ghost{background:rgba(255,255,255,.16);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.28)}
+.btn-light{background:#fff;color:var(--navy)}
+.btn-light:hover{transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(0,0,0,.4)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow-sm)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ============================================================
+   شريط التبويبات
+   ============================================================ */
+.tabs-wrap{
+  background:var(--card);position:sticky;top:80px;z-index:40;
+  border-bottom:1px solid var(--line);box-shadow:0 4px 12px -10px rgba(30,58,110,.4);
+}
+.tabs{
+  display:flex;gap:6px;overflow-x:auto;padding:10px 14px;
+  scrollbar-width:none;-ms-overflow-style:none;max-width:1100px;margin:0 auto;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  border:0;background:transparent;cursor:pointer;font-family:inherit;
+  font-weight:700;font-size:14px;color:var(--muted);
+  padding:10px 16px;border-radius:12px;white-space:nowrap;transition:.18s;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.tab .ico{font-size:17px;line-height:1}
+.tab:hover{background:var(--bg);color:var(--navy)}
+.tab.active{background:var(--grad);color:#fff;box-shadow:var(--shadow-sm)}
+
+/* ============================================================
+   المحتوى
+   ============================================================ */
+.container{max-width:1100px;margin:0 auto;padding:22px 16px 80px}
+.panel{display:none;animation:fade .35s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.page-head .ttl{display:flex;align-items:center;gap:14px}
+.page-head .ttl .badge{
+  width:50px;height:50px;border-radius:15px;background:var(--grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--shadow-sm);
+}
+.page-head h2{font-family:'Cairo';font-size:23px;font-weight:900;margin:0;color:var(--navy)}
+.page-head .sub{margin:3px 0 0;color:var(--muted);font-size:13px;font-weight:500}
+
+/* بطاقات */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow-sm);transition:.2s;position:relative;overflow:hidden;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--accent,var(--blue))}
+
+.stat .n{font-family:'Cairo';font-size:32px;font-weight:900;color:var(--navy);line-height:1}
+.stat .l{color:var(--muted);font-weight:600;font-size:13px;margin-top:6px}
+.stat .ico{position:absolute;left:16px;top:16px;font-size:26px;opacity:.18}
+
+/* حالة فارغة / قيد الإنشاء */
+.empty{
+  background:var(--card);border:2px dashed var(--line);border-radius:var(--radius);
+  padding:46px 24px;text-align:center;color:var(--muted);
+}
+.empty .big{font-size:46px;margin-bottom:12px}
+.empty h3{font-family:'Cairo';color:var(--navy);font-size:19px;margin:0 0 8px}
+.empty p{margin:0 auto;max-width:440px;line-height:1.7;font-size:14px}
+
+/* صندوق الملاحظة المشتركة (تجريبي لإثبات المزامنة) */
+.note-box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);margin-top:18px}
+.note-box label{font-weight:700;color:var(--navy);display:block;margin-bottom:8px;font-size:14px}
+.note-box textarea{
+  width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;
+  font-family:inherit;font-size:14px;resize:vertical;min-height:80px;color:var(--ink);background:var(--bg);
+}
+.note-box textarea:disabled{opacity:.8;cursor:not-allowed}
+.note-meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+.viewer-hint{
+  display:none;align-items:center;gap:10px;background:#FFF7ED;border:1px solid #FED7AA;
+  color:#9A3412;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:18px;
+}
+body.viewer .viewer-hint{display:flex}
+.edit-only{display:none}
+body.editor .edit-only{display:inline-flex}
+
+/* ============================================================
+   النافذة المنبثقة (تسجيل دخول المحرر)
+   ============================================================ */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(21,42,82,.55);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-bg.show{display:flex}
+.modal{
+  background:#fff;border-radius:22px;padding:30px 26px;width:100%;max-width:380px;
+  box-shadow:0 30px 60px -20px rgba(21,42,82,.6);text-align:center;animation:pop .25s ease;
+}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .m-logo{width:64px;height:64px;border-radius:18px;background:var(--bg);margin:0 auto 14px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.modal .m-logo img{width:100%;height:100%;object-fit:contain;padding:6px}
+.modal h3{font-family:'Cairo';color:var(--navy);margin:0 0 6px;font-size:20px}
+.modal p{color:var(--muted);font-size:13px;margin:0 0 20px}
+.modal input{
+  width:100%;border:1.5px solid var(--line);border-radius:13px;padding:13px 14px;
+  font-family:inherit;font-size:15px;text-align:center;margin-bottom:14px;
+}
+.modal input:focus{outline:none;border-color:var(--blue)}
+.modal .err{color:var(--red);font-size:13px;font-weight:600;min-height:18px;margin-bottom:10px}
+.modal .row{display:flex;gap:10px}
+.modal .row .btn{flex:1;justify-content:center}
+
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 16px;border-top:1px solid var(--line)}
+footer b{color:var(--navy)}
+
+/* تنبيه إعداد Firebase */
+.setup-warn{
+  max-width:1100px;margin:14px auto 0;padding:14px 18px;border-radius:14px;
+  background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;font-size:13px;font-weight:600;
+  display:flex;gap:10px;align-items:flex-start;line-height:1.6;
+}
+.setup-warn code{background:rgba(0,0,0,.07);padding:2px 6px;border-radius:6px;font-size:12px}
+</style>
+</head>
+<body class="viewer">
+
+<!-- ===================== الترويسة ===================== -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><img src="Logo.jpeg" alt="شعار المدرسة" /></div>
+    <div class="titles">
+      <h1>مدارس الأندلس الأهلية</h1>
+      <p>للموهوبين — فرع الشاطئ · قسم البنين</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <div class="sync-pill" title="حالة الاتصال">
+      <span class="sync-dot" id="syncDot"></span>
+      <span class="txt" id="syncTxt">جارٍ الاتصال…</span>
+    </div>
+    <button class="btn btn-light" id="loginBtn" onclick="openLogin()">🔑 <span class="txt" style="display:inline">دخول المحرر</span></button>
+  </div>
+</header>
+
+<!-- تنبيه يظهر فقط إذا لم تُضبط مفاتيح Firebase -->
+<div class="setup-warn" id="setupWarn" style="display:none">
+  ⚠️ <div>لم يتم ربط قاعدة البيانات بعد. افتح الملف وضع مفاتيح <b>Firebase</b> في الأعلى داخل <code>firebaseConfig</code> حتى تُحفظ البيانات وتتزامن بين الأجهزة. (تعليمات الإعداد في رسالة المحادثة)</div>
+</div>
+
+<!-- ===================== التبويبات ===================== -->
+<nav class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="staff"><span class="ico">👥</span> الكادر التعليمي</button>
+    <button class="tab" data-tab="classes"><span class="ico">📚</span> الفصول والمواد</button>
+    <button class="tab" data-tab="schedule"><span class="ico">🗓️</span> الجدول الدراسي</button>
+    <button class="tab" data-tab="agenda"><span class="ico">📋</span> الأجندة التعليمية</button>
+    <button class="tab" data-tab="asas"><span class="ico">🧭</span> أساس</button>
+    <button class="tab" data-tab="qudurat"><span class="ico">🧠</span> القدرات</button>
+    <button class="tab" data-tab="tahsili"><span class="ico">📈</span> التحصيلي</button>
+    <button class="tab" data-tab="exams"><span class="ico">📝</span> الاختبارات</button>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="viewer-hint">👁️ أنت في وضع <b>المشاهدة</b> — لتعديل البيانات اضغط «دخول المحرر» في الأعلى.</div>
+
+  <!-- ===== الكادر التعليمي ===== -->
+  <section class="panel active" id="tab-staff">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">👥</div><div><h2>الكادر التعليمي</h2><p class="sub">المعلمون والإداريون في قسم البنين</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة موظف</button>
+    </div>
+    <div class="cards">
+      <div class="card stat" style="--accent:var(--navy)"><span class="ico">👨‍🏫</span><div class="n">29</div><div class="l">المعلمون والمشرف المختص</div></div>
+      <div class="card stat" style="--accent:var(--blue)"><span class="ico">🗂️</span><div class="n">9</div><div class="l">الإداريون والاستقبال</div></div>
+      <div class="card stat" style="--accent:var(--purple)"><span class="ico">👥</span><div class="n">38</div><div class="l">إجمالي الكادر</div></div>
+      <div class="card stat" style="--accent:var(--red)"><span class="ico">🏫</span><div class="n">—</div><div class="l">عدد الفصول</div></div>
+    </div>
+    <div class="empty" style="margin-top:18px">
+      <div class="big">👥</div><h3>قائمة الكادر التفصيلية قيد الإنشاء</h3>
+      <p>سنبني هنا جدول الكادر الكامل (الاسم، الوظيفة، الجنسية، الحالة، الملاحظات) مع إمكانية الإضافة والتعديل والبحث — مستفيدين من ملف «الكادر التعليمي والإداري».</p>
+    </div>
+  </section>
+
+  <!-- ===== الفصول والمواد ===== -->
+  <section class="panel" id="tab-classes">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">📚</div><div><h2>الفصول والمواد</h2><p class="sub">الشُّعب الدراسية والمواد المقررة</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة فصل</button>
+    </div>
+    <div class="empty">
+      <div class="big">📚</div><h3>إدارة الفصول والمواد قيد الإنشاء</h3>
+      <p>سنعرض هنا الشُّعب (مثل 12a، 11b، 10a …) والمواد (عربي، رياضيات، علوم، إنجليزي، إسلامية، اجتماعيات، حاسب، فنية، بدنية) وربط كل مادة بمعلمها.</p>
+    </div>
+  </section>
+
+  <!-- ===== الجدول الدراسي ===== -->
+  <section class="panel" id="tab-schedule">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2><p class="sub">جدول الحصص الأسبوعي</p></div></div>
+      <button class="btn btn-primary edit-only">＋ تحرير الجدول</button>
+    </div>
+    <div class="empty">
+      <div class="big">🗓️</div><h3>الجدول الدراسي قيد الإنشاء</h3>
+      <p>جدول حصص أسبوعي (الأحد → الخميس) لكل شعبة ولكل معلم، مع إمكانية العرض حسب الفصل أو حسب المعلم — مستفيدين من ملف «جدول2 ف2».</p>
+    </div>
+  </section>
+
+  <!-- ===== الأجندة التعليمية ===== -->
+  <section class="panel" id="tab-agenda">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">📋</div><div><h2>الأجندة التعليمية</h2><p class="sub">الخطط والمهام والمواعيد</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة بند</button>
+    </div>
+    <div class="empty">
+      <div class="big">📋</div><h3>الأجندة التعليمية قيد الإنشاء</h3>
+      <p>تقويم وأجندة بالمهام والأنشطة والزيارات الإشرافية والمواعيد المهمة خلال الفصل الدراسي.</p>
+    </div>
+  </section>
+
+  <!-- ===== أساس ===== -->
+  <section class="panel" id="tab-asas">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">🧭</div><div><h2>أساس</h2><p class="sub">منصة «أساس» ومتابعتها</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة بيان</button>
+    </div>
+    <div class="empty">
+      <div class="big">🧭</div><h3>تبويب «أساس» قيد الإنشاء</h3>
+      <p>سنحدد سوياً ما تريد عرضه ومتابعته هنا من بيانات نظام «أساس».</p>
+    </div>
+  </section>
+
+  <!-- ===== القدرات ===== -->
+  <section class="panel" id="tab-qudurat">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">🧠</div><div><h2>القدرات</h2><p class="sub">اختبار القدرات العامة ونتائجه</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة نتيجة</button>
+    </div>
+    <div class="empty">
+      <div class="big">🧠</div><h3>تبويب «القدرات» قيد الإنشاء</h3>
+      <p>متابعة درجات الطلاب في اختبار القدرات، نسب الإنجاز، والمقارنات.</p>
+    </div>
+  </section>
+
+  <!-- ===== التحصيلي ===== -->
+  <section class="panel" id="tab-tahsili">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">📈</div><div><h2>التحصيلي</h2><p class="sub">الاختبار التحصيلي ونتائجه</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة نتيجة</button>
+    </div>
+    <div class="empty">
+      <div class="big">📈</div><h3>تبويب «التحصيلي» قيد الإنشاء</h3>
+      <p>متابعة درجات الطلاب في الاختبار التحصيلي حسب المواد العلمية، ونسب التقدم.</p>
+    </div>
+  </section>
+
+  <!-- ===== الاختبارات ===== -->
+  <section class="panel" id="tab-exams">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">📝</div><div><h2>الاختبارات</h2><p class="sub">جدول الاختبارات والدرجات</p></div></div>
+      <button class="btn btn-primary edit-only">＋ إضافة اختبار</button>
+    </div>
+    <div class="empty">
+      <div class="big">📝</div><h3>تبويب «الاختبارات» قيد الإنشاء</h3>
+      <p>جدولة الاختبارات الدورية والفصلية، أيامها، والمواد، ورصد الدرجات.</p>
+    </div>
+
+    <!-- صندوق ملاحظة مشتركة: تجريبي لإثبات أن المزامنة تعمل بين الأجهزة -->
+    <div class="note-box">
+      <label>📌 لوحة ملاحظات مشتركة (تجريبية لاختبار المزامنة)</label>
+      <textarea id="sharedNote" placeholder="اكتب أي ملاحظة هنا… ستظهر فوراً لكل من يفتح الرابط" disabled></textarea>
+      <div class="note-meta" id="noteMeta">— لا تتوفر مزامنة بعد —</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  منصة <b>مدارس الأندلس الأهلية — للموهوبين</b> · فرع الشاطئ · تأسست ١٩٨٤<br>
+  <span style="opacity:.7">نسخة أولية — الصفحة الرئيسة والتبويبات</span>
+</footer>
+
+<!-- ===================== نافذة دخول المحرر ===================== -->
+<div class="modal-bg" id="loginModal">
+  <div class="modal">
+    <div class="m-logo"><img src="Logo.jpeg" alt="" /></div>
+    <h3 id="modalTitle">دخول المحرر</h3>
+    <p>أدخل كلمة المرور لتفعيل وضع التعديل</p>
+    <input type="password" id="pwInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()" />
+    <div class="err" id="pwErr"></div>
+    <div class="row">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeLogin()">إلغاء</button>
+      <button class="btn btn-primary" onclick="doLogin()">دخول</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     إعدادات المنصة + Firebase
+     ============================================================ -->
+<script type="module">
+
+  /* ===========================================================
+     (1) كلمة مرور المحرر  —  غيّرها إلى ما تريد
+     =========================================================== */
+  const EDITOR_PASSWORD = "andalus1984";
+
+  /* ===========================================================
+     (2) مفاتيح Firebase
+     ضع هنا مفاتيح مشروعك من Firebase (مجاناً).
+     طريقة الحصول عليها مشروحة في رسالة المحادثة.
+     طالما القيم فارغة، تعمل المنصة بدون حفظ.
+     =========================================================== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyA2WnUyWKNKKbqsQOh7P2VwnLO1kvSxEao",
+    authDomain: "andalus-school-cd034.firebaseapp.com",
+    databaseURL: "https://andalus-school-cd034-default-rtdb.firebaseio.com",
+    projectId: "andalus-school-cd034",
+    storageBucket: "andalus-school-cd034.firebasestorage.app",
+    messagingSenderId: "424914858687",
+    appId: "1:424914858687:web:af096553bf74cebf294c0a",
+    measurementId: "G-PDS2GD9BZ8"
+  };
+
+  /* =========================================================== */
+
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncTxt');
+  const noteEl = document.getElementById('sharedNote');
+  const noteMeta = document.getElementById('noteMeta');
+  const setupWarn = document.getElementById('setupWarn');
+  const isConfigured = firebaseConfig.apiKey && firebaseConfig.databaseURL;
+
+  let db = null, dbRef = null, setData = null;
+
+  function setSync(state, label){
+    dot.className = 'sync-dot ' + state;
+    txt.textContent = label;
+  }
+
+  if(!isConfigured){
+    setupWarn.style.display = 'flex';
+    setSync('off','غير مرتبط');
+    noteMeta.textContent = '— لتفعيل المزامنة اضبط مفاتيح Firebase —';
+  } else {
+    try{
+      const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+      const { getDatabase, ref, onValue, set } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+      const app = initializeApp(firebaseConfig);
+      db = getDatabase(app);
+      setData = set;
+      dbRef = ref(db, 'sharedNote');
+      setSync('on','متصل');
+
+      // استماع فوري لأي تغيير (المزامنة بين الأجهزة)
+      onValue(dbRef, (snap)=>{
+        const v = snap.val();
+        if(v && typeof v === 'object'){
+          if(document.activeElement !== noteEl) noteEl.value = v.text || '';
+          noteMeta.textContent = 'آخر تحديث: ' + (v.at ? new Date(v.at).toLocaleString('ar') : '—');
+        }
+      }, (err)=>{ setSync('off','خطأ اتصال'); console.error(err); });
+    }catch(e){
+      console.error('Firebase init error', e);
+      setSync('off','تعذّر الاتصال');
+    }
+  }
+
+  // حفظ الملاحظة المشتركة (للمحرر فقط)
+  let saveTimer = null;
+  noteEl.addEventListener('input', ()=>{
+    if(!document.body.classList.contains('editor') || !dbRef) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(()=>{
+      setData(dbRef, { text: noteEl.value, at: Date.now() });
+    }, 500);
+  });
+
+  /* ===========================================================
+     وضع المحرر / المشاهد
+     =========================================================== */
+  window.openLogin = ()=>{
+    if(document.body.classList.contains('editor')){
+      // تسجيل خروج
+      document.body.classList.remove('editor');
+      document.body.classList.add('viewer');
+      noteEl.disabled = true;
+      document.getElementById('loginBtn').innerHTML = '🔑 <span class="txt" style="display:inline">دخول المحرر</span>';
+      return;
+    }
+    document.getElementById('loginModal').classList.add('show');
+    setTimeout(()=>document.getElementById('pwInput').focus(),100);
+  };
+  window.closeLogin = ()=>{
+    document.getElementById('loginModal').classList.remove('show');
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwErr').textContent='';
+  };
+  window.doLogin = ()=>{
+    const v = document.getElementById('pwInput').value;
+    if(v === EDITOR_PASSWORD){
+      document.body.classList.remove('viewer');
+      document.body.classList.add('editor');
+      noteEl.disabled = false;
+      document.getElementById('loginBtn').innerHTML = '🔓 <span class="txt" style="display:inline">محرر — خروج</span>';
+      closeLogin();
+    } else {
+      document.getElementById('pwErr').textContent = 'كلمة المرور غير صحيحة';
+    }
+  };
+
+  /* ===========================================================
+     تبديل التبويبات
+     =========================================================== */
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+</script>
+</body>
+</html>

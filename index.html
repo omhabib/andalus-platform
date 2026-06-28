@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>منصة الأندلس | إدارة المدرسة</title>
+<title>منصة قائد | مدارس الأندلس الأهلية</title>
 <meta name="theme-color" content="#1E3A6E" />
-<link rel="icon" href="Logo.jpeg" />
+<link rel="icon" href="Qaed_mark.png" />
 
 <!-- ============================================================
      خطوط جوجل (عربي عصري)
@@ -45,6 +45,21 @@ body{
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
 }
+/* شعار المدرسة كخلفية مائية */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url('Logo.jpeg') no-repeat center 42%;
+  background-size:min(660px,86vw);
+  opacity:.11;
+  mix-blend-mode:multiply;
+  pointer-events:none;
+  z-index:-1;
+}
+/* مؤشّر الفأرة = طائرة قائد */
+body{cursor:url('Qaed_cursor.png') 22 0, auto}
+input,textarea{cursor:text}
 
 /* ============================================================
    الترويسة العلوية
@@ -59,13 +74,13 @@ body{
 }
 .brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .brand .logo{
-  width:52px;height:52px;border-radius:14px;background:#fff;
+  width:64px;height:64px;border-radius:16px;background:#fff;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 6px 16px -8px rgba(0,0,0,.4);flex-shrink:0;overflow:hidden;
 }
-.brand .logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.brand .logo img{width:100%;height:100%;object-fit:contain;padding:7px}
 .brand .titles{min-width:0}
-.brand .titles h1{font-family:'Cairo';font-size:18px;font-weight:900;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .titles h1{font-family:'Cairo';font-size:22px;font-weight:900;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand .titles p{margin:2px 0 0;font-size:12px;opacity:.85;font-weight:500}
 
 .topbar-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -248,6 +263,11 @@ body.editor .sc-edit{display:flex}
 body.editor .subj-card .subj-acts{display:flex}
 .mini-btn{border:0;cursor:pointer;width:30px;height:30px;border-radius:9px;font-size:13px;background:var(--bg);transition:.15s}
 .mini-btn:hover{filter:brightness(.92)}
+.subj-stages{display:flex;gap:3px;margin-top:3px}
+.stg-tag{font-size:10px;font-weight:800;color:#fff;background:var(--c);width:16px;height:16px;border-radius:5px;display:flex;align-items:center;justify-content:center;opacity:.85}
+.stage-checks{display:flex;gap:16px;flex-wrap:wrap;padding:4px 0}
+.stage-checks label{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px;color:var(--ink);cursor:pointer}
+.stage-checks input{width:18px;height:18px;accent-color:var(--blue);cursor:pointer}
 
 .sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
 .sec-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow-sm);position:relative}
@@ -286,6 +306,29 @@ table.sched .per-h{background:var(--navy);color:#fff;font-weight:800;font-size:1
 .tally-item .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
 .tally-item.done{border-color:#34d39966;background:#34d39912}
 .tally-item.over{border-color:var(--red);color:var(--red)}
+
+/* ============================================================
+   الاختبارات
+   ============================================================ */
+.exam-month{font-family:'Cairo';font-weight:800;font-size:14px;color:var(--navy);margin:18px 0 10px;display:flex;align-items:center;gap:10px}
+.exam-month:first-child{margin-top:0}
+.exam-month .ln{flex:1;height:1px;background:var(--line)}
+.exam-card{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-inline-start:5px solid var(--c,var(--blue));border-radius:14px;padding:11px 14px;box-shadow:var(--shadow-sm);margin-bottom:10px}
+.exam-dt{text-align:center;min-width:60px;background:var(--bg);border-radius:11px;padding:7px 6px;line-height:1.05;flex-shrink:0}
+.exam-dt .d{font-family:'Cairo';font-weight:900;font-size:21px;color:var(--navy)}
+.exam-dt .m{font-size:11px;color:var(--muted);font-weight:700;margin-top:1px}
+.exam-dt .wd{font-size:10px;color:var(--blue);font-weight:700;margin-top:3px}
+.exam-main{flex:1;min-width:0}
+.exam-subj{font-weight:800;color:var(--ink);font-size:15px;display:flex;align-items:center;gap:7px}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;align-items:center}
+.exam-tag{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:30px;background:var(--bg);color:var(--muted)}
+.exam-tag.type{color:#fff}
+.exam-cd{font-size:11.5px;font-weight:800;padding:4px 11px;border-radius:30px;white-space:nowrap;flex-shrink:0}
+.exam-cd.today{background:var(--red);color:#fff}
+.exam-cd.soon{background:#FEF3C7;color:#92400E}
+.exam-cd.past{background:var(--bg);color:var(--muted)}
+.exam-acts{display:none;gap:6px;flex-shrink:0}
+body.editor .exam-card .exam-acts{display:flex}
 
 /* ============================================================
    النافذة المنبثقة (تسجيل دخول المحرر)
@@ -330,10 +373,10 @@ footer b{color:var(--navy)}
 <!-- ===================== الترويسة ===================== -->
 <header class="topbar">
   <div class="brand">
-    <div class="logo"><img src="Logo.jpeg" alt="شعار المدرسة" /></div>
+    <div class="logo"><img src="Qaed_mark.png" alt="شعار قائد" /></div>
     <div class="titles">
-      <h1>مدارس الأندلس الأهلية</h1>
-      <p>للموهوبين — فرع الشاطئ · قسم البنين</p>
+      <h1>منصة قائد</h1>
+      <p>مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · بنين</p>
     </div>
   </div>
   <div class="topbar-actions">
@@ -400,6 +443,12 @@ footer b{color:var(--navy)}
     <!-- المواد -->
     <div class="subview active" id="sub-subjects">
       <div class="toolbar"><div style="flex:1"></div><button class="btn btn-primary edit-only" onclick="openSubjectForm()">＋ إضافة مادة</button></div>
+      <div class="subnav" id="subjStageBar" style="margin-bottom:16px">
+        <button class="active" data-stg="all" onclick="setSubjStage(this)">كل المراحل</button>
+        <button data-stg="ابتدائي" onclick="setSubjStage(this)">🟢 ابتدائي</button>
+        <button data-stg="متوسط" onclick="setSubjStage(this)">🔵 متوسط</button>
+        <button data-stg="ثانوي" onclick="setSubjStage(this)">🟣 ثانوي</button>
+      </div>
       <div class="sec-title">المواد الأساسية <span class="ln"></span></div>
       <div class="subj-grid" id="subjCore"></div>
       <div class="sec-title">البرامج الإثرائية / الموهبة <span class="ln"></span></div>
@@ -450,13 +499,19 @@ footer b{color:var(--navy)}
   <!-- ===== الأجندة التعليمية ===== -->
   <section class="panel" id="tab-agenda">
     <div class="page-head">
-      <div class="ttl"><div class="badge">📋</div><div><h2>الأجندة التعليمية</h2><p class="sub">الخطط والمهام والمواعيد</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة بند</button>
+      <div class="ttl"><div class="badge">📋</div><div><h2>الأجندة التعليمية</h2></div></div>
     </div>
-    <div class="empty">
-      <div class="big">📋</div><h3>الأجندة التعليمية قيد الإنشاء</h3>
-      <p>تقويم وأجندة بالمهام والأنشطة والزيارات الإشرافية والمواعيد المهمة خلال الفصل الدراسي.</p>
+    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+      <div class="subnav" id="agendaFilterBar" style="margin:0">
+        <button class="active" data-af="upcoming" onclick="setAgendaFilter(this)">📌 القادمة</button>
+        <button data-af="all" onclick="setAgendaFilter(this)">الكل</button>
+        <button data-af="past" onclick="setAgendaFilter(this)">المنتهية</button>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary edit-only" onclick="openAgendaForm()">＋ إضافة حدث</button>
     </div>
+    <div id="agendaWrap"></div>
+    <div class="empty" id="agendaEmpty" style="display:none"><div class="big">📋</div><h3>لا توجد أحداث</h3></div>
   </section>
 
   <!-- ===== أساس ===== -->
@@ -498,36 +553,35 @@ footer b{color:var(--navy)}
   <!-- ===== الاختبارات ===== -->
   <section class="panel" id="tab-exams">
     <div class="page-head">
-      <div class="ttl"><div class="badge">📝</div><div><h2>الاختبارات</h2><p class="sub">جدول الاختبارات والدرجات</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة اختبار</button>
+      <div class="ttl"><div class="badge">📝</div><div><h2>الاختبارات</h2></div></div>
     </div>
-    <div class="empty">
-      <div class="big">📝</div><h3>تبويب «الاختبارات» قيد الإنشاء</h3>
-      <p>جدولة الاختبارات الدورية والفصلية، أيامها، والمواد، ورصد الدرجات.</p>
+    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+      <div class="subnav" id="examFilterBar" style="margin:0">
+        <button class="active" data-ef="upcoming" onclick="setExamFilter(this)">📌 القادمة</button>
+        <button data-ef="all" onclick="setExamFilter(this)">الكل</button>
+        <button data-ef="past" onclick="setExamFilter(this)">المنتهية</button>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary edit-only" onclick="openExamForm()">＋ إضافة اختبار</button>
     </div>
-
-    <!-- صندوق ملاحظة مشتركة: تجريبي لإثبات أن المزامنة تعمل بين الأجهزة -->
-    <div class="note-box">
-      <label>📌 لوحة ملاحظات مشتركة (تجريبية لاختبار المزامنة)</label>
-      <textarea id="sharedNote" placeholder="اكتب أي ملاحظة هنا… ستظهر فوراً لكل من يفتح الرابط" disabled></textarea>
-      <div class="note-meta" id="noteMeta">— لا تتوفر مزامنة بعد —</div>
-    </div>
+    <div id="examsWrap"></div>
+    <div class="empty" id="examsEmpty" style="display:none"><div class="big">📝</div><h3>لا توجد اختبارات</h3></div>
+    <div style="display:none"><textarea id="sharedNote"></textarea><span id="noteMeta"></span></div>
   </section>
 
 </main>
 
 <footer>
-  منصة <b>مدارس الأندلس الأهلية — للموهوبين</b> · فرع الشاطئ · تأسست ١٩٨٤<br>
-  <span style="opacity:.7">نسخة أولية — الصفحة الرئيسة والتبويبات</span>
+  <b>منصة قائد</b> · مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · تأسست ١٩٨٤<br>
+  <span style="opacity:.7">Qaed Learning Platform</span>
 </footer>
 
 <!-- ===================== نافذة دخول المحرر ===================== -->
 <div class="modal-bg" id="loginModal">
   <div class="modal">
-    <div class="m-logo"><img src="Logo.jpeg" alt="" /></div>
+    <div class="m-logo"><img src="Qaed_mark.png" alt="" /></div>
     <h3 id="modalTitle">دخول المحرر</h3>
-    <p>أدخل بريدك وكلمة المرور لتفعيل وضع التعديل</p>
-    <input type="email" id="emailInput" placeholder="البريد الإلكتروني" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    <p>أدخل كلمة المرور لتفعيل وضع التعديل</p>
     <input type="password" id="pwInput" placeholder="كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
     <div class="err" id="pwErr"></div>
     <div class="row">
@@ -587,6 +641,13 @@ footer b{color:var(--navy)}
       <div class="fld full"><label>التصنيف</label>
         <select id="subjCat"><option value="core">مادة أساسية</option><option value="gifted">برنامج إثرائي / موهبة</option></select>
       </div>
+      <div class="fld full"><label>المراحل التي تُدرّس فيها</label>
+        <div class="stage-checks">
+          <label><input type="checkbox" id="stg-ابتدائي" value="ابتدائي" /> ابتدائي</label>
+          <label><input type="checkbox" id="stg-متوسط" value="متوسط" /> متوسط</label>
+          <label><input type="checkbox" id="stg-ثانوي" value="ثانوي" /> ثانوي</label>
+        </div>
+      </div>
     </div>
     <div class="err" id="subjErr" style="text-align:center"></div>
     <div class="row" style="margin-top:6px">
@@ -601,18 +662,59 @@ footer b{color:var(--navy)}
   <div class="modal lg">
     <h3 id="secFormTitle">إضافة فصل</h3>
     <div class="form-grid">
-      <div class="fld"><label>المرحلة *</label>
-        <select id="secStage" onchange="fillGrades()"><option value="ابتدائي">ابتدائي</option><option value="متوسط">متوسط</option><option value="ثانوي">ثانوي</option></select>
-      </div>
       <div class="fld"><label>الصف *</label><select id="secGrade"></select></div>
-      <div class="fld"><label>الفصل (الشعبة) *</label><input type="text" id="secSec" placeholder="a أو ب" /></div>
+      <div class="fld"><label>الفصل (الشعبة) *</label>
+        <select id="secSec"><option value="a">a</option><option value="b">b</option><option value="c">c</option></select>
+      </div>
       <div class="fld"><label>عدد الطلاب</label><input type="number" id="secStudents" min="0" inputmode="numeric" /></div>
-      <div class="fld full"><label>رائد الفصل (المربّي)</label><select id="secHomeroom"></select></div>
+      <div class="fld"><label>رائد الفصل (المربّي)</label><select id="secHomeroom"></select></div>
     </div>
     <div class="err" id="secErr" style="text-align:center"></div>
     <div class="row" style="margin-top:6px">
       <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeSectionForm()">إلغاء</button>
       <button class="btn btn-primary" onclick="saveSection()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== نموذج الاختبار ===================== -->
+<div class="modal-bg" id="examModal">
+  <div class="modal lg">
+    <h3 id="examFormTitle">إضافة اختبار</h3>
+    <div class="form-grid">
+      <div class="fld"><label>المرحلة *</label>
+        <select id="examStage" onchange="examStageChanged()"><option value="">— اختر المرحلة —</option><option value="ابتدائي">ابتدائي</option><option value="متوسط">متوسط</option><option value="ثانوي">ثانوي</option></select>
+      </div>
+      <div class="fld"><label>الصف *</label><select id="examGrade" onchange="examGradeChanged()"></select></div>
+      <div class="fld"><label>الفصل *</label>
+        <select id="examSec"><option value="a">a</option><option value="b">b</option><option value="c">c</option></select>
+      </div>
+      <div class="fld full"><label>المادة *</label><select id="examSubject"></select></div>
+      <div class="fld"><label>نوع الاختبار *</label>
+        <select id="examType"><option>الدوري الأول</option><option>الدوري الثاني</option><option>النهائي</option></select>
+      </div>
+      <div class="fld"><label>تاريخ الاختبار *</label><input type="date" id="examDate" /></div>
+    </div>
+    <div class="err" id="examErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeExamForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveExam()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== نموذج حدث الأجندة ===================== -->
+<div class="modal-bg" id="agendaModal">
+  <div class="modal lg">
+    <h3 id="agendaFormTitle">إضافة حدث</h3>
+    <div class="form-grid">
+      <div class="fld full"><label>الحدث *</label><input type="text" id="agendaTitle" placeholder="مثال: اجتماع أولياء الأمور" /></div>
+      <div class="fld full"><label>التاريخ *</label><input type="date" id="agendaDate" /></div>
+    </div>
+    <div class="err" id="agendaErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeAgendaForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveAgenda()">💾 حفظ</button>
     </div>
   </div>
 </div>
@@ -642,6 +744,10 @@ footer b{color:var(--navy)}
     measurementId: "G-PDS2GD9BZ8"
   };
 
+  // كلمة مرور المحرر (مؤقتة — تحقق داخل المتصفح). غيّرها كما تريد.
+  // لاحقاً عند تفعيل Authentication بإيميل الوكيل نعيد الدخول بالبريد.
+  const EDITOR_PASSWORD = "andalus1984";
+
   /* =========================================================== */
 
   const dot = document.getElementById('syncDot');
@@ -650,11 +756,6 @@ footer b{color:var(--navy)}
   const noteMeta = document.getElementById('noteMeta');
   const setupWarn = document.getElementById('setupWarn');
   const isConfigured = firebaseConfig.apiKey && firebaseConfig.databaseURL;
-
-  /* وضع تطوير مؤقت: يسمح بالتعديل قبل تفعيل تسجيل الدخول.
-     عند التفعيل النهائي بإيميل الوكيل: اجعل DEV_MODE = false */
-  const DEV_MODE = true;
-  const DEV_PASSWORD = "andalus";
 
   let db = null, dbRef = null, setData = null;
   let auth = null, fbSignIn = null, fbSignOut = null;
@@ -665,6 +766,8 @@ footer b{color:var(--navy)}
   let editSubjId = null, editSecId = null;
   let scheduleRef = null, settingsRef = null;
   let scheduleData = {}, settings = {};
+  let examsRef = null, examsList = [], editExamId = null;
+  let agendaRef = null, agendaList = [], editAgendaId = null;
 
   function setSync(state, label){
     dot.className = 'sync-dot ' + state;
@@ -698,6 +801,8 @@ footer b{color:var(--navy)}
       assignRef   = ref(db, 'assign');
       scheduleRef = ref(db, 'schedule');
       settingsRef = ref(db, 'settings');
+      examsRef    = ref(db, 'exams');
+      agendaRef   = ref(db, 'agenda');
 
       // استماع فوري لبيانات الكادر
       onValue(staffRef, (snap)=>{
@@ -730,10 +835,15 @@ footer b{color:var(--navy)}
         if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
         renderSchedSection(); renderSchedTeacher();
       });
-
-      // تتبّع حالة تسجيل الدخول (تبقى محفوظة بعد إعادة فتح الصفحة)
-      onAuthStateChanged(auth, (user)=>{
-        if(user) applyEditor(user.email); else applyViewer();
+      onValue(examsRef, (snap)=>{
+        const v = snap.val() || {};
+        examsList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderExams();
+      });
+      onValue(agendaRef, (snap)=>{
+        const v = snap.val() || {};
+        agendaList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderAgenda();
       });
 
       // استماع فوري لأي تغيير (المزامنة بين الأجهزة)
@@ -779,44 +889,24 @@ footer b{color:var(--navy)}
   /* ===========================================================
      وضع المحرر / المشاهد
      =========================================================== */
-  window.openLogin = async ()=>{
+  window.openLogin = ()=>{
     if(document.body.classList.contains('editor')){
-      // تسجيل خروج
-      if(auth && fbSignOut){ try{ await fbSignOut(auth); }catch(e){ console.error(e); } }
-      applyViewer();
+      applyViewer();   // تسجيل خروج
       return;
     }
-    if(!auth && !DEV_MODE){ alert('قاعدة البيانات غير مرتبطة بعد.'); return; }
     document.getElementById('loginModal').classList.add('show');
-    setTimeout(()=>document.getElementById('emailInput').focus(),100);
+    setTimeout(()=>document.getElementById('pwInput').focus(),100);
   };
   window.closeLogin = ()=>{
     document.getElementById('loginModal').classList.remove('show');
     document.getElementById('pwInput').value='';
     document.getElementById('pwErr').textContent='';
   };
-  window.doLogin = async ()=>{
-    const email = document.getElementById('emailInput').value.trim();
+  window.doLogin = ()=>{
     const pw = document.getElementById('pwInput').value;
     const errEl = document.getElementById('pwErr');
-    // وضع التطوير المؤقت: كلمة مرور واحدة بدون حساب (يُلغى عند DEV_MODE=false)
-    if(DEV_MODE && pw === DEV_PASSWORD){ applyEditor('وضع التطوير'); closeLogin(); return; }
-    if(!email || !pw){ errEl.textContent = 'أدخل البريد وكلمة المرور'; return; }
-    if(!auth){ errEl.textContent = 'تسجيل الدخول غير مُفعّل بعد'; return; }
-    errEl.textContent = 'جارٍ التحقق…';
-    try{
-      await fbSignIn(auth, email, pw);   // onAuthStateChanged سيفعّل وضع المحرر
-      closeLogin();
-    }catch(e){
-      const map = {
-        'auth/invalid-credential':'البريد أو كلمة المرور غير صحيحة',
-        'auth/invalid-email':'صيغة البريد غير صحيحة',
-        'auth/user-not-found':'هذا الحساب غير مسجّل',
-        'auth/wrong-password':'كلمة المرور غير صحيحة',
-        'auth/too-many-requests':'محاولات كثيرة — انتظر قليلاً'
-      };
-      errEl.textContent = map[e.code] || ('تعذّر الدخول: ' + e.code);
-    }
+    if(pw === EDITOR_PASSWORD){ applyEditor('محرر'); closeLogin(); }
+    else { errEl.textContent = 'كلمة المرور غير صحيحة'; }
   };
 
   /* ===========================================================
@@ -972,12 +1062,22 @@ footer b{color:var(--navy)}
   /* ===========================================================
      الفصول والمواد
      =========================================================== */
-  const GRADES = {
-    'ابتدائي':['الأول','الثاني','الثالث','الرابع','الخامس','السادس'],
-    'متوسط':['الأول','الثاني','الثالث'],
-    'ثانوي':['الأول','الثاني','الثالث']
-  };
   const STAGES = ['ابتدائي','متوسط','ثانوي'];
+  const SEC_LETTERS = ['a','b','c'];
+  const GRADE_LIST = [
+    {num:3,  stage:'ابتدائي', label:'ثالث ابتدائي'},
+    {num:4,  stage:'ابتدائي', label:'رابع ابتدائي'},
+    {num:5,  stage:'ابتدائي', label:'خامس ابتدائي'},
+    {num:6,  stage:'ابتدائي', label:'سادس ابتدائي'},
+    {num:7,  stage:'متوسط',   label:'أول متوسط'},
+    {num:8,  stage:'متوسط',   label:'ثاني متوسط'},
+    {num:9,  stage:'متوسط',   label:'ثالث متوسط'},
+    {num:10, stage:'ثانوي',   label:'أول ثانوي'},
+    {num:11, stage:'ثانوي',   label:'ثاني ثانوي'},
+    {num:12, stage:'ثانوي',   label:'ثالث ثانوي'}
+  ];
+  const gradeInfo = (num)=> GRADE_LIST.find(x=> x.num == num) || {num, stage:'', label:String(num)};
+  const secLabel  = (s)=> (gradeInfo(s.grade).label + ' ' + (s.sec||'')).trim();
 
   window.switchSub = (btn)=>{
     document.querySelectorAll('.subnav button').forEach(b=>b.classList.remove('active'));
@@ -987,21 +1087,36 @@ footer b{color:var(--navy)}
   };
 
   /* ----- المواد ----- */
+  let subjStageFilter = 'all';
+  const STAGE_AB = {'ابتدائي':'ا','متوسط':'م','ثانوي':'ث'};
   function subjCard(s){
     const c = s.color || '#888';
+    const tags = (s.stages||[]).map(st=>`<span class="stg-tag">${STAGE_AB[st]||st}</span>`).join('');
     return `<div class="subj-card" style="--c:${c}">
       <div class="subj-ic" style="background:${c}22">${s.icon||'📚'}</div>
-      <div class="subj-nm">${esc(s.name)}</div>
+      <div style="min-width:0">
+        <div class="subj-nm">${esc(s.name)}</div>
+        ${tags?`<div class="subj-stages">${tags}</div>`:''}
+      </div>
       <div class="subj-acts">
         <button class="mini-btn" onclick="openSubjectForm('${s.id}')">✏️</button>
         <button class="mini-btn" onclick="deleteSubject('${s.id}')">🗑️</button>
       </div>
     </div>`;
   }
+  function inStageFilter(s){
+    return subjStageFilter==='all' || !s.stages || s.stages.length===0 || s.stages.includes(subjStageFilter);
+  }
+  window.setSubjStage = (btn)=>{
+    document.querySelectorAll('#subjStageBar button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); subjStageFilter = btn.dataset.stg; renderSubjects();
+  };
   window.renderSubjects = ()=>{
     const byOrder = (a,b)=>(a.order||0)-(b.order||0);
-    g('subjCore').innerHTML   = subjectsList.filter(s=>s.cat!=='gifted').sort(byOrder).map(subjCard).join('');
-    g('subjGifted').innerHTML = subjectsList.filter(s=>s.cat==='gifted').sort(byOrder).map(subjCard).join('');
+    const list = subjectsList.filter(inStageFilter);
+    const none = '<div style="color:var(--muted);font-size:13px;padding:6px 2px">— لا يوجد —</div>';
+    g('subjCore').innerHTML   = list.filter(s=>s.cat!=='gifted').sort(byOrder).map(subjCard).join('') || none;
+    g('subjGifted').innerHTML = list.filter(s=>s.cat==='gifted').sort(byOrder).map(subjCard).join('') || none;
   };
   window.openSubjectForm = (id)=>{
     editSubjId = id || null;
@@ -1009,13 +1124,16 @@ footer b{color:var(--navy)}
     g('subjFormTitle').textContent = id ? 'تعديل مادة' : 'إضافة مادة';
     g('subjName').value = s?.name||''; g('subjIcon').value = s?.icon||'📚';
     g('subjColor').value = s?.color||'#3B7DC4'; g('subjCat').value = s?.cat||'core';
+    const stages = s?.stages || ['ابتدائي','متوسط','ثانوي'];
+    STAGES.forEach(st=>{ const cb=g('stg-'+st); if(cb) cb.checked = stages.includes(st); });
     g('subjErr').textContent=''; g('subjectModal').classList.add('show');
   };
   window.closeSubjectForm = ()=> g('subjectModal').classList.remove('show');
   window.saveSubject = async ()=>{
     const name = g('subjName').value.trim();
     if(!name){ g('subjErr').textContent='اسم المادة مطلوب'; return; }
-    const data = { name, icon:g('subjIcon').value.trim()||'📚', color:g('subjColor').value, cat:g('subjCat').value,
+    const stages = STAGES.filter(st=> g('stg-'+st) && g('stg-'+st).checked);
+    const data = { name, icon:g('subjIcon').value.trim()||'📚', color:g('subjColor').value, cat:g('subjCat').value, stages,
       order: editSubjId ? (subjectsList.find(x=>x.id===editSubjId)?.order||99) : (subjectsList.length+1) };
     try{ if(editSubjId) await fbUpdate(fbChildRef(db,'subjects/'+editSubjId),data); else await fbPush(subjectsRef,data); closeSubjectForm(); }
     catch(e){ g('subjErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
@@ -1027,15 +1145,9 @@ footer b{color:var(--navy)}
   };
 
   /* ----- الصفوف والفصول ----- */
-  window.fillGrades = ()=>{
-    const st = g('secStage').value;
-    g('secGrade').innerHTML = (GRADES[st]||[]).map(gr=>`<option value="${gr}">${gr}</option>`).join('');
-  };
+  function secStage(s){ return gradeInfo(s.grade).stage; }
   function secSort(a,b){
-    const sa=STAGES.indexOf(a.stage), sb=STAGES.indexOf(b.stage);
-    if(sa!==sb) return sa-sb;
-    const ga=(GRADES[a.stage]||[]).indexOf(a.grade), gb=(GRADES[b.stage]||[]).indexOf(b.grade);
-    return ga-gb || (a.sec||'').localeCompare(b.sec||'','ar');
+    return (a.grade - b.grade) || String(a.sec||'').localeCompare(String(b.sec||''),'en');
   }
   window.renderSections = ()=>{
     const wrap=g('sectionsWrap'), empty=g('sectionsEmpty');
@@ -1043,15 +1155,16 @@ footer b{color:var(--navy)}
     empty.style.display='none';
     let html='';
     STAGES.forEach(st=>{
-      const inSt = sectionsList.filter(s=>s.stage===st).sort(secSort);
+      const inSt = sectionsList.filter(s=>secStage(s)===st).sort(secSort);
       if(!inSt.length) return;
       html += `<div class="sec-title">${st} <span class="ln"></span></div><div class="sec-grid">`;
       inSt.forEach(s=>{
         const hr = s.homeroom ? staffList.find(x=>x.id===s.homeroom) : null;
+        const gi = gradeInfo(s.grade);
         html += `<div class="sec-card">
           <div class="sec-acts"><button class="mini-btn" onclick="openSectionForm('${s.id}')">✏️</button><button class="mini-btn" onclick="deleteSection('${s.id}')">🗑️</button></div>
-          <div class="sec-badge">${esc(s.grade)} ${esc(s.sec||'')}</div>
-          <div class="sec-grade">${esc(s.grade)} ${esc(st)}</div>
+          <div class="sec-badge">${esc(gi.num)}${esc(s.sec||'')}</div>
+          <div class="sec-grade">${esc(gi.label)}</div>
           <div class="sec-meta">${s.students?('👥 '+toAr(s.students)+' طالب'):''}${hr?((s.students?'<br>':'')+'🎓 '+esc(hr.name)):''}</div>
         </div>`;
       });
@@ -1063,9 +1176,12 @@ footer b{color:var(--navy)}
     editSecId = id || null;
     const s = id ? sectionsList.find(x=>x.id===id) : null;
     g('secFormTitle').textContent = id ? 'تعديل فصل' : 'إضافة فصل';
-    g('secStage').value = s?.stage||'ابتدائي'; fillGrades();
-    if(s?.grade) g('secGrade').value = s.grade;
-    g('secSec').value = s?.sec||''; g('secStudents').value = s?.students||'';
+    g('secGrade').innerHTML = STAGES.map(st=>
+      '<optgroup label="'+st+'">' + GRADE_LIST.filter(gr=>gr.stage===st).map(gr=>`<option value="${gr.num}">${gr.label}</option>`).join('') + '</optgroup>'
+    ).join('');
+    g('secGrade').value = s?.grade || 3;
+    g('secSec').value = s?.sec || 'a';
+    g('secStudents').value = s?.students||'';
     g('secHomeroom').innerHTML = '<option value="">— بدون —</option>' +
       staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar')).map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
     g('secHomeroom').value = s?.homeroom||'';
@@ -1073,10 +1189,11 @@ footer b{color:var(--navy)}
   };
   window.closeSectionForm = ()=> g('sectionModal').classList.remove('show');
   window.saveSection = async ()=>{
-    const data = { stage:g('secStage').value, grade:g('secGrade').value, sec:g('secSec').value.trim(),
+    const data = { grade: parseInt(g('secGrade').value), sec: g('secSec').value,
       students:g('secStudents').value.trim(), homeroom:g('secHomeroom').value };
     if(!data.grade){ g('secErr').textContent='اختر الصف'; return; }
-    if(!data.sec){ g('secErr').textContent='أدخل اسم الفصل (الشعبة)'; return; }
+    const dup = sectionsList.find(x=> x.id!==editSecId && x.grade==data.grade && x.sec===data.sec);
+    if(dup){ g('secErr').textContent='هذا الفصل موجود مسبقاً'; return; }
     try{ if(editSecId) await fbUpdate(fbChildRef(db,'sections/'+editSecId),data); else await fbPush(sectionsRef,data); closeSectionForm(); }
     catch(e){ g('secErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
   };
@@ -1093,7 +1210,7 @@ footer b{color:var(--navy)}
     const sel = g('assignSection'); if(!sel) return;
     const cur = sel.value;
     sel.innerHTML = '<option value="">— اختر الفصل —</option>' +
-      sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(s.grade+' '+s.stage+' '+(s.sec||''))}</option>`).join('');
+      sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(secLabel(s))}</option>`).join('');
     if(cur) sel.value = cur;
   }
   window.renderAssign = ()=>{
@@ -1101,7 +1218,10 @@ footer b{color:var(--navy)}
     const secId = g('assignSection').value;
     if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🔗</div><h3>اختر فصلاً لإسناد المواد والمعلمين</h3></div>'; return; }
     const rows = assignList.filter(a=>a.sectionId===secId);
-    const subjOpts = sel => '<option value="">— المادة —</option>' + subjectsList.slice().sort((a,b)=>(a.order||0)-(b.order||0))
+    const secObj = sectionsList.find(x=>x.id===secId);
+    const stage = secObj ? gradeInfo(secObj.grade).stage : '';
+    const stageSubjects = subjectsList.filter(s=> !s.stages || s.stages.length===0 || s.stages.includes(stage));
+    const subjOpts = sel => '<option value="">— المادة —</option>' + stageSubjects.slice().sort((a,b)=>(a.order||0)-(b.order||0))
       .map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.icon||''} ${esc(s.name)}</option>`).join('');
     const teachOpts = sel => '<option value="">— المعلم —</option>' + staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'))
       .map(t=>`<option value="${t.id}" ${t.id===sel?'selected':''}>${esc(t.name)}</option>`).join('');
@@ -1140,7 +1260,7 @@ footer b{color:var(--navy)}
     const ss = g('schedSection');
     if(ss){ const cur = ss.value;
       ss.innerHTML = '<option value="">— اختر الفصل —</option>' +
-        sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(s.grade+' '+s.stage+' '+(s.sec||''))}</option>`).join('');
+        sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(secLabel(s))}</option>`).join('');
       if(cur) ss.value = cur; }
     const ts = g('schedTeacher');
     if(ts){ const cur = ts.value;
@@ -1234,7 +1354,7 @@ footer b{color:var(--navy)}
         if(found){
           const subj = subjectsList.find(x=>x.id===found.a.subjectId);
           const sec = sectionsList.find(x=>x.id===found.secId);
-          html += `<td><div class="cell" style="background:${subj?subj.color:'#888'}">${subj?esc(subj.name):''}<span class="t">${sec?esc(sec.grade+' '+(sec.sec||'')):''}</span></div></td>`;
+          html += `<td><div class="cell" style="background:${subj?subj.color:'#888'}">${subj?esc(subj.name):''}<span class="t">${sec?esc(gradeInfo(sec.grade).num+(sec.sec||'')):''}</span></div></td>`;
         } else html += `<td><div class="cell empty">—</div></td>`;
       });
       html += '</tr>';
@@ -1243,9 +1363,169 @@ footer b{color:var(--navy)}
     wrap.innerHTML = html;
   };
 
+  /* ===========================================================
+     الاختبارات
+     =========================================================== */
+  let examFilter = 'upcoming';
+  const EXAM_TYPE_COLOR = {'الدوري الأول':'#3B7DC4','الدوري الثاني':'#8E4B9E','النهائي':'#C0504D'};
+  const AR_WD = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const AR_MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+  window.setExamFilter = (btn)=>{
+    document.querySelectorAll('#examFilterBar button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); examFilter = btn.dataset.ef; renderExams();
+  };
+  function examDateParts(ds){
+    const d = new Date(ds+'T00:00:00');
+    const today = new Date(); today.setHours(0,0,0,0);
+    const diff = Math.round((d - today)/86400000);
+    return { d, day:d.getDate(), mon:d.getMonth()+1, year:d.getFullYear(), wd:AR_WD[d.getDay()], diff };
+  }
+  function countdownTag(diff){
+    if(diff===0)  return ['today','اليوم'];
+    if(diff===1)  return ['soon','غداً'];
+    if(diff>1)    return ['soon','بعد '+toAr(diff)+' يوم'];
+    if(diff===-1) return ['past','أمس'];
+    return ['past','منذ '+toAr(-diff)+' يوم'];
+  }
+  window.renderExams = ()=>{
+    const wrap = g('examsWrap'), empty = g('examsEmpty'); if(!wrap) return;
+    const todayMs = (()=>{ const t=new Date(); t.setHours(0,0,0,0); return t.getTime(); })();
+    let list = examsList.filter(e=>e.date);
+    if(examFilter==='upcoming') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() >= todayMs);
+    else if(examFilter==='past') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() < todayMs);
+    list.sort((a,b)=> examFilter==='past' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+    if(!list.length){ wrap.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    let html='', curMonth='';
+    list.forEach(e=>{
+      const p = examDateParts(e.date);
+      const mk = p.year+'-'+p.mon;
+      if(mk!==curMonth){ curMonth=mk; html+=`<div class="exam-month">${AR_MONTHS[p.mon-1]} ${toAr(p.year)} <span class="ln"></span></div>`; }
+      const subj = subjectsList.find(x=>x.id===e.subjectId);
+      const [cdc,cdt] = countdownTag(p.diff);
+      const typeColor = EXAM_TYPE_COLOR[e.type]||'#888';
+      const gi = e.grade ? gradeInfo(e.grade) : null;
+      html+=`<div class="exam-card" style="--c:${subj?subj.color:'#888'}">
+        <div class="exam-dt"><div class="d">${toAr(p.day)}</div><div class="m">/${toAr(p.mon)}</div><div class="wd">${p.wd}</div></div>
+        <div class="exam-main">
+          <div class="exam-subj">${subj?(subj.icon+' '):''}${subj?esc(subj.name):'—'}</div>
+          <div class="exam-meta">
+            ${e.type?`<span class="exam-tag type" style="background:${typeColor}">${esc(e.type)}</span>`:''}
+            ${gi?`<span class="exam-tag">🏫 ${esc(gi.label)} ${esc(e.sec||'')}</span>`:''}
+          </div>
+        </div>
+        <span class="exam-cd ${cdc}">${cdt}</span>
+        <div class="exam-acts">
+          <button class="mini-btn" onclick="openExamForm('${e.id}')">✏️</button>
+          <button class="mini-btn" onclick="deleteExam('${e.id}')">🗑️</button>
+        </div>
+      </div>`;
+    });
+    wrap.innerHTML = html;
+  };
+
+  function fillExamGrades(stage){
+    const cur = g('examGrade').value;
+    g('examGrade').innerHTML = '<option value="">— اختر الصف —</option>' +
+      GRADE_LIST.filter(gr=>!stage || gr.stage===stage).map(gr=>`<option value="${gr.num}">${gr.label}</option>`).join('');
+    if(cur && GRADE_LIST.find(gr=>gr.num==cur && (!stage||gr.stage===stage))) g('examGrade').value = cur;
+  }
+  function fillExamSubjects(stage){
+    const subs = stage ? subjectsList.filter(s=>!s.stages||!s.stages.length||s.stages.includes(stage)) : [];
+    const cur = g('examSubject').value;
+    g('examSubject').innerHTML = '<option value="">— المادة —</option>' +
+      subs.slice().sort((a,b)=>(a.order||0)-(b.order||0)).map(s=>`<option value="${s.id}">${s.icon||''} ${esc(s.name)}</option>`).join('');
+    if(cur && subs.find(s=>s.id===cur)) g('examSubject').value = cur;
+  }
+  window.examStageChanged = ()=>{ const st=g('examStage').value; fillExamGrades(st); fillExamSubjects(st); };
+  window.examGradeChanged = ()=>{ /* المرحلة تحدد المواد */ };
+
+  window.openExamForm = (id)=>{
+    editExamId = id||null;
+    const e = id ? examsList.find(x=>x.id===id) : null;
+    g('examFormTitle').textContent = id ? 'تعديل اختبار' : 'إضافة اختبار';
+    const stage = e?.grade ? gradeInfo(e.grade).stage : '';
+    g('examStage').value = stage;
+    fillExamGrades(stage);
+    g('examGrade').value = e?.grade || '';
+    g('examSec').value = e?.sec || 'a';
+    fillExamSubjects(stage);
+    g('examSubject').value = e?.subjectId || '';
+    g('examType').value = e?.type || 'الدوري الأول';
+    g('examDate').value = e?.date || '';
+    g('examErr').textContent=''; g('examModal').classList.add('show');
+  };
+  window.closeExamForm = ()=> g('examModal').classList.remove('show');
+  window.saveExam = async ()=>{
+    if(!g('examStage').value){ g('examErr').textContent='اختر المرحلة'; return; }
+    if(!g('examGrade').value){ g('examErr').textContent='اختر الصف'; return; }
+    if(!g('examSubject').value){ g('examErr').textContent='اختر المادة'; return; }
+    if(!g('examDate').value){ g('examErr').textContent='اختر تاريخ الاختبار'; return; }
+    const data = { grade: parseInt(g('examGrade').value), sec: g('examSec').value,
+      subjectId: g('examSubject').value, type: g('examType').value, date: g('examDate').value };
+    try{ if(editExamId) await fbUpdate(fbChildRef(db,'exams/'+editExamId),data); else await fbPush(examsRef,data); closeExamForm(); }
+    catch(err){ g('examErr').textContent='تعذّر الحفظ: '+(err.code||err.message); }
+  };
+  window.deleteExam = async (id)=>{ if(!confirm('حذف هذا الاختبار؟')) return; try{ await fbRemove(fbChildRef(db,'exams/'+id)); }catch(e){ alert('تعذّر الحذف'); } };
+
+  /* ===========================================================
+     الأجندة التعليمية
+     =========================================================== */
+  let agendaFilter = 'upcoming';
+  window.setAgendaFilter = (btn)=>{
+    document.querySelectorAll('#agendaFilterBar button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); agendaFilter = btn.dataset.af; renderAgenda();
+  };
+  window.renderAgenda = ()=>{
+    const wrap = g('agendaWrap'), empty = g('agendaEmpty'); if(!wrap) return;
+    const todayMs = (()=>{ const t=new Date(); t.setHours(0,0,0,0); return t.getTime(); })();
+    let list = agendaList.filter(a=>a.date);
+    if(agendaFilter==='upcoming') list = list.filter(a=> new Date(a.date+'T00:00:00').getTime() >= todayMs);
+    else if(agendaFilter==='past') list = list.filter(a=> new Date(a.date+'T00:00:00').getTime() < todayMs);
+    list.sort((a,b)=> agendaFilter==='past' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+    if(!list.length){ wrap.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    let html='', curMonth='';
+    list.forEach(a=>{
+      const p = examDateParts(a.date);
+      const mk = p.year+'-'+p.mon;
+      if(mk!==curMonth){ curMonth=mk; html+=`<div class="exam-month">${AR_MONTHS[p.mon-1]} ${toAr(p.year)} <span class="ln"></span></div>`; }
+      const [cdc,cdt] = countdownTag(p.diff);
+      html+=`<div class="exam-card" style="--c:#3B7DC4">
+        <div class="exam-dt"><div class="d">${toAr(p.day)}</div><div class="m">/${toAr(p.mon)}</div><div class="wd">${p.wd}</div></div>
+        <div class="exam-main"><div class="exam-subj">📌 ${esc(a.title)}</div></div>
+        <span class="exam-cd ${cdc}">${cdt}</span>
+        <div class="exam-acts">
+          <button class="mini-btn" onclick="openAgendaForm('${a.id}')">✏️</button>
+          <button class="mini-btn" onclick="deleteAgenda('${a.id}')">🗑️</button>
+        </div>
+      </div>`;
+    });
+    wrap.innerHTML = html;
+  };
+  window.openAgendaForm = (id)=>{
+    editAgendaId = id||null;
+    const a = id ? agendaList.find(x=>x.id===id) : null;
+    g('agendaFormTitle').textContent = id ? 'تعديل حدث' : 'إضافة حدث';
+    g('agendaTitle').value = a?.title || '';
+    g('agendaDate').value = a?.date || '';
+    g('agendaErr').textContent=''; g('agendaModal').classList.add('show');
+  };
+  window.closeAgendaForm = ()=> g('agendaModal').classList.remove('show');
+  window.saveAgenda = async ()=>{
+    const title = g('agendaTitle').value.trim();
+    if(!title){ g('agendaErr').textContent='أدخل اسم الحدث'; return; }
+    if(!g('agendaDate').value){ g('agendaErr').textContent='اختر التاريخ'; return; }
+    const data = { title, date: g('agendaDate').value };
+    try{ if(editAgendaId) await fbUpdate(fbChildRef(db,'agenda/'+editAgendaId),data); else await fbPush(agendaRef,data); closeAgendaForm(); }
+    catch(err){ g('agendaErr').textContent='تعذّر الحفظ: '+(err.code||err.message); }
+  };
+  window.deleteAgenda = async (id)=>{ if(!confirm('حذف هذا الحدث؟')) return; try{ await fbRemove(fbChildRef(db,'agenda/'+id)); }catch(e){ alert('تعذّر الحذف'); } };
+
   // عرض أولي
   renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
-  refreshSchedPickers(); renderSchedSection(); renderSchedTeacher();
+  refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda();
 
   /* ===========================================================
      تبديل التبويبات

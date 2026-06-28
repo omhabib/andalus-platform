@@ -173,6 +173,61 @@ body.viewer .viewer-hint{display:flex}
 body.editor .edit-only{display:inline-flex}
 
 /* ============================================================
+   تبويب الكادر التعليمي
+   ============================================================ */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;border:1px solid var(--line);border-radius:30px;padding:11px 44px 11px 16px;font-family:inherit;font-size:14px;background:var(--card)}
+.search input:focus{outline:none;border-color:var(--blue)}
+.search .si{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:.45;font-size:16px}
+.count-pill{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:10px 16px;font-weight:700;font-size:13px;color:var(--navy);white-space:nowrap}
+
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:16px}
+.staff-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);transition:.2s;display:flex;flex-direction:column;gap:12px}
+.staff-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.sc-top{display:flex;gap:12px;align-items:center}
+.sc-photo{width:62px;height:62px;border-radius:16px;flex-shrink:0;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo';font-weight:900;font-size:21px;overflow:hidden;cursor:zoom-in}
+.sc-photo img{width:100%;height:100%;object-fit:cover}
+.sc-name{font-family:'Cairo';font-weight:800;font-size:16px;color:var(--ink);line-height:1.3}
+.sc-job{color:var(--purple);font-weight:700;font-size:13px;margin-top:3px}
+.sc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--bg);border:1px solid var(--line);border-radius:30px;padding:4px 11px;font-size:12px;font-weight:700;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.chip.navy{color:var(--navy)}
+.chip.red{color:var(--red)}
+.sc-row{font-size:13px;color:var(--ink);font-weight:600;line-height:1.5}
+.sc-row .lbl{color:var(--muted);font-weight:700}
+.sc-actions{display:flex;gap:8px;align-items:center;margin-top:auto;padding-top:12px;border-top:1px dashed var(--line)}
+.wa-btn{width:40px;height:40px;border-radius:11px;background:#25D366;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;transition:.15s}
+.wa-btn svg{width:22px;height:22px;fill:#fff}
+.wa-btn:hover{background:#1da851;transform:translateY(-1px)}
+.wa-btn.off{background:var(--bg);pointer-events:none;border:1px solid var(--line)}
+.wa-btn.off svg{fill:var(--muted);opacity:.55}
+.icon-btn{border:0;cursor:pointer;width:38px;height:38px;border-radius:11px;font-size:15px;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
+.icon-btn.edit{background:rgba(59,125,196,.12);color:var(--blue)}
+.icon-btn.del{background:rgba(192,80,77,.12);color:var(--red)}
+.icon-btn:hover{filter:brightness(.94)}
+.sc-edit{display:none;gap:8px;margin-inline-start:auto}
+body.editor .sc-edit{display:flex}
+
+/* نموذج الموظف */
+.modal.lg{max-width:560px;text-align:right}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;text-align:right;margin-top:6px}
+.form-grid .full{grid-column:1/-1}
+.fld label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--ink)}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--blue);background:#fff}
+.fld .hint{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}
+.photo-pick{display:flex;align-items:center;gap:14px}
+.photo-prev{width:74px;height:74px;border-radius:16px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;flex-shrink:0}
+.photo-prev img{width:100%;height:100%;object-fit:cover}
+.photo-pick .btn{padding:8px 14px}
+
+/* عرض الصورة مكبّرة (نفس الصفحة) */
+.lightbox{position:fixed;inset:0;background:rgba(21,42,82,.82);display:none;align-items:center;justify-content:center;z-index:120;padding:24px;cursor:zoom-out;backdrop-filter:blur(3px)}
+.lightbox.show{display:flex}
+.lightbox img{max-width:92%;max-height:88%;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+
+/* ============================================================
    النافذة المنبثقة (تسجيل دخول المحرر)
    ============================================================ */
 .modal-bg{
@@ -257,17 +312,19 @@ footer b{color:var(--navy)}
   <section class="panel active" id="tab-staff">
     <div class="page-head">
       <div class="ttl"><div class="badge">👥</div><div><h2>الكادر التعليمي</h2><p class="sub">المعلمون والإداريون في قسم البنين</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة موظف</button>
+      <button class="btn btn-primary edit-only" onclick="openStaffForm()">＋ إضافة موظف</button>
     </div>
-    <div class="cards">
-      <div class="card stat" style="--accent:var(--navy)"><span class="ico">👨‍🏫</span><div class="n">29</div><div class="l">المعلمون والمشرف المختص</div></div>
-      <div class="card stat" style="--accent:var(--blue)"><span class="ico">🗂️</span><div class="n">9</div><div class="l">الإداريون والاستقبال</div></div>
-      <div class="card stat" style="--accent:var(--purple)"><span class="ico">👥</span><div class="n">38</div><div class="l">إجمالي الكادر</div></div>
-      <div class="card stat" style="--accent:var(--red)"><span class="ico">🏫</span><div class="n">—</div><div class="l">عدد الفصول</div></div>
+    <div class="toolbar">
+      <div class="search">
+        <span class="si">🔍</span>
+        <input type="text" id="staffSearch" placeholder="ابحث بالاسم، الوظيفة، المادة…" oninput="renderStaff()" />
+      </div>
+      <div class="count-pill" id="staffCount">٠ موظف</div>
     </div>
-    <div class="empty" style="margin-top:18px">
-      <div class="big">👥</div><h3>قائمة الكادر التفصيلية قيد الإنشاء</h3>
-      <p>سنبني هنا جدول الكادر الكامل (الاسم، الوظيفة، الجنسية، الحالة، الملاحظات) مع إمكانية الإضافة والتعديل والبحث — مستفيدين من ملف «الكادر التعليمي والإداري».</p>
+    <div class="staff-grid" id="staffGrid"></div>
+    <div class="empty" id="staffEmpty" style="display:none">
+      <div class="big">👥</div><h3>لا يوجد كادر بعد</h3>
+      <p>اضغط «دخول المحرر» ثم «＋ إضافة موظف» لإضافة أول عضو في الكادر. ستظهر البيانات تلقائياً لكل من يفتح الرابط.</p>
     </div>
   </section>
 
@@ -374,8 +431,9 @@ footer b{color:var(--navy)}
   <div class="modal">
     <div class="m-logo"><img src="Logo.jpeg" alt="" /></div>
     <h3 id="modalTitle">دخول المحرر</h3>
-    <p>أدخل كلمة المرور لتفعيل وضع التعديل</p>
-    <input type="password" id="pwInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()" />
+    <p>أدخل بريدك وكلمة المرور لتفعيل وضع التعديل</p>
+    <input type="email" id="emailInput" placeholder="البريد الإلكتروني" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    <input type="password" id="pwInput" placeholder="كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
     <div class="err" id="pwErr"></div>
     <div class="row">
       <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeLogin()">إلغاء</button>
@@ -384,18 +442,55 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== نموذج الموظف ===================== -->
+<div class="modal-bg" id="staffModal">
+  <div class="modal lg">
+    <h3 id="staffFormTitle">إضافة موظف</h3>
+    <div class="form-grid">
+      <div class="fld full">
+        <label>الصورة</label>
+        <div class="photo-pick">
+          <div class="photo-prev" id="photoPrev">👤</div>
+          <div>
+            <input type="file" id="photoInput" accept="image/*" style="display:none" />
+            <button type="button" class="btn btn-light" style="border:1px solid var(--line)" onclick="document.getElementById('photoInput').click()">📷 اختيار صورة</button>
+            <button type="button" class="btn btn-ghost" id="photoClear" style="background:var(--bg);color:var(--muted);display:none" onclick="clearPhoto()">إزالة</button>
+            <div class="hint">تُصغَّر الصورة تلقائياً لتوفير المساحة</div>
+          </div>
+        </div>
+      </div>
+      <div class="fld full"><label>الاسم *</label><input type="text" id="fName" placeholder="الاسم الكامل" /></div>
+      <div class="fld"><label>الوظيفة</label><input type="text" id="fJob" placeholder="معلم رياضيات / وكيل…" list="jobList" />
+        <datalist id="jobList"><option value="مدير المدرسة"><option value="وكيل مدرسة"><option value="موجه طلابي"><option value="معلم لغة عربية"><option value="معلم رياضيات"><option value="معلم علوم"><option value="معلم لغة إنجليزية"><option value="معلم إسلامية"><option value="معلم اجتماعيات"><option value="معلم حاسب"><option value="معلم فنية"><option value="معلم بدنية"><option value="إداري"></datalist>
+      </div>
+      <div class="fld"><label>الجنسية</label><input type="text" id="fNat" placeholder="سعودي / مصري…" list="natList" />
+        <datalist id="natList"><option value="سعودي"><option value="مصري"><option value="أردني"><option value="يمني"><option value="سوري"><option value="فلسطيني"><option value="سوداني"></datalist>
+      </div>
+      <div class="fld"><label>رقم الجوال</label><input type="tel" id="fPhone" placeholder="05XXXXXXXX" inputmode="tel" />
+        <div class="hint">يُستخدم لزر واتساب (أرقام سعودية تلقائياً)</div>
+      </div>
+      <div class="fld"><label>النصاب (عدد الحصص)</label><input type="number" id="fNisab" min="0" placeholder="مثال: 24" inputmode="numeric" /></div>
+      <div class="fld full"><label>المواد</label><input type="text" id="fSubjects" placeholder="مثال: رياضيات، إحصاء" /></div>
+      <div class="fld full"><label>المرحلة / الصف</label><input type="text" id="fGrade" placeholder="مثال: ثانوي — 11a، 12b" /></div>
+    </div>
+    <div class="err" id="staffErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeStaffForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveStaff()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- عرض الصورة مكبّرة -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg" src="" alt="" /></div>
+
 <!-- ============================================================
      إعدادات المنصة + Firebase
      ============================================================ -->
 <script type="module">
 
   /* ===========================================================
-     (1) كلمة مرور المحرر  —  غيّرها إلى ما تريد
-     =========================================================== */
-  const EDITOR_PASSWORD = "andalus1984";
-
-  /* ===========================================================
-     (2) مفاتيح Firebase
+     (1) مفاتيح Firebase
      ضع هنا مفاتيح مشروعك من Firebase (مجاناً).
      طريقة الحصول عليها مشروحة في رسالة المحادثة.
      طالما القيم فارغة، تعمل المنصة بدون حفظ.
@@ -420,7 +515,15 @@ footer b{color:var(--navy)}
   const setupWarn = document.getElementById('setupWarn');
   const isConfigured = firebaseConfig.apiKey && firebaseConfig.databaseURL;
 
+  /* وضع تطوير مؤقت: يسمح بالتعديل قبل تفعيل تسجيل الدخول.
+     عند التفعيل النهائي بإيميل الوكيل: اجعل DEV_MODE = false */
+  const DEV_MODE = true;
+  const DEV_PASSWORD = "andalus";
+
   let db = null, dbRef = null, setData = null;
+  let auth = null, fbSignIn = null, fbSignOut = null;
+  let staffRef = null, fbPush = null, fbUpdate = null, fbRemove = null, fbChildRef = null;
+  let staffList = [];
 
   function setSync(state, label){
     dot.className = 'sync-dot ' + state;
@@ -434,12 +537,32 @@ footer b{color:var(--navy)}
   } else {
     try{
       const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-      const { getDatabase, ref, onValue, set } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+      const { getDatabase, ref, onValue, set, push, update, remove } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+      const { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } =
+        await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+
       const app = initializeApp(firebaseConfig);
       db = getDatabase(app);
       setData = set;
+      auth = getAuth(app);
+      fbSignIn = signInWithEmailAndPassword;
+      fbSignOut = signOut;
       dbRef = ref(db, 'sharedNote');
+      fbPush = push; fbUpdate = update; fbRemove = remove; fbChildRef = ref;
+      staffRef = ref(db, 'staff');
       setSync('on','متصل');
+
+      // استماع فوري لبيانات الكادر
+      onValue(staffRef, (snap)=>{
+        const v = snap.val() || {};
+        staffList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderStaff();
+      });
+
+      // تتبّع حالة تسجيل الدخول (تبقى محفوظة بعد إعادة فتح الصفحة)
+      onAuthStateChanged(auth, (user)=>{
+        if(user) applyEditor(user.email); else applyViewer();
+      });
 
       // استماع فوري لأي تغيير (المزامنة بين الأجهزة)
       onValue(dbRef, (snap)=>{
@@ -455,6 +578,20 @@ footer b{color:var(--navy)}
     }
   }
 
+  // تطبيق وضع المحرر / المشاهد على الواجهة
+  function applyEditor(email){
+    document.body.classList.remove('viewer');
+    document.body.classList.add('editor');
+    noteEl.disabled = false;
+    document.getElementById('loginBtn').innerHTML = '🔓 <span class="txt" style="display:inline">محرر — خروج</span>';
+  }
+  function applyViewer(){
+    document.body.classList.remove('editor');
+    document.body.classList.add('viewer');
+    noteEl.disabled = true;
+    document.getElementById('loginBtn').innerHTML = '🔑 <span class="txt" style="display:inline">دخول المحرر</span>';
+  }
+
   // حفظ الملاحظة المشتركة (للمحرر فقط)
   let saveTimer = null;
   noteEl.addEventListener('input', ()=>{
@@ -468,35 +605,186 @@ footer b{color:var(--navy)}
   /* ===========================================================
      وضع المحرر / المشاهد
      =========================================================== */
-  window.openLogin = ()=>{
+  window.openLogin = async ()=>{
     if(document.body.classList.contains('editor')){
       // تسجيل خروج
-      document.body.classList.remove('editor');
-      document.body.classList.add('viewer');
-      noteEl.disabled = true;
-      document.getElementById('loginBtn').innerHTML = '🔑 <span class="txt" style="display:inline">دخول المحرر</span>';
+      if(auth && fbSignOut){ try{ await fbSignOut(auth); }catch(e){ console.error(e); } }
+      applyViewer();
       return;
     }
+    if(!auth && !DEV_MODE){ alert('قاعدة البيانات غير مرتبطة بعد.'); return; }
     document.getElementById('loginModal').classList.add('show');
-    setTimeout(()=>document.getElementById('pwInput').focus(),100);
+    setTimeout(()=>document.getElementById('emailInput').focus(),100);
   };
   window.closeLogin = ()=>{
     document.getElementById('loginModal').classList.remove('show');
     document.getElementById('pwInput').value='';
     document.getElementById('pwErr').textContent='';
   };
-  window.doLogin = ()=>{
-    const v = document.getElementById('pwInput').value;
-    if(v === EDITOR_PASSWORD){
-      document.body.classList.remove('viewer');
-      document.body.classList.add('editor');
-      noteEl.disabled = false;
-      document.getElementById('loginBtn').innerHTML = '🔓 <span class="txt" style="display:inline">محرر — خروج</span>';
+  window.doLogin = async ()=>{
+    const email = document.getElementById('emailInput').value.trim();
+    const pw = document.getElementById('pwInput').value;
+    const errEl = document.getElementById('pwErr');
+    // وضع التطوير المؤقت: كلمة مرور واحدة بدون حساب (يُلغى عند DEV_MODE=false)
+    if(DEV_MODE && pw === DEV_PASSWORD){ applyEditor('وضع التطوير'); closeLogin(); return; }
+    if(!email || !pw){ errEl.textContent = 'أدخل البريد وكلمة المرور'; return; }
+    if(!auth){ errEl.textContent = 'تسجيل الدخول غير مُفعّل بعد'; return; }
+    errEl.textContent = 'جارٍ التحقق…';
+    try{
+      await fbSignIn(auth, email, pw);   // onAuthStateChanged سيفعّل وضع المحرر
       closeLogin();
-    } else {
-      document.getElementById('pwErr').textContent = 'كلمة المرور غير صحيحة';
+    }catch(e){
+      const map = {
+        'auth/invalid-credential':'البريد أو كلمة المرور غير صحيحة',
+        'auth/invalid-email':'صيغة البريد غير صحيحة',
+        'auth/user-not-found':'هذا الحساب غير مسجّل',
+        'auth/wrong-password':'كلمة المرور غير صحيحة',
+        'auth/too-many-requests':'محاولات كثيرة — انتظر قليلاً'
+      };
+      errEl.textContent = map[e.code] || ('تعذّر الدخول: ' + e.code);
     }
   };
+
+  /* ===========================================================
+     الكادر التعليمي
+     =========================================================== */
+  const g = id => document.getElementById(id);
+  const esc = s => (''+ (s??'')).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const toAr = n => (''+ (n??'')).replace(/[0-9]/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+
+  let editingId = null, currentPhoto = '', photoCleared = false;
+
+  // تحويل رقم الجوال إلى رابط واتساب (يفترض الأرقام السعودية)
+  function waLink(raw){
+    let d = (''+(raw||'')).replace(/\D/g,'');
+    if(!d) return '';
+    if(d.startsWith('00')) d = d.slice(2);
+    if(d.startsWith('966')) {}
+    else if(d.startsWith('0')) d = '966' + d.slice(1);
+    else if(d.length === 9 && d.startsWith('5')) d = '966' + d;
+    return 'https://wa.me/' + d;
+  }
+
+  function cardHtml(s){
+    const init = esc((s.name||'؟').trim().charAt(0) || '؟');
+    const photoCell = s.photo
+      ? `<div class="sc-photo" onclick="showLightbox('${s.id}')"><img src="${s.photo}" alt=""></div>`
+      : `<div class="sc-photo">${init}</div>`;
+    const wa = waLink(s.phone);
+    const WA_SVG = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 0h-.008C7.174 0 .002 7.174.002 16c0 3.5 1.128 6.744 3.046 9.38L1.05 31.4l6.222-1.99A15.9 15.9 0 0 0 16.004 32C24.83 32 32 24.826 32 16S24.83 0 16.004 0zm9.31 22.594c-.386 1.09-1.92 1.994-3.143 2.258-.836.178-1.928.32-5.604-1.204-4.7-1.948-7.726-6.724-7.962-7.034-.226-.31-1.9-2.53-1.9-4.826s1.204-3.424 1.63-3.89c.35-.386.928-.562 1.482-.562.18 0 .342.01.488.016.426.018.64.044.92.714.348.84 1.196 2.94 1.296 3.152.102.212.17.46.034.77-.128.318-.24.46-.452.71-.212.25-.412.442-.624.71-.194.234-.412.486-.166.91.246.42 1.094 1.804 2.35 2.922 1.62 1.444 2.96 1.892 3.434 2.092.353.146.776.11 1.034-.166.327-.354.728-.94 1.136-1.518.29-.412.654-.464 1.036-.32.39.136 2.48 1.17 2.906 1.382.426.212.71.314.814.49.102.18.102 1.03-.284 2.12z"/></svg>';
+    const waBtn = wa
+      ? `<a class="wa-btn" href="${wa}" target="_blank" rel="noopener" title="مراسلة عبر واتساب">${WA_SVG}</a>`
+      : `<span class="wa-btn off" title="لا يوجد رقم">${WA_SVG}</span>`;
+    const chips = [];
+    if(s.nat)   chips.push(`<span class="chip navy">🌍 ${esc(s.nat)}</span>`);
+    if(s.grade) chips.push(`<span class="chip">🏫 ${esc(s.grade)}</span>`);
+    if(s.nisab!=null && s.nisab!=='') chips.push(`<span class="chip red">⏳ نصاب ${esc(toAr(s.nisab))}</span>`);
+    return `<div class="staff-card">
+      <div class="sc-top">${photoCell}<div><div class="sc-name">${esc(s.name)}</div>${s.job?`<div class="sc-job">${esc(s.job)}</div>`:''}</div></div>
+      ${chips.length?`<div class="sc-chips">${chips.join('')}</div>`:''}
+      ${s.subjects?`<div class="sc-row"><span class="lbl">📚 المواد:</span> ${esc(s.subjects)}</div>`:''}
+      ${s.phone?`<div class="sc-row"><span class="lbl">📱</span> ${esc(s.phone)}</div>`:''}
+      <div class="sc-actions">${waBtn}
+        <div class="sc-edit">
+          <button class="icon-btn edit" title="تعديل" onclick="openStaffForm('${s.id}')">✏️</button>
+          <button class="icon-btn del" title="حذف" onclick="deleteStaff('${s.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  window.renderStaff = ()=>{
+    const grid = g('staffGrid'), empty = g('staffEmpty');
+    const q = (g('staffSearch').value || '').trim().toLowerCase();
+    let list = staffList.slice().sort((a,b)=> (a.name||'').localeCompare(b.name||'','ar'));
+    if(q) list = list.filter(s => [s.name,s.job,s.subjects,s.nat,s.grade,s.phone].join(' ').toLowerCase().includes(q));
+    g('staffCount').textContent = toAr(q ? list.length : staffList.length) + ' موظف';
+    if(staffList.length === 0){ empty.style.display='block'; grid.innerHTML=''; return; }
+    empty.style.display='none';
+    grid.innerHTML = list.length
+      ? list.map(cardHtml).join('')
+      : '<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>لا نتائج مطابقة للبحث</p></div>';
+  };
+
+  window.showLightbox = (id)=>{
+    const s = staffList.find(x=>x.id===id);
+    if(!s || !s.photo) return;
+    g('lightboxImg').src = s.photo;
+    g('lightbox').classList.add('show');
+  };
+
+  function setPhotoPreview(d){
+    const p = g('photoPrev'), clr = g('photoClear');
+    if(d){ p.innerHTML = `<img src="${d}" alt="">`; clr.style.display='inline-flex'; }
+    else { p.innerHTML = '👤'; clr.style.display='none'; }
+  }
+  window.clearPhoto = ()=>{ currentPhoto=''; photoCleared=true; setPhotoPreview(''); };
+
+  // تصغير الصورة قبل الحفظ
+  function resizeImage(file, max, q){
+    return new Promise((res,rej)=>{
+      const fr = new FileReader();
+      fr.onload = ()=>{ const img = new Image();
+        img.onload = ()=>{ let w=img.width, h=img.height;
+          if(w>h && w>max){ h=Math.round(h*max/w); w=max; }
+          else if(h>=w && h>max){ w=Math.round(w*max/h); h=max; }
+          const c=document.createElement('canvas'); c.width=w; c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          res(c.toDataURL('image/jpeg', q));
+        }; img.onerror=rej; img.src=fr.result; };
+      fr.onerror=rej; fr.readAsDataURL(file);
+    });
+  }
+
+  window.openStaffForm = (id)=>{
+    editingId = id || null; currentPhoto=''; photoCleared=false;
+    const s = id ? staffList.find(x=>x.id===id) : null;
+    g('staffFormTitle').textContent = id ? 'تعديل موظف' : 'إضافة موظف';
+    g('fName').value = s?.name||''; g('fJob').value = s?.job||'';
+    g('fNat').value = s?.nat||'';   g('fPhone').value = s?.phone||'';
+    g('fNisab').value = s?.nisab||''; g('fSubjects').value = s?.subjects||'';
+    g('fGrade').value = s?.grade||''; g('staffErr').textContent='';
+    setPhotoPreview(s?.photo || '');
+    g('staffModal').classList.add('show');
+    setTimeout(()=>g('fName').focus(),100);
+  };
+  window.closeStaffForm = ()=>{ g('staffModal').classList.remove('show'); g('staffErr').textContent=''; };
+
+  window.saveStaff = async ()=>{
+    const name = g('fName').value.trim();
+    if(!name){ g('staffErr').textContent='الاسم مطلوب'; return; }
+    if(!staffRef){ g('staffErr').textContent='غير متصل بقاعدة البيانات'; return; }
+    const existing = editingId ? staffList.find(x=>x.id===editingId) : null;
+    let photo = currentPhoto ? currentPhoto : (photoCleared ? '' : (existing?.photo || ''));
+    const data = {
+      name, job:g('fJob').value.trim(), nat:g('fNat').value.trim(),
+      phone:g('fPhone').value.trim(), nisab:g('fNisab').value.trim(),
+      subjects:g('fSubjects').value.trim(), grade:g('fGrade').value.trim(), photo,
+      updatedAt: Date.now()
+    };
+    g('staffErr').textContent='جارٍ الحفظ…';
+    try{
+      if(editingId) await fbUpdate(fbChildRef(db,'staff/'+editingId), data);
+      else await fbPush(staffRef, data);
+      closeStaffForm();
+    }catch(e){ g('staffErr').textContent = 'تعذّر الحفظ: ' + (e.code||e.message); }
+  };
+
+  window.deleteStaff = async (id)=>{
+    const s = staffList.find(x=>x.id===id);
+    if(!confirm('حذف «'+(s?.name||'')+'» نهائياً؟')) return;
+    try{ await fbRemove(fbChildRef(db,'staff/'+id)); }
+    catch(e){ alert('تعذّر الحذف: '+(e.code||e.message)); }
+  };
+
+  g('photoInput').addEventListener('change', async (e)=>{
+    const file = e.target.files[0]; if(!file) return;
+    try{ const d = await resizeImage(file, 320, .82); currentPhoto=d; photoCleared=false; setPhotoPreview(d); }
+    catch(err){ console.error(err); g('staffErr').textContent='تعذّر قراءة الصورة'; }
+    e.target.value='';
+  });
+
+  renderStaff();
 
   /* ===========================================================
      تبديل التبويبات

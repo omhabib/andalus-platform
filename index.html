@@ -130,7 +130,7 @@ body{
   display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--shadow-sm);
 }
 .page-head h2{font-family:'Cairo';font-size:23px;font-weight:900;margin:0;color:var(--navy)}
-.page-head .sub{margin:3px 0 0;color:var(--muted);font-size:13px;font-weight:500}
+.page-head .sub{display:none}
 
 /* بطاقات */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
@@ -152,7 +152,7 @@ body{
 }
 .empty .big{font-size:46px;margin-bottom:12px}
 .empty h3{font-family:'Cairo';color:var(--navy);font-size:19px;margin:0 0 8px}
-.empty p{margin:0 auto;max-width:440px;line-height:1.7;font-size:14px}
+.empty p{display:none}
 
 /* صندوق الملاحظة المشتركة (تجريبي لإثبات المزامنة) */
 .note-box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);margin-top:18px}
@@ -226,6 +226,66 @@ body.editor .sc-edit{display:flex}
 .lightbox{position:fixed;inset:0;background:rgba(21,42,82,.82);display:none;align-items:center;justify-content:center;z-index:120;padding:24px;cursor:zoom-out;backdrop-filter:blur(3px)}
 .lightbox.show{display:flex}
 .lightbox img{max-width:92%;max-height:88%;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+
+/* ============================================================
+   تبويب الفصول والمواد
+   ============================================================ */
+.subnav{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.subnav button{border:1px solid var(--line);background:var(--card);cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;color:var(--muted);padding:9px 16px;border-radius:30px;transition:.15s}
+.subnav button.active{background:var(--grad);color:#fff;border-color:transparent;box-shadow:var(--shadow-sm)}
+.subview{display:none}
+.subview.active{display:block;animation:fade .3s ease}
+.sec-title{font-family:'Cairo';font-weight:800;font-size:15px;color:var(--navy);margin:20px 0 12px;display:flex;align-items:center;gap:12px}
+.sec-title:first-child{margin-top:0}
+.sec-title .ln{flex:1;height:1px;background:var(--line)}
+
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.subj-card{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 13px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.subj-card::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--c)}
+.subj-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.subj-nm{font-weight:700;font-size:13.5px;color:var(--ink);line-height:1.3}
+.subj-acts{display:none;gap:5px;margin-inline-start:auto}
+body.editor .subj-card .subj-acts{display:flex}
+.mini-btn{border:0;cursor:pointer;width:30px;height:30px;border-radius:9px;font-size:13px;background:var(--bg);transition:.15s}
+.mini-btn:hover{filter:brightness(.92)}
+
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
+.sec-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow-sm);position:relative}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;font-family:'Cairo';font-weight:900;font-size:17px;background:var(--grad);color:#fff;border-radius:11px;padding:6px 13px;margin-bottom:9px}
+.sec-grade{font-weight:700;color:var(--ink);font-size:14px}
+.sec-meta{color:var(--muted);font-size:12.5px;font-weight:600;margin-top:6px;line-height:1.7}
+.sec-acts{position:absolute;top:12px;left:12px;display:none;gap:5px}
+body.editor .sec-card .sec-acts{display:flex}
+
+.assign-pick{margin-bottom:16px;max-width:360px}
+.assign-head,.assign-row{display:grid;grid-template-columns:1.4fr 1.4fr .65fr 34px;gap:8px;align-items:center}
+.assign-head{padding:0 9px;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.assign-row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
+.assign-row select,.assign-row input{border:1px solid var(--line);border-radius:9px;padding:9px;font-family:inherit;font-size:13px;background:var(--bg);width:100%}
+.assign-row .mini-btn{width:34px;height:34px}
+.assign-sum{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:13px 16px;font-weight:800;color:var(--navy);margin-top:10px;font-size:14px}
+.chip.auto{color:var(--blue);border-color:rgba(59,125,196,.3);background:rgba(59,125,196,.08)}
+
+/* ============================================================
+   الجدول الدراسي
+   ============================================================ */
+.schedview{display:none}
+.schedview.active{display:block;animation:fade .3s ease}
+.sched-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
+.sched-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+table.sched{border-collapse:separate;border-spacing:0;width:100%;min-width:660px;background:var(--card)}
+table.sched th,table.sched td{border-bottom:1px solid var(--line);border-inline-start:1px solid var(--line);text-align:center;vertical-align:middle;padding:2px}
+table.sched thead th{background:var(--bg);color:var(--navy);font-weight:800;font-size:13px;padding:11px 6px;font-family:'Cairo'}
+table.sched .per-h{background:var(--navy);color:#fff;font-weight:800;font-size:12px;width:50px}
+.cell{padding:7px 6px;font-size:12px;font-weight:700;line-height:1.35;color:#fff;border-radius:9px;margin:3px;display:flex;flex-direction:column;gap:2px;justify-content:center;min-height:46px}
+.cell .t{font-size:10.5px;font-weight:600;opacity:.92}
+.cell.empty{background:transparent;color:#C7CCD6;font-weight:600}
+.cell-pick{width:100%;min-width:108px;border:0;border-radius:9px;font-family:inherit;font-size:11.5px;font-weight:700;padding:8px 4px;cursor:pointer;min-height:46px;text-align:center;text-align-last:center}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tally-item{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:6px 13px;font-size:12.5px;font-weight:700;color:var(--ink)}
+.tally-item .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.tally-item.done{border-color:#34d39966;background:#34d39912}
+.tally-item.over{border-color:var(--red);color:var(--red)}
 
 /* ============================================================
    النافذة المنبثقة (تسجيل دخول المحرر)
@@ -306,8 +366,6 @@ footer b{color:var(--navy)}
 
 <main class="container">
 
-  <div class="viewer-hint">👁️ أنت في وضع <b>المشاهدة</b> — لتعديل البيانات اضغط «دخول المحرر» في الأعلى.</div>
-
   <!-- ===== الكادر التعليمي ===== -->
   <section class="panel active" id="tab-staff">
     <div class="page-head">
@@ -331,24 +389,61 @@ footer b{color:var(--navy)}
   <!-- ===== الفصول والمواد ===== -->
   <section class="panel" id="tab-classes">
     <div class="page-head">
-      <div class="ttl"><div class="badge">📚</div><div><h2>الفصول والمواد</h2><p class="sub">الشُّعب الدراسية والمواد المقررة</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة فصل</button>
+      <div class="ttl"><div class="badge">📚</div><div><h2>الفصول والمواد</h2></div></div>
     </div>
-    <div class="empty">
-      <div class="big">📚</div><h3>إدارة الفصول والمواد قيد الإنشاء</h3>
-      <p>سنعرض هنا الشُّعب (مثل 12a، 11b، 10a …) والمواد (عربي، رياضيات، علوم، إنجليزي، إسلامية، اجتماعيات، حاسب، فنية، بدنية) وربط كل مادة بمعلمها.</p>
+    <div class="subnav">
+      <button class="active" data-sub="subjects" onclick="switchSub(this)">🎨 المواد</button>
+      <button data-sub="sections" onclick="switchSub(this)">🏫 الصفوف والفصول</button>
+      <button data-sub="assign" onclick="switchSub(this)">🔗 الإسناد</button>
+    </div>
+
+    <!-- المواد -->
+    <div class="subview active" id="sub-subjects">
+      <div class="toolbar"><div style="flex:1"></div><button class="btn btn-primary edit-only" onclick="openSubjectForm()">＋ إضافة مادة</button></div>
+      <div class="sec-title">المواد الأساسية <span class="ln"></span></div>
+      <div class="subj-grid" id="subjCore"></div>
+      <div class="sec-title">البرامج الإثرائية / الموهبة <span class="ln"></span></div>
+      <div class="subj-grid" id="subjGifted"></div>
+    </div>
+
+    <!-- الصفوف والفصول -->
+    <div class="subview" id="sub-sections">
+      <div class="toolbar"><div style="flex:1"></div><button class="btn btn-primary edit-only" onclick="openSectionForm()">＋ إضافة فصل</button></div>
+      <div id="sectionsWrap"></div>
+      <div class="empty" id="sectionsEmpty" style="display:none"><div class="big">🏫</div><h3>لا توجد فصول بعد</h3></div>
+    </div>
+
+    <!-- الإسناد -->
+    <div class="subview" id="sub-assign">
+      <div class="fld assign-pick"><label>اختر الفصل</label><select id="assignSection" onchange="renderAssign()"></select></div>
+      <div id="assignWrap"></div>
     </div>
   </section>
 
   <!-- ===== الجدول الدراسي ===== -->
   <section class="panel" id="tab-schedule">
     <div class="page-head">
-      <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2><p class="sub">جدول الحصص الأسبوعي</p></div></div>
-      <button class="btn btn-primary edit-only">＋ تحرير الجدول</button>
+      <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2></div></div>
     </div>
-    <div class="empty">
-      <div class="big">🗓️</div><h3>الجدول الدراسي قيد الإنشاء</h3>
-      <p>جدول حصص أسبوعي (الأحد → الخميس) لكل شعبة ولكل معلم، مع إمكانية العرض حسب الفصل أو حسب المعلم — مستفيدين من ملف «جدول2 ف2».</p>
+    <div class="subnav">
+      <button class="active" data-sched="bySection" onclick="switchSched(this)">🏫 حسب الفصل</button>
+      <button data-sched="byTeacher" onclick="switchSched(this)">👤 حسب المعلم</button>
+    </div>
+
+    <!-- حسب الفصل -->
+    <div class="schedview active" id="sched-bySection">
+      <div class="sched-controls">
+        <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="schedSection" onchange="renderSchedSection()"></select></div>
+        <div class="fld edit-only" style="max-width:150px"><label>عدد الحصص يومياً</label><input type="number" id="schedPeriods" min="1" max="12" value="7" onchange="setPeriods(this.value)" /></div>
+      </div>
+      <div id="schedSectionWrap"></div>
+      <div id="schedSubjTally" style="margin-top:16px"></div>
+    </div>
+
+    <!-- حسب المعلم -->
+    <div class="schedview" id="sched-byTeacher">
+      <div class="fld" style="max-width:280px;margin-bottom:16px"><label>المعلم</label><select id="schedTeacher" onchange="renderSchedTeacher()"></select></div>
+      <div id="schedTeacherWrap"></div>
     </div>
   </section>
 
@@ -481,6 +576,47 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== نموذج المادة ===================== -->
+<div class="modal-bg" id="subjectModal">
+  <div class="modal lg">
+    <h3 id="subjFormTitle">إضافة مادة</h3>
+    <div class="form-grid">
+      <div class="fld full"><label>اسم المادة *</label><input type="text" id="subjName" placeholder="مثال: الرياضيات" /></div>
+      <div class="fld"><label>الأيقونة</label><input type="text" id="subjIcon" maxlength="3" placeholder="📚" /></div>
+      <div class="fld"><label>اللون</label><input type="color" id="subjColor" value="#3B7DC4" style="height:46px;padding:4px" /></div>
+      <div class="fld full"><label>التصنيف</label>
+        <select id="subjCat"><option value="core">مادة أساسية</option><option value="gifted">برنامج إثرائي / موهبة</option></select>
+      </div>
+    </div>
+    <div class="err" id="subjErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeSubjectForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveSubject()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== نموذج الفصل ===================== -->
+<div class="modal-bg" id="sectionModal">
+  <div class="modal lg">
+    <h3 id="secFormTitle">إضافة فصل</h3>
+    <div class="form-grid">
+      <div class="fld"><label>المرحلة *</label>
+        <select id="secStage" onchange="fillGrades()"><option value="ابتدائي">ابتدائي</option><option value="متوسط">متوسط</option><option value="ثانوي">ثانوي</option></select>
+      </div>
+      <div class="fld"><label>الصف *</label><select id="secGrade"></select></div>
+      <div class="fld"><label>الفصل (الشعبة) *</label><input type="text" id="secSec" placeholder="a أو ب" /></div>
+      <div class="fld"><label>عدد الطلاب</label><input type="number" id="secStudents" min="0" inputmode="numeric" /></div>
+      <div class="fld full"><label>رائد الفصل (المربّي)</label><select id="secHomeroom"></select></div>
+    </div>
+    <div class="err" id="secErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeSectionForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveSection()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
 <!-- عرض الصورة مكبّرة -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg" src="" alt="" /></div>
 
@@ -524,6 +660,11 @@ footer b{color:var(--navy)}
   let auth = null, fbSignIn = null, fbSignOut = null;
   let staffRef = null, fbPush = null, fbUpdate = null, fbRemove = null, fbChildRef = null;
   let staffList = [];
+  let subjectsRef = null, sectionsRef = null, assignRef = null;
+  let subjectsList = [], sectionsList = [], assignList = [];
+  let editSubjId = null, editSecId = null;
+  let scheduleRef = null, settingsRef = null;
+  let scheduleData = {}, settings = {};
 
   function setSync(state, label){
     dot.className = 'sync-dot ' + state;
@@ -552,11 +693,42 @@ footer b{color:var(--navy)}
       staffRef = ref(db, 'staff');
       setSync('on','متصل');
 
+      subjectsRef = ref(db, 'subjects');
+      sectionsRef = ref(db, 'sections');
+      assignRef   = ref(db, 'assign');
+      scheduleRef = ref(db, 'schedule');
+      settingsRef = ref(db, 'settings');
+
       // استماع فوري لبيانات الكادر
       onValue(staffRef, (snap)=>{
         const v = snap.val() || {};
         staffList = Object.keys(v).map(id => ({ id, ...v[id] }));
-        renderStaff();
+        renderStaff(); renderSections(); refreshAssignSectionPicker(); renderAssign();
+        refreshSchedPickers(); renderSchedSection(); renderSchedTeacher();
+      });
+      onValue(subjectsRef, (snap)=>{
+        const v = snap.val() || {};
+        subjectsList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderSubjects(); renderAssign(); renderStaff();
+      });
+      onValue(sectionsRef, (snap)=>{
+        const v = snap.val() || {};
+        sectionsList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderSections(); refreshAssignSectionPicker(); refreshSchedPickers(); renderSchedSection();
+      });
+      onValue(assignRef, (snap)=>{
+        const v = snap.val() || {};
+        assignList = Object.keys(v).map(id => ({ id, ...v[id] }));
+        renderAssign(); renderStaff(); renderSchedSection(); renderSchedTeacher();
+      });
+      onValue(scheduleRef, (snap)=>{
+        scheduleData = snap.val() || {};
+        renderSchedSection(); renderSchedTeacher();
+      });
+      onValue(settingsRef, (snap)=>{
+        settings = snap.val() || {};
+        if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
+        renderSchedSection(); renderSchedTeacher();
       });
 
       // تتبّع حالة تسجيل الدخول (تبقى محفوظة بعد إعادة فتح الصفحة)
@@ -584,12 +756,14 @@ footer b{color:var(--navy)}
     document.body.classList.add('editor');
     noteEl.disabled = false;
     document.getElementById('loginBtn').innerHTML = '🔓 <span class="txt" style="display:inline">محرر — خروج</span>';
+    if(window.renderSchedSection){ renderSchedSection(); }
   }
   function applyViewer(){
     document.body.classList.remove('editor');
     document.body.classList.add('viewer');
     noteEl.disabled = true;
     document.getElementById('loginBtn').innerHTML = '🔑 <span class="txt" style="display:inline">دخول المحرر</span>';
+    if(window.renderSchedSection){ renderSchedSection(); }
   }
 
   // حفظ الملاحظة المشتركة (للمحرر فقط)
@@ -675,14 +849,23 @@ footer b{color:var(--navy)}
     const waBtn = wa
       ? `<a class="wa-btn" href="${wa}" target="_blank" rel="noopener" title="مراسلة عبر واتساب">${WA_SVG}</a>`
       : `<span class="wa-btn off" title="لا يوجد رقم">${WA_SVG}</span>`;
+    // اشتقاق النصاب والمواد من مصفوفة الإسناد (إن وُجدت)
+    const myAssign = assignList.filter(a => a.teacherId === s.id);
+    const autoPeriods = myAssign.reduce((n,a)=> n + (parseInt(a.periods)||0), 0);
+    const autoSubjNames = [...new Set(myAssign.map(a=>a.subjectId).filter(Boolean))]
+      .map(id => subjectsList.find(x=>x.id===id)?.name).filter(Boolean);
+    const nisabShown = autoPeriods>0 ? autoPeriods : s.nisab;
+    const nisabAuto  = autoPeriods>0;
+    const subjText   = autoSubjNames.length ? autoSubjNames.join('، ') : s.subjects;
+
     const chips = [];
     if(s.nat)   chips.push(`<span class="chip navy">🌍 ${esc(s.nat)}</span>`);
     if(s.grade) chips.push(`<span class="chip">🏫 ${esc(s.grade)}</span>`);
-    if(s.nisab!=null && s.nisab!=='') chips.push(`<span class="chip red">⏳ نصاب ${esc(toAr(s.nisab))}</span>`);
+    if(nisabShown!=null && nisabShown!=='') chips.push(`<span class="chip ${nisabAuto?'auto':'red'}">⏳ نصاب ${esc(toAr(nisabShown))}${nisabAuto?' •':''}</span>`);
     return `<div class="staff-card">
       <div class="sc-top">${photoCell}<div><div class="sc-name">${esc(s.name)}</div>${s.job?`<div class="sc-job">${esc(s.job)}</div>`:''}</div></div>
       ${chips.length?`<div class="sc-chips">${chips.join('')}</div>`:''}
-      ${s.subjects?`<div class="sc-row"><span class="lbl">📚 المواد:</span> ${esc(s.subjects)}</div>`:''}
+      ${subjText?`<div class="sc-row"><span class="lbl">📚 المواد:</span> ${esc(subjText)}</div>`:''}
       ${s.phone?`<div class="sc-row"><span class="lbl">📱</span> ${esc(s.phone)}</div>`:''}
       <div class="sc-actions">${waBtn}
         <div class="sc-edit">
@@ -785,6 +968,284 @@ footer b{color:var(--navy)}
   });
 
   renderStaff();
+
+  /* ===========================================================
+     الفصول والمواد
+     =========================================================== */
+  const GRADES = {
+    'ابتدائي':['الأول','الثاني','الثالث','الرابع','الخامس','السادس'],
+    'متوسط':['الأول','الثاني','الثالث'],
+    'ثانوي':['الأول','الثاني','الثالث']
+  };
+  const STAGES = ['ابتدائي','متوسط','ثانوي'];
+
+  window.switchSub = (btn)=>{
+    document.querySelectorAll('.subnav button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.subview').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    g('sub-'+btn.dataset.sub).classList.add('active');
+  };
+
+  /* ----- المواد ----- */
+  function subjCard(s){
+    const c = s.color || '#888';
+    return `<div class="subj-card" style="--c:${c}">
+      <div class="subj-ic" style="background:${c}22">${s.icon||'📚'}</div>
+      <div class="subj-nm">${esc(s.name)}</div>
+      <div class="subj-acts">
+        <button class="mini-btn" onclick="openSubjectForm('${s.id}')">✏️</button>
+        <button class="mini-btn" onclick="deleteSubject('${s.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }
+  window.renderSubjects = ()=>{
+    const byOrder = (a,b)=>(a.order||0)-(b.order||0);
+    g('subjCore').innerHTML   = subjectsList.filter(s=>s.cat!=='gifted').sort(byOrder).map(subjCard).join('');
+    g('subjGifted').innerHTML = subjectsList.filter(s=>s.cat==='gifted').sort(byOrder).map(subjCard).join('');
+  };
+  window.openSubjectForm = (id)=>{
+    editSubjId = id || null;
+    const s = id ? subjectsList.find(x=>x.id===id) : null;
+    g('subjFormTitle').textContent = id ? 'تعديل مادة' : 'إضافة مادة';
+    g('subjName').value = s?.name||''; g('subjIcon').value = s?.icon||'📚';
+    g('subjColor').value = s?.color||'#3B7DC4'; g('subjCat').value = s?.cat||'core';
+    g('subjErr').textContent=''; g('subjectModal').classList.add('show');
+  };
+  window.closeSubjectForm = ()=> g('subjectModal').classList.remove('show');
+  window.saveSubject = async ()=>{
+    const name = g('subjName').value.trim();
+    if(!name){ g('subjErr').textContent='اسم المادة مطلوب'; return; }
+    const data = { name, icon:g('subjIcon').value.trim()||'📚', color:g('subjColor').value, cat:g('subjCat').value,
+      order: editSubjId ? (subjectsList.find(x=>x.id===editSubjId)?.order||99) : (subjectsList.length+1) };
+    try{ if(editSubjId) await fbUpdate(fbChildRef(db,'subjects/'+editSubjId),data); else await fbPush(subjectsRef,data); closeSubjectForm(); }
+    catch(e){ g('subjErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
+  };
+  window.deleteSubject = async (id)=>{
+    const s = subjectsList.find(x=>x.id===id);
+    if(!confirm('حذف مادة «'+(s?.name||'')+'»؟')) return;
+    try{ await fbRemove(fbChildRef(db,'subjects/'+id)); }catch(e){ alert('تعذّر الحذف'); }
+  };
+
+  /* ----- الصفوف والفصول ----- */
+  window.fillGrades = ()=>{
+    const st = g('secStage').value;
+    g('secGrade').innerHTML = (GRADES[st]||[]).map(gr=>`<option value="${gr}">${gr}</option>`).join('');
+  };
+  function secSort(a,b){
+    const sa=STAGES.indexOf(a.stage), sb=STAGES.indexOf(b.stage);
+    if(sa!==sb) return sa-sb;
+    const ga=(GRADES[a.stage]||[]).indexOf(a.grade), gb=(GRADES[b.stage]||[]).indexOf(b.grade);
+    return ga-gb || (a.sec||'').localeCompare(b.sec||'','ar');
+  }
+  window.renderSections = ()=>{
+    const wrap=g('sectionsWrap'), empty=g('sectionsEmpty');
+    if(sectionsList.length===0){ wrap.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    let html='';
+    STAGES.forEach(st=>{
+      const inSt = sectionsList.filter(s=>s.stage===st).sort(secSort);
+      if(!inSt.length) return;
+      html += `<div class="sec-title">${st} <span class="ln"></span></div><div class="sec-grid">`;
+      inSt.forEach(s=>{
+        const hr = s.homeroom ? staffList.find(x=>x.id===s.homeroom) : null;
+        html += `<div class="sec-card">
+          <div class="sec-acts"><button class="mini-btn" onclick="openSectionForm('${s.id}')">✏️</button><button class="mini-btn" onclick="deleteSection('${s.id}')">🗑️</button></div>
+          <div class="sec-badge">${esc(s.grade)} ${esc(s.sec||'')}</div>
+          <div class="sec-grade">${esc(s.grade)} ${esc(st)}</div>
+          <div class="sec-meta">${s.students?('👥 '+toAr(s.students)+' طالب'):''}${hr?((s.students?'<br>':'')+'🎓 '+esc(hr.name)):''}</div>
+        </div>`;
+      });
+      html += '</div>';
+    });
+    wrap.innerHTML = html;
+  };
+  window.openSectionForm = (id)=>{
+    editSecId = id || null;
+    const s = id ? sectionsList.find(x=>x.id===id) : null;
+    g('secFormTitle').textContent = id ? 'تعديل فصل' : 'إضافة فصل';
+    g('secStage').value = s?.stage||'ابتدائي'; fillGrades();
+    if(s?.grade) g('secGrade').value = s.grade;
+    g('secSec').value = s?.sec||''; g('secStudents').value = s?.students||'';
+    g('secHomeroom').innerHTML = '<option value="">— بدون —</option>' +
+      staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar')).map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+    g('secHomeroom').value = s?.homeroom||'';
+    g('secErr').textContent=''; g('sectionModal').classList.add('show');
+  };
+  window.closeSectionForm = ()=> g('sectionModal').classList.remove('show');
+  window.saveSection = async ()=>{
+    const data = { stage:g('secStage').value, grade:g('secGrade').value, sec:g('secSec').value.trim(),
+      students:g('secStudents').value.trim(), homeroom:g('secHomeroom').value };
+    if(!data.grade){ g('secErr').textContent='اختر الصف'; return; }
+    if(!data.sec){ g('secErr').textContent='أدخل اسم الفصل (الشعبة)'; return; }
+    try{ if(editSecId) await fbUpdate(fbChildRef(db,'sections/'+editSecId),data); else await fbPush(sectionsRef,data); closeSectionForm(); }
+    catch(e){ g('secErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
+  };
+  window.deleteSection = async (id)=>{
+    if(!confirm('حذف هذا الفصل؟ (سيُحذف إسناده أيضاً)')) return;
+    try{
+      await fbRemove(fbChildRef(db,'sections/'+id));
+      for(const a of assignList.filter(a=>a.sectionId===id)) await fbRemove(fbChildRef(db,'assign/'+a.id));
+    }catch(e){ alert('تعذّر الحذف'); }
+  };
+
+  /* ----- الإسناد (المصفوفة) ----- */
+  function refreshAssignSectionPicker(){
+    const sel = g('assignSection'); if(!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— اختر الفصل —</option>' +
+      sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(s.grade+' '+s.stage+' '+(s.sec||''))}</option>`).join('');
+    if(cur) sel.value = cur;
+  }
+  window.renderAssign = ()=>{
+    const wrap = g('assignWrap'); if(!wrap) return;
+    const secId = g('assignSection').value;
+    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🔗</div><h3>اختر فصلاً لإسناد المواد والمعلمين</h3></div>'; return; }
+    const rows = assignList.filter(a=>a.sectionId===secId);
+    const subjOpts = sel => '<option value="">— المادة —</option>' + subjectsList.slice().sort((a,b)=>(a.order||0)-(b.order||0))
+      .map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.icon||''} ${esc(s.name)}</option>`).join('');
+    const teachOpts = sel => '<option value="">— المعلم —</option>' + staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'))
+      .map(t=>`<option value="${t.id}" ${t.id===sel?'selected':''}>${esc(t.name)}</option>`).join('');
+    let html = `<div class="assign-head"><div>المادة</div><div>المعلم</div><div>الحصص</div><div></div></div>`;
+    rows.forEach(r=>{
+      html += `<div class="assign-row">
+        <select onchange="updateAssign('${r.id}','subjectId',this.value)">${subjOpts(r.subjectId)}</select>
+        <select onchange="updateAssign('${r.id}','teacherId',this.value)">${teachOpts(r.teacherId)}</select>
+        <input type="number" min="0" value="${r.periods||''}" onchange="updateAssign('${r.id}','periods',this.value)" />
+        <button class="mini-btn" onclick="deleteAssign('${r.id}')">🗑️</button>
+      </div>`;
+    });
+    const total = rows.reduce((n,r)=>n+(parseInt(r.periods)||0),0);
+    html += `<button class="btn btn-light edit-only" style="border:1px solid var(--line);margin-top:4px" onclick="addAssign('${secId}')">＋ إضافة مادة للفصل</button>`;
+    html += `<div class="assign-sum">إجمالي حصص الفصل: ${toAr(total)}</div>`;
+    wrap.innerHTML = html;
+  };
+  window.addAssign = async (secId)=>{ try{ await fbPush(assignRef,{sectionId:secId,subjectId:'',teacherId:'',periods:''}); }catch(e){ alert('تعذّر'); } };
+  window.updateAssign = async (id,field,val)=>{ try{ await fbUpdate(fbChildRef(db,'assign/'+id),{[field]:val}); }catch(e){ console.error(e); } };
+  window.deleteAssign = async (id)=>{ try{ await fbRemove(fbChildRef(db,'assign/'+id)); }catch(e){ alert('تعذّر'); } };
+
+  /* ===========================================================
+     الجدول الدراسي
+     =========================================================== */
+  const DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس'];
+  function periodsCount(){ return Math.max(1, Math.min(12, parseInt(settings.periods)||7)); }
+
+  window.switchSched = (btn)=>{
+    document.querySelectorAll('[data-sched]').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.schedview').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    g('sched-'+btn.dataset.sched).classList.add('active');
+  };
+
+  function refreshSchedPickers(){
+    const ss = g('schedSection');
+    if(ss){ const cur = ss.value;
+      ss.innerHTML = '<option value="">— اختر الفصل —</option>' +
+        sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(s.grade+' '+s.stage+' '+(s.sec||''))}</option>`).join('');
+      if(cur) ss.value = cur; }
+    const ts = g('schedTeacher');
+    if(ts){ const cur = ts.value;
+      ts.innerHTML = '<option value="">— اختر المعلم —</option>' +
+        staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar')).map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+      if(cur) ts.value = cur; }
+    if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
+  }
+
+  window.setPeriods = async (v)=>{ try{ await setData(fbChildRef(db,'settings/periods'), Math.max(1,Math.min(12,parseInt(v)||7))); }catch(e){ console.error(e); } };
+
+  function assignLabel(a){
+    const subj = subjectsList.find(x=>x.id===a.subjectId);
+    const t = staffList.find(x=>x.id===a.teacherId);
+    return (subj ? (subj.icon||'')+' '+subj.name : '؟') + (t ? ' — '+t.name : '');
+  }
+  function countPlaced(secId, aid){
+    let n=0; const sec = scheduleData?.[secId] || {};
+    for(const day of DAYS){ const dd = sec[day]||{}; for(const p in dd){ if(dd[p]===aid) n++; } }
+    return n;
+  }
+
+  window.renderSchedSection = ()=>{
+    const wrap = g('schedSectionWrap'), tallyWrap = g('schedSubjTally');
+    if(!wrap) return;
+    const secId = g('schedSection') ? g('schedSection').value : '';
+    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🗓️</div><h3>اختر فصلاً لعرض جدوله</h3></div>'; if(tallyWrap) tallyWrap.innerHTML=''; return; }
+    const assigns = assignList.filter(a=>a.sectionId===secId && a.subjectId);
+    const editor = document.body.classList.contains('editor');
+    const P = periodsCount();
+    const opts = sel => '<option value="">—</option>' + assigns.map(a=>`<option value="${a.id}" ${a.id===sel?'selected':''}>${esc(assignLabel(a))}</option>`).join('');
+
+    let html = '<div class="sched-scroll"><table class="sched"><thead><tr><th class="per-h"></th>'+DAYS.map(d=>`<th>${d}</th>`).join('')+'</tr></thead><tbody>';
+    for(let p=1;p<=P;p++){
+      html += `<tr><th class="per-h">${toAr(p)}</th>`;
+      DAYS.forEach(day=>{
+        const aid = scheduleData?.[secId]?.[day]?.[p];
+        const a = aid ? assigns.find(x=>x.id===aid) : null;
+        const subj = a ? subjectsList.find(x=>x.id===a.subjectId) : null;
+        const t = a ? staffList.find(x=>x.id===a.teacherId) : null;
+        if(editor){
+          const bg = subj ? subj.color : '#F4F6FB';
+          const col = subj ? '#fff' : 'var(--muted)';
+          html += `<td><select class="cell-pick" style="background:${bg};color:${col}" onchange="setSchedCell('${secId}','${day}',${p},this.value)">${opts(aid)}</select></td>`;
+        } else {
+          html += subj
+            ? `<td><div class="cell" style="background:${subj.color}">${esc(subj.name)}<span class="t">${t?esc(t.name):''}</span></div></td>`
+            : `<td><div class="cell empty">—</div></td>`;
+        }
+      });
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    wrap.innerHTML = html;
+
+    if(tallyWrap){
+      if(!assigns.length){ tallyWrap.innerHTML=''; }
+      else {
+        const items = assigns.map(a=>{
+          const placed = countPlaced(secId, a.id), total = parseInt(a.periods)||0;
+          const subj = subjectsList.find(x=>x.id===a.subjectId);
+          const cls = placed>total ? 'over' : (total && placed===total ? 'done' : '');
+          return `<div class="tally-item ${cls}"><span class="dot" style="background:${subj?subj.color:'#888'}"></span>${subj?esc(subj.name):''}: ${toAr(placed)}/${toAr(total)}</div>`;
+        }).join('');
+        tallyWrap.innerHTML = '<div class="sec-title">توزيع الحصص (المُجدول / المطلوب) <span class="ln"></span></div><div class="tally">'+items+'</div>';
+      }
+    }
+  };
+
+  window.setSchedCell = async (secId, day, p, aid)=>{
+    const path = `schedule/${secId}/${day}/${p}`;
+    try{ if(aid) await setData(fbChildRef(db,path), aid); else await fbRemove(fbChildRef(db,path)); }
+    catch(e){ console.error(e); }
+  };
+
+  window.renderSchedTeacher = ()=>{
+    const wrap = g('schedTeacherWrap'); if(!wrap) return;
+    const tId = g('schedTeacher') ? g('schedTeacher').value : '';
+    if(!tId){ wrap.innerHTML = '<div class="empty"><div class="big">👤</div><h3>اختر معلماً لعرض جدوله</h3></div>'; return; }
+    const P = periodsCount();
+    let html = '<div class="sched-scroll"><table class="sched"><thead><tr><th class="per-h"></th>'+DAYS.map(d=>`<th>${d}</th>`).join('')+'</tr></thead><tbody>';
+    for(let p=1;p<=P;p++){
+      html += `<tr><th class="per-h">${toAr(p)}</th>`;
+      DAYS.forEach(day=>{
+        let found=null;
+        for(const secId in scheduleData){
+          const aid = scheduleData[secId]?.[day]?.[p]; if(!aid) continue;
+          const a = assignList.find(x=>x.id===aid);
+          if(a && a.teacherId===tId){ found={a,secId}; break; }
+        }
+        if(found){
+          const subj = subjectsList.find(x=>x.id===found.a.subjectId);
+          const sec = sectionsList.find(x=>x.id===found.secId);
+          html += `<td><div class="cell" style="background:${subj?subj.color:'#888'}">${subj?esc(subj.name):''}<span class="t">${sec?esc(sec.grade+' '+(sec.sec||'')):''}</span></div></td>`;
+        } else html += `<td><div class="cell empty">—</div></td>`;
+      });
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    wrap.innerHTML = html;
+  };
+
+  // عرض أولي
+  renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
+  refreshSchedPickers(); renderSchedSection(); renderSchedTeacher();
 
   /* ===========================================================
      تبديل التبويبات

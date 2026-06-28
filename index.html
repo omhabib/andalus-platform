@@ -828,7 +828,7 @@ footer b{color:var(--navy)}
       });
       onValue(scheduleRef, (snap)=>{
         scheduleData = snap.val() || {};
-        renderSchedSection(); renderSchedTeacher();
+        renderSchedSection(); renderSchedTeacher(); renderStaff();
       });
       onValue(settingsRef, (snap)=>{
         settings = snap.val() || {};
@@ -916,6 +916,22 @@ footer b{color:var(--navy)}
   const esc = s => (''+ (s??'')).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const toAr = n => (''+ (n??'')).replace(/[0-9]/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 
+  // عدد حصص المعلم في الجدول الدراسي (كل حصة = ١)
+  function teacherSchedCount(tid){
+    let n=0;
+    for(const secId in scheduleData){
+      const days = scheduleData[secId] || {};
+      for(const day in days){
+        const slots = days[day] || {};
+        for(const p in slots){
+          const a = assignList.find(x=>x.id===slots[p]);
+          if(a && a.teacherId===tid) n++;
+        }
+      }
+    }
+    return n;
+  }
+
   let editingId = null, currentPhoto = '', photoCleared = false;
 
   // تحويل رقم الجوال إلى رابط واتساب (يفترض الأرقام السعودية)
@@ -941,7 +957,10 @@ footer b{color:var(--navy)}
       : `<span class="wa-btn off" title="لا يوجد رقم">${WA_SVG}</span>`;
     // اشتقاق النصاب والمواد من مصفوفة الإسناد (إن وُجدت)
     const myAssign = assignList.filter(a => a.teacherId === s.id);
-    const autoPeriods = myAssign.reduce((n,a)=> n + (parseInt(a.periods)||0), 0);
+    // النصاب = عدد الحصص في الجدول (كل حصة = ١)، وإن لم يُجدول بعد فمجموع حصص الإسناد
+    const schedCount = teacherSchedCount(s.id);
+    const assignPeriods = myAssign.reduce((n,a)=> n + (parseInt(a.periods)||0), 0);
+    const autoPeriods = schedCount>0 ? schedCount : assignPeriods;
     const autoSubjNames = [...new Set(myAssign.map(a=>a.subjectId).filter(Boolean))]
       .map(id => subjectsList.find(x=>x.id===id)?.name).filter(Boolean);
     const nisabShown = autoPeriods>0 ? autoPeriods : s.nisab;
@@ -1089,9 +1108,25 @@ footer b{color:var(--navy)}
   /* ----- المواد ----- */
   let subjStageFilter = 'all';
   const STAGE_AB = {'ابتدائي':'ا','متوسط':'م','ثانوي':'ث'};
+  // مادة مسموحة لصف معيّن: إن كان لها grades محددة تُطابق الصف، وإلا تُطابق المرحلة
+  function subjAllowed(s, gradeNum){
+    if(s.grades && s.grades.length) return s.grades.includes(Number(gradeNum));
+    const st = gradeInfo(gradeNum).stage;
+    return !s.stages || !s.stages.length || s.stages.includes(st);
+  }
+  // المراحل التي تظهر فيها المادة (للعرض والتصفية)
+  function dispStages(s){
+    const set = new Set(s.stages||[]);
+    (s.grades||[]).forEach(gr=> set.add(gradeInfo(gr).stage));
+    return [...set];
+  }
+  function subjInStage(s, stage){
+    if(stage==='all') return true;
+    return dispStages(s).includes(stage);
+  }
   function subjCard(s){
     const c = s.color || '#888';
-    const tags = (s.stages||[]).map(st=>`<span class="stg-tag">${STAGE_AB[st]||st}</span>`).join('');
+    const tags = dispStages(s).map(st=>`<span class="stg-tag">${STAGE_AB[st]||st}</span>`).join('');
     return `<div class="subj-card" style="--c:${c}">
       <div class="subj-ic" style="background:${c}22">${s.icon||'📚'}</div>
       <div style="min-width:0">
@@ -1105,7 +1140,7 @@ footer b{color:var(--navy)}
     </div>`;
   }
   function inStageFilter(s){
-    return subjStageFilter==='all' || !s.stages || s.stages.length===0 || s.stages.includes(subjStageFilter);
+    return subjInStage(s, subjStageFilter);
   }
   window.setSubjStage = (btn)=>{
     document.querySelectorAll('#subjStageBar button').forEach(b=>b.classList.remove('active'));
@@ -1133,8 +1168,10 @@ footer b{color:var(--navy)}
     const name = g('subjName').value.trim();
     if(!name){ g('subjErr').textContent='اسم المادة مطلوب'; return; }
     const stages = STAGES.filter(st=> g('stg-'+st) && g('stg-'+st).checked);
+    const existing = editSubjId ? subjectsList.find(x=>x.id===editSubjId) : null;
     const data = { name, icon:g('subjIcon').value.trim()||'📚', color:g('subjColor').value, cat:g('subjCat').value, stages,
-      order: editSubjId ? (subjectsList.find(x=>x.id===editSubjId)?.order||99) : (subjectsList.length+1) };
+      grades: existing?.grades || [],
+      order: existing ? (existing.order||99) : (subjectsList.length+1) };
     try{ if(editSubjId) await fbUpdate(fbChildRef(db,'subjects/'+editSubjId),data); else await fbPush(subjectsRef,data); closeSubjectForm(); }
     catch(e){ g('subjErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
   };
@@ -1219,9 +1256,8 @@ footer b{color:var(--navy)}
     if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🔗</div><h3>اختر فصلاً لإسناد المواد والمعلمين</h3></div>'; return; }
     const rows = assignList.filter(a=>a.sectionId===secId);
     const secObj = sectionsList.find(x=>x.id===secId);
-    const stage = secObj ? gradeInfo(secObj.grade).stage : '';
-    const stageSubjects = subjectsList.filter(s=> !s.stages || s.stages.length===0 || s.stages.includes(stage));
-    const subjOpts = sel => '<option value="">— المادة —</option>' + stageSubjects.slice().sort((a,b)=>(a.order||0)-(b.order||0))
+    const stageSubjects = subjectsList.filter(s=> secObj ? subjAllowed(s, secObj.grade) : true);
+    const subjOpts = sel => '<option value="">— المادة —</option>' + stageSubjects.slice().sort((a,b)=> ((a.cat==='gifted')-(b.cat==='gifted')) || (a.order||0)-(b.order||0))
       .map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.icon||''} ${esc(s.name)}</option>`).join('');
     const teachOpts = sel => '<option value="">— المعلم —</option>' + staffList.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'))
       .map(t=>`<option value="${t.id}" ${t.id===sel?'selected':''}>${esc(t.name)}</option>`).join('');
@@ -1431,15 +1467,15 @@ footer b{color:var(--navy)}
       GRADE_LIST.filter(gr=>!stage || gr.stage===stage).map(gr=>`<option value="${gr.num}">${gr.label}</option>`).join('');
     if(cur && GRADE_LIST.find(gr=>gr.num==cur && (!stage||gr.stage===stage))) g('examGrade').value = cur;
   }
-  function fillExamSubjects(stage){
-    const subs = stage ? subjectsList.filter(s=>!s.stages||!s.stages.length||s.stages.includes(stage)) : [];
+  function fillExamSubjects(gradeNum){
+    const subs = gradeNum ? subjectsList.filter(s=> subjAllowed(s, gradeNum)) : [];
     const cur = g('examSubject').value;
     g('examSubject').innerHTML = '<option value="">— المادة —</option>' +
-      subs.slice().sort((a,b)=>(a.order||0)-(b.order||0)).map(s=>`<option value="${s.id}">${s.icon||''} ${esc(s.name)}</option>`).join('');
+      subs.slice().sort((a,b)=> ((a.cat==='gifted')-(b.cat==='gifted')) || (a.order||0)-(b.order||0)).map(s=>`<option value="${s.id}">${s.icon||''} ${esc(s.name)}</option>`).join('');
     if(cur && subs.find(s=>s.id===cur)) g('examSubject').value = cur;
   }
-  window.examStageChanged = ()=>{ const st=g('examStage').value; fillExamGrades(st); fillExamSubjects(st); };
-  window.examGradeChanged = ()=>{ /* المرحلة تحدد المواد */ };
+  window.examStageChanged = ()=>{ const st=g('examStage').value; fillExamGrades(st); fillExamSubjects(''); };
+  window.examGradeChanged = ()=>{ fillExamSubjects(g('examGrade').value); };
 
   window.openExamForm = (id)=>{
     editExamId = id||null;
@@ -1450,7 +1486,7 @@ footer b{color:var(--navy)}
     fillExamGrades(stage);
     g('examGrade').value = e?.grade || '';
     g('examSec').value = e?.sec || 'a';
-    fillExamSubjects(stage);
+    fillExamSubjects(e?.grade || '');
     g('examSubject').value = e?.subjectId || '';
     g('examType').value = e?.type || 'الدوري الأول';
     g('examDate').value = e?.date || '';

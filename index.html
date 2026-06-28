@@ -384,7 +384,7 @@ footer b{color:var(--navy)}
       <span class="sync-dot" id="syncDot"></span>
       <span class="txt" id="syncTxt">جارٍ الاتصال…</span>
     </div>
-    <button class="btn btn-light" id="loginBtn" onclick="openLogin()">🔑 <span class="txt" style="display:inline">دخول المحرر</span></button>
+    <button class="btn btn-light" id="loginBtn" onclick="openLogin()" title="دخول المحرر" style="font-size:18px;padding:9px 13px">🔑</button>
   </div>
 </header>
 
@@ -425,7 +425,7 @@ footer b{color:var(--navy)}
     <div class="staff-grid" id="staffGrid"></div>
     <div class="empty" id="staffEmpty" style="display:none">
       <div class="big">👥</div><h3>لا يوجد كادر بعد</h3>
-      <p>اضغط «دخول المحرر» ثم «＋ إضافة موظف» لإضافة أول عضو في الكادر. ستظهر البيانات تلقائياً لكل من يفتح الرابط.</p>
+      <p>اضغط «دخول المحرر» ثم «＋ إضافة موظف» لإضافة أول عضو في الكادر. ستظهر البيانات تلقائيًا لكل من يفتح الرابط.</p>
     </div>
   </section>
 
@@ -483,7 +483,7 @@ footer b{color:var(--navy)}
     <div class="schedview active" id="sched-bySection">
       <div class="sched-controls">
         <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="schedSection" onchange="renderSchedSection()"></select></div>
-        <div class="fld edit-only" style="max-width:150px"><label>عدد الحصص يومياً</label><input type="number" id="schedPeriods" min="1" max="12" value="7" onchange="setPeriods(this.value)" /></div>
+        <div class="fld edit-only" style="max-width:150px"><label>عدد الحصص يوميًا</label><input type="number" id="schedPeriods" min="1" max="12" value="7" onchange="setPeriods(this.value)" /></div>
       </div>
       <div id="schedSectionWrap"></div>
       <div id="schedSubjTally" style="margin-top:16px"></div>
@@ -522,7 +522,7 @@ footer b{color:var(--navy)}
     </div>
     <div class="empty">
       <div class="big">🧭</div><h3>تبويب «أساس» قيد الإنشاء</h3>
-      <p>سنحدد سوياً ما تريد عرضه ومتابعته هنا من بيانات نظام «أساس».</p>
+      <p>سنحدد سويًا ما تريد عرضه ومتابعته هنا من بيانات نظام «أساس».</p>
     </div>
   </section>
 
@@ -572,7 +572,7 @@ footer b{color:var(--navy)}
 </main>
 
 <footer>
-  <b>منصة قائد</b> · مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · تأسست ١٩٨٤<br>
+  <b>منصة قائد</b> · مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · (بنين)<br>
   <span style="opacity:.7">Qaed Learning Platform</span>
 </footer>
 
@@ -604,7 +604,7 @@ footer b{color:var(--navy)}
             <input type="file" id="photoInput" accept="image/*" style="display:none" />
             <button type="button" class="btn btn-light" style="border:1px solid var(--line)" onclick="document.getElementById('photoInput').click()">📷 اختيار صورة</button>
             <button type="button" class="btn btn-ghost" id="photoClear" style="background:var(--bg);color:var(--muted);display:none" onclick="clearPhoto()">إزالة</button>
-            <div class="hint">تُصغَّر الصورة تلقائياً لتوفير المساحة</div>
+            <div class="hint">تُصغَّر الصورة تلقائيًا لتوفير المساحة</div>
           </div>
         </div>
       </div>
@@ -616,7 +616,7 @@ footer b{color:var(--navy)}
         <datalist id="natList"><option value="سعودي"><option value="مصري"><option value="أردني"><option value="يمني"><option value="سوري"><option value="فلسطيني"><option value="سوداني"></datalist>
       </div>
       <div class="fld"><label>رقم الجوال</label><input type="tel" id="fPhone" placeholder="05XXXXXXXX" inputmode="tel" />
-        <div class="hint">يُستخدم لزر واتساب (أرقام سعودية تلقائياً)</div>
+        <div class="hint">يُستخدم لزر واتساب (أرقام سعودية تلقائيًا)</div>
       </div>
       <div class="fld"><label>النصاب (عدد الحصص)</label><input type="number" id="fNisab" min="0" placeholder="مثال: 24" inputmode="numeric" /></div>
       <div class="fld full"><label>المواد</label><input type="text" id="fSubjects" placeholder="مثال: رياضيات، إحصاء" /></div>
@@ -729,7 +729,7 @@ footer b{color:var(--navy)}
 
   /* ===========================================================
      (1) مفاتيح Firebase
-     ضع هنا مفاتيح مشروعك من Firebase (مجاناً).
+     ضع هنا مفاتيح مشروعك من Firebase (مجانًا).
      طريقة الحصول عليها مشروحة في رسالة المحادثة.
      طالما القيم فارغة، تعمل المنصة بدون حفظ.
      =========================================================== */
@@ -745,7 +745,7 @@ footer b{color:var(--navy)}
   };
 
   // كلمة مرور المحرر (مؤقتة — تحقق داخل المتصفح). غيّرها كما تريد.
-  // لاحقاً عند تفعيل Authentication بإيميل الوكيل نعيد الدخول بالبريد.
+  // لاحقًا عند تفعيل Authentication بإيميل الوكيل نعيد الدخول بالبريد.
   const EDITOR_PASSWORD = "andalus1984";
 
   /* =========================================================== */
@@ -865,14 +865,14 @@ footer b{color:var(--navy)}
     document.body.classList.remove('viewer');
     document.body.classList.add('editor');
     noteEl.disabled = false;
-    document.getElementById('loginBtn').innerHTML = '🔓 <span class="txt" style="display:inline">محرر — خروج</span>';
+    const lb=document.getElementById('loginBtn'); lb.innerHTML='🔓'; lb.title='محرر — اضغط للخروج';
     if(window.renderSchedSection){ renderSchedSection(); }
   }
   function applyViewer(){
     document.body.classList.remove('editor');
     document.body.classList.add('viewer');
     noteEl.disabled = true;
-    document.getElementById('loginBtn').innerHTML = '🔑 <span class="txt" style="display:inline">دخول المحرر</span>';
+    const lb=document.getElementById('loginBtn'); lb.innerHTML='🔑'; lb.title='دخول المحرر';
     if(window.renderSchedSection){ renderSchedSection(); }
   }
 
@@ -906,7 +906,7 @@ footer b{color:var(--navy)}
     const pw = document.getElementById('pwInput').value;
     const errEl = document.getElementById('pwErr');
     if(pw === EDITOR_PASSWORD){ applyEditor('محرر'); closeLogin(); }
-    else { errEl.textContent = 'كلمة المرور غير صحيحة'; }
+    else { errEl.textContent = 'عفوًا، لا تملك صلاحية التحرير'; }
   };
 
   /* ===========================================================
@@ -1064,7 +1064,7 @@ footer b{color:var(--navy)}
 
   window.deleteStaff = async (id)=>{
     const s = staffList.find(x=>x.id===id);
-    if(!confirm('حذف «'+(s?.name||'')+'» نهائياً؟')) return;
+    if(!confirm('حذف «'+(s?.name||'')+'» نهائيًا؟')) return;
     try{ await fbRemove(fbChildRef(db,'staff/'+id)); }
     catch(e){ alert('تعذّر الحذف: '+(e.code||e.message)); }
   };
@@ -1230,12 +1230,12 @@ footer b{color:var(--navy)}
       students:g('secStudents').value.trim(), homeroom:g('secHomeroom').value };
     if(!data.grade){ g('secErr').textContent='اختر الصف'; return; }
     const dup = sectionsList.find(x=> x.id!==editSecId && x.grade==data.grade && x.sec===data.sec);
-    if(dup){ g('secErr').textContent='هذا الفصل موجود مسبقاً'; return; }
+    if(dup){ g('secErr').textContent='هذا الفصل موجود مسبقًا'; return; }
     try{ if(editSecId) await fbUpdate(fbChildRef(db,'sections/'+editSecId),data); else await fbPush(sectionsRef,data); closeSectionForm(); }
     catch(e){ g('secErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
   };
   window.deleteSection = async (id)=>{
-    if(!confirm('حذف هذا الفصل؟ (سيُحذف إسناده أيضاً)')) return;
+    if(!confirm('حذف هذا الفصل؟ (سيُحذف إسناده أيضًا)')) return;
     try{
       await fbRemove(fbChildRef(db,'sections/'+id));
       for(const a of assignList.filter(a=>a.sectionId===id)) await fbRemove(fbChildRef(db,'assign/'+a.id));
@@ -1253,7 +1253,7 @@ footer b{color:var(--navy)}
   window.renderAssign = ()=>{
     const wrap = g('assignWrap'); if(!wrap) return;
     const secId = g('assignSection').value;
-    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🔗</div><h3>اختر فصلاً لإسناد المواد والمعلمين</h3></div>'; return; }
+    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🔗</div><h3>اختر فصلًا لإسناد المواد والمعلمين</h3></div>'; return; }
     const rows = assignList.filter(a=>a.sectionId===secId);
     const secObj = sectionsList.find(x=>x.id===secId);
     const stageSubjects = subjectsList.filter(s=> secObj ? subjAllowed(s, secObj.grade) : true);
@@ -1323,7 +1323,7 @@ footer b{color:var(--navy)}
     const wrap = g('schedSectionWrap'), tallyWrap = g('schedSubjTally');
     if(!wrap) return;
     const secId = g('schedSection') ? g('schedSection').value : '';
-    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🗓️</div><h3>اختر فصلاً لعرض جدوله</h3></div>'; if(tallyWrap) tallyWrap.innerHTML=''; return; }
+    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🗓️</div><h3>اختر فصلًا لعرض جدوله</h3></div>'; if(tallyWrap) tallyWrap.innerHTML=''; return; }
     const assigns = assignList.filter(a=>a.sectionId===secId && a.subjectId);
     const editor = document.body.classList.contains('editor');
     const P = periodsCount();
@@ -1375,7 +1375,7 @@ footer b{color:var(--navy)}
   window.renderSchedTeacher = ()=>{
     const wrap = g('schedTeacherWrap'); if(!wrap) return;
     const tId = g('schedTeacher') ? g('schedTeacher').value : '';
-    if(!tId){ wrap.innerHTML = '<div class="empty"><div class="big">👤</div><h3>اختر معلماً لعرض جدوله</h3></div>'; return; }
+    if(!tId){ wrap.innerHTML = '<div class="empty"><div class="big">👤</div><h3>اختر معلمًا لعرض جدوله</h3></div>'; return; }
     const P = periodsCount();
     let html = '<div class="sched-scroll"><table class="sched"><thead><tr><th class="per-h"></th>'+DAYS.map(d=>`<th>${d}</th>`).join('')+'</tr></thead><tbody>';
     for(let p=1;p<=P;p++){
@@ -1419,7 +1419,7 @@ footer b{color:var(--navy)}
   }
   function countdownTag(diff){
     if(diff===0)  return ['today','اليوم'];
-    if(diff===1)  return ['soon','غداً'];
+    if(diff===1)  return ['soon','غدًا'];
     if(diff>1)    return ['soon','بعد '+toAr(diff)+' يوم'];
     if(diff===-1) return ['past','أمس'];
     return ['past','منذ '+toAr(-diff)+' يوم'];

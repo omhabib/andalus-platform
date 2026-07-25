@@ -306,6 +306,70 @@ table.sched .per-h{background:var(--navy);color:#fff;font-weight:800;font-size:1
 .tally-item .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
 .tally-item.done{border-color:#34d39966;background:#34d39912}
 .tally-item.over{border-color:var(--red);color:var(--red)}
+.sched-tools{display:none;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+body.editor .sched-tools{display:block}
+.sched-tools .st-title{font-weight:800;color:var(--navy);font-size:14px;margin-bottom:10px}
+.sched-tools .st-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
+.sched-tools .st-row .fld{flex:1;min-width:150px}
+.sched-tools .st-result{font-size:13px;font-weight:700;color:var(--blue);margin-top:6px;min-height:18px}
+
+/* الخطة الأسبوعية */
+.week-bar{display:flex;gap:6px;overflow-x:auto;padding:9px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;box-shadow:var(--shadow-sm);scrollbar-width:none}
+.week-bar::-webkit-scrollbar{display:none}
+.week-bar button{border:1px solid var(--line);background:var(--bg);cursor:pointer;font-family:'Cairo';font-weight:800;font-size:13px;color:var(--muted);min-width:40px;height:40px;border-radius:11px;flex-shrink:0;transition:.15s}
+.week-bar button.active{background:var(--grad);color:#fff;border-color:transparent;box-shadow:var(--shadow-sm)}
+table.plan{border-collapse:separate;border-spacing:0;width:100%;min-width:660px;background:var(--card)}
+table.plan th,table.plan td{border-bottom:1px solid var(--line);border-inline-start:1px solid var(--line);padding:8px 10px;text-align:center;font-size:13px;vertical-align:middle}
+table.plan thead th{background:var(--navy);color:#fff;font-weight:800;font-family:'Cairo'}
+table.plan .day-c{font-weight:800;color:var(--navy);background:var(--bg);white-space:nowrap}
+table.plan .per-c{font-weight:800;color:var(--navy);width:44px}
+.plan-subj{display:inline-block;font-weight:700;color:#fff;border-radius:8px;padding:4px 10px;font-size:12.5px}
+.plan-topic{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font-family:inherit;font-size:13px;background:var(--bg);min-width:170px}
+.plan-empty-topic{color:var(--muted);font-size:12.5px}
+.teacher-note{background:#E6F1FB;border:1px solid #B5D4F4;color:#0C447C;padding:11px 15px;border-radius:12px;font-size:13.5px;font-weight:600;margin-bottom:14px}
+/* المتابعة */
+.follow-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.follow-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow-sm)}
+.follow-card.complete{border-color:#86EFAC;background:#F6FEF9}
+.follow-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.follow-head .nm{font-weight:800;color:var(--navy);font-size:14.5px}
+.follow-days{display:flex;flex-wrap:wrap;gap:6px}
+.fday{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:30px;display:inline-block}
+.fday.done{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.fday.todo{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.follow-meta{font-size:12.5px;font-weight:800;color:var(--red);margin-top:11px}
+.follow-meta.done{color:#166534}
+.follow-open{border:1px solid var(--line);background:var(--bg);cursor:pointer;font-family:inherit;font-weight:700;font-size:12px;color:var(--navy);padding:5px 12px;border-radius:9px;transition:.15s}
+.follow-open:hover{background:var(--card);filter:brightness(.97)}
+.follow-sum{display:flex;gap:12px;flex-wrap:wrap}
+.follow-sum .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-weight:800;font-size:14px}
+.follow-sum .box .n{font-family:'Cairo';font-size:22px;color:var(--navy)}
+.follow-sum .box.g .n{color:#166534}
+.follow-sum .box.r .n{color:var(--red)}
+/* روابط أولياء الأمور + وضع ولي الأمر */
+.parent-hd{font-family:'Cairo';font-weight:900;font-size:19px;color:var(--navy);margin:0 0 14px}
+body:not(.parent) .parent-hd{display:none}
+body.parent .topbar-actions{display:none}
+body.parent .tabs-wrap{display:none}
+body.parent .panel{display:none !important}
+body.parent #tab-plan{display:block !important}
+body.parent #tab-plan .sched-controls{display:none}
+body.parent #tab-plan .page-head .btn.edit-only{display:none !important}
+.plink-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line)}
+.plink-nm{font-weight:700;color:var(--ink);font-size:14px}
+table.plan tr.plan-mine td{background:#F2F8FF}
+table.plan tr.plan-mine .per-c,table.plan tr.plan-mine .day-c{background:#E6F1FB}
+@media print{
+  .topbar,.tabs-wrap,footer,.week-bar,.setup-warn,.page-head .btn,.sched-controls{display:none !important}
+  body::before{display:none !important}
+  .panel:not(.active){display:none !important}
+  .container{padding:0}
+  body{background:#fff}
+  .print-head{display:block !important;font-family:'Cairo';font-weight:900;font-size:18px;color:#1E3A6E;margin:0 0 12px;text-align:center}
+  table.plan{min-width:0;width:100%}
+  .plan-topic{border:none !important;background:none !important;padding:2px !important}
+  .sched-scroll{overflow:visible !important;border:none !important;box-shadow:none !important}
+}
 
 /* ============================================================
    الاختبارات
@@ -399,6 +463,8 @@ footer b{color:var(--navy)}
     <button class="tab active" data-tab="staff"><span class="ico">👥</span> الكادر التعليمي</button>
     <button class="tab" data-tab="classes"><span class="ico">📚</span> الفصول والمواد</button>
     <button class="tab" data-tab="schedule"><span class="ico">🗓️</span> الجدول الدراسي</button>
+    <button class="tab" data-tab="plan"><span class="ico">📖</span> الخطة الأسبوعية</button>
+    <button class="tab" data-tab="follow"><span class="ico">✅</span> المتابعة</button>
     <button class="tab" data-tab="agenda"><span class="ico">📋</span> الأجندة التعليمية</button>
     <button class="tab" data-tab="asas"><span class="ico">🧭</span> أساس</button>
     <button class="tab" data-tab="qudurat"><span class="ico">🧠</span> القدرات</button>
@@ -481,6 +547,21 @@ footer b{color:var(--navy)}
 
     <!-- حسب الفصل -->
     <div class="schedview active" id="sched-bySection">
+      <div class="sched-tools">
+        <div class="st-title">⚡ أدوات سريعة (آخر الفصل)</div>
+        <div class="st-row">
+          <div class="fld"><label>النطاق</label>
+            <select id="toolScope"><option value="all">كل الفصول</option><option value="ابتدائي">ابتدائي</option><option value="متوسط">متوسط</option><option value="ثانوي">ثانوي</option></select>
+          </div>
+          <div class="fld"><label>المادة / البرنامج</label><select id="toolSubject"></select></div>
+          <button class="btn btn-light" style="border:1px solid var(--line)" onclick="toolClearSubject()">🗑️ مسح حصصها</button>
+        </div>
+        <div class="st-row">
+          <div class="fld"><label>استبدالها بـ</label><select id="toolReplaceWith"></select></div>
+          <button class="btn btn-primary" onclick="toolReplaceSubject()">🔄 استبدال</button>
+        </div>
+        <div class="st-result" id="toolResult"></div>
+      </div>
       <div class="sched-controls">
         <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="schedSection" onchange="renderSchedSection()"></select></div>
         <div class="fld edit-only" style="max-width:150px"><label>عدد الحصص يوميًا</label><input type="number" id="schedPeriods" min="1" max="12" value="7" onchange="setPeriods(this.value)" /></div>
@@ -494,6 +575,32 @@ footer b{color:var(--navy)}
       <div class="fld" style="max-width:280px;margin-bottom:16px"><label>المعلم</label><select id="schedTeacher" onchange="renderSchedTeacher()"></select></div>
       <div id="schedTeacherWrap"></div>
     </div>
+  </section>
+
+  <!-- ===== الخطة الأسبوعية ===== -->
+  <section class="panel" id="tab-plan">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">📖</div><div><h2>الخطة الأسبوعية</h2></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-light edit-only" style="border:1px solid var(--line)" onclick="openParentLinks()">🔗 روابط أولياء الأمور</button>
+        <button class="btn btn-light" style="border:1px solid var(--line)" onclick="printPlan()">🖨️ طباعة</button>
+      </div>
+    </div>
+    <div class="sched-controls">
+      <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="planSection" onchange="renderPlan()"></select></div>
+    </div>
+    <div class="week-bar" id="planWeekBar"></div>
+    <div id="planWrap"></div>
+  </section>
+
+  <!-- ===== المتابعة ===== -->
+  <section class="panel" id="tab-follow">
+    <div class="page-head">
+      <div class="ttl"><div class="badge">✅</div><div><h2>متابعة تعبئة الخطط</h2></div></div>
+    </div>
+    <div class="week-bar" id="followWeekBar"></div>
+    <div id="followSummary" style="margin-bottom:14px"></div>
+    <div id="followWrap"></div>
   </section>
 
   <!-- ===== الأجندة التعليمية ===== -->
@@ -581,7 +688,8 @@ footer b{color:var(--navy)}
   <div class="modal">
     <div class="m-logo"><img src="Qaed_mark.png" alt="" /></div>
     <h3 id="modalTitle">دخول المحرر</h3>
-    <p>أدخل كلمة المرور لتفعيل وضع التعديل</p>
+    <p>للمحرر أو المعلم — أدخل بيانات الدخول</p>
+    <input type="text" id="userInput" placeholder="اسم الدخول (المعلم) — اتركه فارغًا للمحرر" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
     <input type="password" id="pwInput" placeholder="كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
     <div class="err" id="pwErr"></div>
     <div class="row">
@@ -621,6 +729,45 @@ footer b{color:var(--navy)}
       <div class="fld"><label>النصاب (عدد الحصص)</label><input type="number" id="fNisab" min="0" placeholder="مثال: 24" inputmode="numeric" /></div>
       <div class="fld full"><label>المواد</label><input type="text" id="fSubjects" placeholder="مثال: رياضيات، إحصاء" /></div>
       <div class="fld full"><label>المرحلة / الصف</label><input type="text" id="fGrade" placeholder="مثال: ثانوي — 11a، 12b" /></div>
+
+      <div class="fld full" style="border-top:1px dashed var(--line);padding-top:14px;margin-top:2px"><label>🔐 حساب دخول المعلم (ليُدخل خطته بنفسه)</label></div>
+      <div class="fld"><label>اسم الدخول</label><input type="text" id="fUsername" placeholder="مثال: 01 أو ahmed" autocomplete="off" /></div>
+      <div class="fld"><label>كلمة المرور</label>
+        <div style="display:flex;gap:6px">
+          <input type="text" id="fPassword" placeholder="اتركها فارغة لعدم التغيير" autocomplete="off" style="flex:1" />
+          <button type="button" class="btn btn-light" style="border:1px solid var(--line)" onclick="genPassword()">توليد</button>
+        </div>
+        <div class="hint">تُحفظ مشفّرة. اكتبها وأعطِها المعلم مع اسم الدخول.</div>
+      </div>
+
+      <div class="fld full" style="border-top:1px dashed var(--line);padding-top:14px;margin-top:2px">
+        <label>🚫 قيود الجدول — أيام عدم الحضور (تُعالَج عند توليد الجدول)</label>
+        <div class="stage-checks" id="offDaysBox">
+          <label><input type="checkbox" class="offday" value="الأحد" /> الأحد</label>
+          <label><input type="checkbox" class="offday" value="الإثنين" /> الإثنين</label>
+          <label><input type="checkbox" class="offday" value="الثلاثاء" /> الثلاثاء</label>
+          <label><input type="checkbox" class="offday" value="الأربعاء" /> الأربعاء</label>
+          <label><input type="checkbox" class="offday" value="الخميس" /> الخميس</label>
+        </div>
+      </div>
+      <div class="fld full">
+        <label>⛔ حصص محجوزة — لا تُجدول فيها حصص (مثل اجتماع الكوتش)</label>
+        <div class="stage-checks" id="blockPeriodsBox">
+          <label><input type="checkbox" class="blockperiod" value="1" /> ١</label>
+          <label><input type="checkbox" class="blockperiod" value="2" /> ٢</label>
+          <label><input type="checkbox" class="blockperiod" value="3" /> ٣</label>
+          <label><input type="checkbox" class="blockperiod" value="4" /> ٤</label>
+          <label><input type="checkbox" class="blockperiod" value="5" /> ٥</label>
+          <label><input type="checkbox" class="blockperiod" value="6" /> ٦</label>
+          <label><input type="checkbox" class="blockperiod" value="7" /> ٧</label>
+          <label><input type="checkbox" class="blockperiod" value="8" /> ٨</label>
+        </div>
+      </div>
+      <div class="fld"><label>أقصى حصص في اليوم (اختياري)</label><input type="number" id="fMaxPerDay" min="1" max="12" placeholder="مثال: 6" inputmode="numeric" /></div>
+      <div class="fld"><label>تفضيل الحصص</label>
+        <select id="fPrefBlocks"><option value="">— لا تفضيل —</option><option value="consecutive">متتالية قدر الإمكان</option><option value="spread">موزّعة قدر الإمكان</option></select>
+      </div>
+      <div class="fld full"><label>قيود أخرى (ملاحظة)</label><input type="text" id="fConstraintNote" placeholder="مثال: لا حصص أول الدوام / يخرج مبكرًا الخميس" /></div>
     </div>
     <div class="err" id="staffErr" style="text-align:center"></div>
     <div class="row" style="margin-top:6px">
@@ -719,6 +866,16 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== روابط أولياء الأمور ===================== -->
+<div class="modal-bg" id="parentLinksModal">
+  <div class="modal lg" style="max-width:640px;text-align:right">
+    <h3>🔗 روابط أولياء الأمور</h3>
+    <p style="text-align:center">انسخ رابط الفصل وأرسله لأولياء الأمور — يشاهدون الخطة فقط دون تسجيل دخول.</p>
+    <div id="parentLinksList" style="max-height:58vh;overflow:auto;margin-bottom:12px"></div>
+    <div class="row"><button class="btn btn-primary" onclick="closeParentLinks()">إغلاق</button></div>
+  </div>
+</div>
+
 <!-- عرض الصورة مكبّرة -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg" src="" alt="" /></div>
 
@@ -768,6 +925,15 @@ footer b{color:var(--navy)}
   let scheduleData = {}, settings = {};
   let examsRef = null, examsList = [], editExamId = null;
   let agendaRef = null, agendaList = [], editAgendaId = null;
+  let plansRef = null, plansData = {}, planWeek = 1, followWeek = 1;
+  let currentTeacher = null;   // بيانات المعلم عند دخوله (وضع المعلم)
+  // وضع ولي الأمر: رابط #p/<sectionId> يفتح خطة الفصل للمشاهدة فقط
+  let parentSectionId = null;
+  { const m = location.hash.match(/^#p\/(.+)$/); if(m){ parentSectionId = decodeURIComponent(m[1]); document.body.classList.remove('viewer'); document.body.classList.add('parent'); } }
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
 
   function setSync(state, label){
     dot.className = 'sync-dot ' + state;
@@ -803,6 +969,7 @@ footer b{color:var(--navy)}
       settingsRef = ref(db, 'settings');
       examsRef    = ref(db, 'exams');
       agendaRef   = ref(db, 'agenda');
+      plansRef    = ref(db, 'plans');
 
       // استماع فوري لبيانات الكادر
       onValue(staffRef, (snap)=>{
@@ -810,30 +977,36 @@ footer b{color:var(--navy)}
         staffList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderStaff(); renderSections(); refreshAssignSectionPicker(); renderAssign();
         refreshSchedPickers(); renderSchedSection(); renderSchedTeacher();
+        refreshPlanPicker(); renderPlan();
       });
       onValue(subjectsRef, (snap)=>{
         const v = snap.val() || {};
         subjectsList = Object.keys(v).map(id => ({ id, ...v[id] }));
-        renderSubjects(); renderAssign(); renderStaff();
+        renderSubjects(); renderAssign(); renderStaff(); fillToolSubjects(); renderPlan();
       });
       onValue(sectionsRef, (snap)=>{
         const v = snap.val() || {};
         sectionsList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderSections(); refreshAssignSectionPicker(); refreshSchedPickers(); renderSchedSection();
+        refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded();
       });
       onValue(assignRef, (snap)=>{
         const v = snap.val() || {};
         assignList = Object.keys(v).map(id => ({ id, ...v[id] }));
-        renderAssign(); renderStaff(); renderSchedSection(); renderSchedTeacher();
+        renderAssign(); renderStaff(); renderSchedSection(); renderSchedTeacher(); renderPlan();
       });
       onValue(scheduleRef, (snap)=>{
         scheduleData = snap.val() || {};
-        renderSchedSection(); renderSchedTeacher(); renderStaff();
+        renderSchedSection(); renderSchedTeacher(); renderStaff(); renderPlan(); renderFollow();
+      });
+      onValue(plansRef, (snap)=>{
+        plansData = snap.val() || {};
+        renderPlan(); renderFollow();
       });
       onValue(settingsRef, (snap)=>{
         settings = snap.val() || {};
         if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
-        renderSchedSection(); renderSchedTeacher();
+        renderSchedSection(); renderSchedTeacher(); renderPlan();
       });
       onValue(examsRef, (snap)=>{
         const v = snap.val() || {};
@@ -862,18 +1035,31 @@ footer b{color:var(--navy)}
 
   // تطبيق وضع المحرر / المشاهد على الواجهة
   function applyEditor(email){
-    document.body.classList.remove('viewer');
+    currentTeacher = null;
+    document.body.classList.remove('viewer','teacher');
     document.body.classList.add('editor');
     noteEl.disabled = false;
     const lb=document.getElementById('loginBtn'); lb.innerHTML='🔓'; lb.title='محرر — اضغط للخروج';
     if(window.renderSchedSection){ renderSchedSection(); }
+    if(window.renderPlan){ renderPlan(); }
+  }
+  function applyTeacher(t){
+    currentTeacher = t;
+    document.body.classList.remove('viewer','editor');
+    document.body.classList.add('teacher');
+    noteEl.disabled = true;
+    const lb=document.getElementById('loginBtn'); lb.innerHTML='👤'; lb.title='معلم: '+t.name+' — اضغط للخروج';
+    if(window.renderPlan){ renderPlan(); }
+    const pt=document.querySelector('.tab[data-tab="plan"]'); if(pt) pt.click();
   }
   function applyViewer(){
-    document.body.classList.remove('editor');
+    currentTeacher = null;
+    document.body.classList.remove('editor','teacher');
     document.body.classList.add('viewer');
     noteEl.disabled = true;
-    const lb=document.getElementById('loginBtn'); lb.innerHTML='🔑'; lb.title='دخول المحرر';
+    const lb=document.getElementById('loginBtn'); lb.innerHTML='🔑'; lb.title='تسجيل الدخول';
     if(window.renderSchedSection){ renderSchedSection(); }
+    if(window.renderPlan){ renderPlan(); }
   }
 
   // حفظ الملاحظة المشتركة (للمحرر فقط)
@@ -890,23 +1076,33 @@ footer b{color:var(--navy)}
      وضع المحرر / المشاهد
      =========================================================== */
   window.openLogin = ()=>{
-    if(document.body.classList.contains('editor')){
+    if(document.body.classList.contains('editor') || document.body.classList.contains('teacher')){
       applyViewer();   // تسجيل خروج
       return;
     }
     document.getElementById('loginModal').classList.add('show');
-    setTimeout(()=>document.getElementById('pwInput').focus(),100);
+    setTimeout(()=>document.getElementById('userInput').focus(),100);
   };
   window.closeLogin = ()=>{
     document.getElementById('loginModal').classList.remove('show');
+    document.getElementById('userInput').value='';
     document.getElementById('pwInput').value='';
     document.getElementById('pwErr').textContent='';
   };
-  window.doLogin = ()=>{
+  window.doLogin = async ()=>{
+    const u = document.getElementById('userInput').value.trim();
     const pw = document.getElementById('pwInput').value;
     const errEl = document.getElementById('pwErr');
-    if(pw === EDITOR_PASSWORD){ applyEditor('محرر'); closeLogin(); }
-    else { errEl.textContent = 'عفوًا، لا تملك صلاحية التحرير'; }
+    if(!pw){ errEl.textContent='أدخل كلمة المرور'; return; }
+    // معلم؟
+    if(u){
+      const hash = await sha256(pw);
+      const t = staffList.find(s=> s.username && s.username.toLowerCase()===u.toLowerCase() && s.passHash===hash);
+      if(t){ applyTeacher(t); closeLogin(); return; }
+    }
+    // محرر (الوكيل)
+    if((!u || u.toLowerCase()==='admin' || u==='مدير') && pw===EDITOR_PASSWORD){ applyEditor('محرر'); closeLogin(); return; }
+    errEl.textContent = 'عفوًا، بيانات الدخول غير صحيحة';
   };
 
   /* ===========================================================
@@ -915,6 +1111,11 @@ footer b{color:var(--navy)}
   const g = id => document.getElementById(id);
   const esc = s => (''+ (s??'')).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const toAr = n => (''+ (n??'')).replace(/[0-9]/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+  // عرض الاسم: يقدّم اسم الأستاذ على الشعبة (إن كُتب بصيغة «الشعبة / الاسم»)
+  const dispName = name => {
+    const parts = (''+(name||'')).split('/').map(x=>x.trim()).filter(Boolean);
+    return parts.length>=2 ? parts[parts.length-1] + ' — ' + parts.slice(0,-1).join(' / ') : (''+(name||'')).trim();
+  };
 
   // عدد حصص المعلم في الجدول الدراسي (كل حصة = ١)
   function teacherSchedCount(tid){
@@ -946,7 +1147,7 @@ footer b{color:var(--navy)}
   }
 
   function cardHtml(s){
-    const init = esc((s.name||'؟').trim().charAt(0) || '؟');
+    const init = esc((dispName(s.name)||'؟').trim().charAt(0) || '؟');
     const photoCell = s.photo
       ? `<div class="sc-photo" onclick="showLightbox('${s.id}')"><img src="${s.photo}" alt=""></div>`
       : `<div class="sc-photo">${init}</div>`;
@@ -971,8 +1172,11 @@ footer b{color:var(--navy)}
     if(s.nat)   chips.push(`<span class="chip navy">🌍 ${esc(s.nat)}</span>`);
     if(s.grade) chips.push(`<span class="chip">🏫 ${esc(s.grade)}</span>`);
     if(nisabShown!=null && nisabShown!=='') chips.push(`<span class="chip ${nisabAuto?'auto':'red'}">⏳ نصاب ${esc(toAr(nisabShown))}${nisabAuto?' •':''}</span>`);
+    if(s.offDays && s.offDays.length) chips.push(`<span class="chip" style="color:#9A3412;border-color:#FED7AA;background:#FFF7ED">🚫 ${esc(s.offDays.join('، '))}</span>`);
+    if(s.blockedPeriods && s.blockedPeriods.length) chips.push(`<span class="chip" style="color:#6B21A8;border-color:#E9D5FF;background:#FAF5FF">⛔ حصص ${esc(s.blockedPeriods.map(toAr).join('،'))}</span>`);
+    if(s.username) chips.push(`<span class="chip" style="color:#0C447C;border-color:#B5D4F4;background:#E6F1FB">🔐 ${esc(s.username)}</span>`);
     return `<div class="staff-card">
-      <div class="sc-top">${photoCell}<div><div class="sc-name">${esc(s.name)}</div>${s.job?`<div class="sc-job">${esc(s.job)}</div>`:''}</div></div>
+      <div class="sc-top">${photoCell}<div><div class="sc-name">${esc(dispName(s.name))}</div>${s.job?`<div class="sc-job">${esc(s.job)}</div>`:''}</div></div>
       ${chips.length?`<div class="sc-chips">${chips.join('')}</div>`:''}
       ${subjText?`<div class="sc-row"><span class="lbl">📚 المواد:</span> ${esc(subjText)}</div>`:''}
       ${s.phone?`<div class="sc-row"><span class="lbl">📱</span> ${esc(s.phone)}</div>`:''}
@@ -1036,11 +1240,26 @@ footer b{color:var(--navy)}
     g('fNat').value = s?.nat||'';   g('fPhone').value = s?.phone||'';
     g('fNisab').value = s?.nisab||''; g('fSubjects').value = s?.subjects||'';
     g('fGrade').value = s?.grade||''; g('staffErr').textContent='';
+    g('fUsername').value = s?.username || '';
+    g('fPassword').value = '';
+    g('fPassword').placeholder = s?.passHash ? 'محفوظة — اتركها فارغة لعدم التغيير' : 'اتركها فارغة لعدم التغيير';
+    const off = s?.offDays || [];
+    document.querySelectorAll('#offDaysBox .offday').forEach(cb=>{ cb.checked = off.includes(cb.value); });
+    const bp = (s?.blockedPeriods || []).map(String);
+    document.querySelectorAll('#blockPeriodsBox .blockperiod').forEach(cb=>{ cb.checked = bp.includes(cb.value); });
+    g('fMaxPerDay').value = s?.maxPerDay || '';
+    g('fPrefBlocks').value = s?.prefBlocks || '';
+    g('fConstraintNote').value = s?.constraintNote || '';
     setPhotoPreview(s?.photo || '');
     g('staffModal').classList.add('show');
     setTimeout(()=>g('fName').focus(),100);
   };
   window.closeStaffForm = ()=>{ g('staffModal').classList.remove('show'); g('staffErr').textContent=''; };
+  window.genPassword = ()=>{
+    const c='abcdefghjkmnpqrstuvwxyz23456789'; let p='';
+    for(let i=0;i<6;i++) p += c[Math.floor(Math.random()*c.length)];
+    g('fPassword').value = p;
+  };
 
   window.saveStaff = async ()=>{
     const name = g('fName').value.trim();
@@ -1052,8 +1271,17 @@ footer b{color:var(--navy)}
       name, job:g('fJob').value.trim(), nat:g('fNat').value.trim(),
       phone:g('fPhone').value.trim(), nisab:g('fNisab').value.trim(),
       subjects:g('fSubjects').value.trim(), grade:g('fGrade').value.trim(), photo,
+      offDays: [...document.querySelectorAll('#offDaysBox .offday:checked')].map(cb=>cb.value),
+      blockedPeriods: [...document.querySelectorAll('#blockPeriodsBox .blockperiod:checked')].map(cb=>parseInt(cb.value)),
+      maxPerDay: g('fMaxPerDay').value.trim(),
+      prefBlocks: g('fPrefBlocks').value,
+      constraintNote: g('fConstraintNote').value.trim(),
+      username: g('fUsername').value.trim(),
+      passHash: existing?.passHash || '',
       updatedAt: Date.now()
     };
+    const newPass = g('fPassword').value.trim();
+    if(newPass) data.passHash = await sha256(newPass);
     g('staffErr').textContent='جارٍ الحفظ…';
     try{
       if(editingId) await fbUpdate(fbChildRef(db,'staff/'+editingId), data);
@@ -1559,9 +1787,237 @@ footer b{color:var(--navy)}
   };
   window.deleteAgenda = async (id)=>{ if(!confirm('حذف هذا الحدث؟')) return; try{ await fbRemove(fbChildRef(db,'agenda/'+id)); }catch(e){ alert('تعذّر الحذف'); } };
 
+  /* ===========================================================
+     أدوات سريعة للجدول (مسح / استبدال جماعي حسب النطاق)
+     =========================================================== */
+  function fillToolSubjects(){
+    const opts = subjectsList.slice()
+      .sort((a,b)=> ((a.cat==='gifted')-(b.cat==='gifted')) || (a.order||0)-(b.order||0))
+      .map(s=>`<option value="${s.id}">${s.icon||''} ${esc(s.name)}</option>`).join('');
+    if(g('toolSubject')) g('toolSubject').innerHTML = opts;
+    if(g('toolReplaceWith')) g('toolReplaceWith').innerHTML = opts;
+  }
+  function scopeSections(scope){
+    return sectionsList.filter(s=> scope==='all' ? true : gradeInfo(s.grade).stage===scope);
+  }
+  function cellsOfSubject(secId, subId){
+    const out=[]; const days=scheduleData[secId]||{};
+    for(const day in days){ const slots=days[day]||{}; for(const p in slots){
+      const a=assignList.find(x=>x.id===slots[p]);
+      if(a && a.subjectId===subId) out.push('schedule/'+secId+'/'+day+'/'+p);
+    }}
+    return out;
+  }
+  window.toolClearSubject = async ()=>{
+    const scope=g('toolScope').value, subId=g('toolSubject').value;
+    const subj=subjectsList.find(x=>x.id===subId);
+    const secs=scopeSections(scope);
+    let paths=[]; secs.forEach(sec=> paths.push(...cellsOfSubject(sec.id, subId)));
+    if(!paths.length){ g('toolResult').textContent='لا توجد حصص لهذه المادة في النطاق المحدد.'; return; }
+    if(!confirm('سيتم مسح '+paths.length+' حصة لمادة «'+(subj?.name||'')+'» من النطاق المحدد. متابعة؟')) return;
+    for(const path of paths) await fbRemove(fbChildRef(db,path));
+    g('toolResult').textContent='✅ مُسحت '+toAr(paths.length)+' حصة. أعد ملء الخلايا بالمادة المكثَّفة من الجدول.';
+  };
+  window.toolReplaceSubject = async ()=>{
+    const scope=g('toolScope').value, fromId=g('toolSubject').value, toId=g('toolReplaceWith').value;
+    if(fromId===toId){ g('toolResult').textContent='اختر مادتين مختلفتين.'; return; }
+    const fromSubj=subjectsList.find(x=>x.id===fromId), toSubj=subjectsList.find(x=>x.id===toId);
+    const secs=scopeSections(scope);
+    let updates=[], skipped=[];
+    secs.forEach(sec=>{
+      const cells=cellsOfSubject(sec.id, fromId);
+      if(!cells.length) return;
+      const target=assignList.find(a=>a.sectionId===sec.id && a.subjectId===toId && a.teacherId);
+      if(!target){ skipped.push(secLabel(sec)); return; }
+      cells.forEach(path=> updates.push([path, target.id]));
+    });
+    if(!updates.length && !skipped.length){ g('toolResult').textContent='لا توجد حصص للمادة في النطاق.'; return; }
+    if(!updates.length){ g('toolResult').textContent='⚠️ تعذّر الاستبدال: لا إسناد للمادة البديلة في: '+skipped.join('، ')+'. أضِفها في الإسناد أولًا.'; return; }
+    if(!confirm('سيتم استبدال '+updates.length+' حصة من «'+(fromSubj?.name)+'» إلى «'+(toSubj?.name)+'». متابعة؟')) return;
+    for(const [path,aid] of updates) await setData(fbChildRef(db,path), aid);
+    let msg='✅ استُبدلت '+toAr(updates.length)+' حصة بنجاح.';
+    if(skipped.length) msg+=' — تعذّر في: '+skipped.join('، ')+' (لا إسناد للمادة البديلة)';
+    g('toolResult').textContent=msg;
+  };
+
+  /* ===========================================================
+     الخطة الأسبوعية
+     =========================================================== */
+  const PLAN_WEEKS = 18;
+  function refreshPlanPicker(){
+    const sel = g('planSection'); if(!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— اختر الفصل —</option>' +
+      sectionsList.slice().sort(secSort).map(s=>`<option value="${s.id}">${esc(secLabel(s))}</option>`).join('');
+    if(cur) sel.value = cur;
+    const wb = g('planWeekBar');
+    if(wb && !wb.dataset.built){
+      let h=''; for(let w=1;w<=PLAN_WEEKS;w++) h+=`<button data-w="${w}" onclick="setPlanWeek(${w})">${toAr(w)}</button>`;
+      wb.innerHTML = h; wb.dataset.built='1'; setPlanWeekActive();
+    }
+  }
+  function setPlanWeekActive(){
+    document.querySelectorAll('#planWeekBar button').forEach(b=>b.classList.toggle('active', (+b.dataset.w)===planWeek));
+  }
+  window.setPlanWeek = (w)=>{ planWeek = w; setPlanWeekActive(); renderPlan(); };
+  window.renderPlan = ()=>{
+    const wrap = g('planWrap'); if(!wrap) return;
+    const secId = g('planSection') ? g('planSection').value : '';
+    if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">📖</div><h3>اختر فصلًا لعرض خطته الأسبوعية</h3></div>'; return; }
+    const P = periodsCount();
+    const rows = [];
+    for(const day of DAYS){ for(let p=1;p<=P;p++){
+      const aid = scheduleData?.[secId]?.[day]?.[p];
+      if(aid){ const a = assignList.find(x=>x.id===aid); if(a) rows.push({day,p,a}); }
+    }}
+    if(!rows.length){ wrap.innerHTML = '<div class="empty"><div class="big">🗓️</div><h3>لا يوجد جدول لهذا الفصل بعد</h3></div>'; return; }
+    const isAdmin = document.body.classList.contains('editor');
+    const isTeacher = document.body.classList.contains('teacher');
+    const sec = sectionsList.find(x=>x.id===secId);
+    let html = `<div class="parent-hd">📖 الخطة الأسبوعية — ${esc(sec?secLabel(sec):'')} · الأسبوع ${toAr(planWeek)}</div>`;
+    html += `<div class="print-head" style="display:none">خطة ${esc(sec?secLabel(sec):'')} — الأسبوع ${toAr(planWeek)}</div>`;
+    if(isTeacher){
+      const nm = (currentTeacher?.name||'').trim();
+      const parts = nm.split('/').map(x=>x.trim()).filter(Boolean);
+      const who = parts.length>=2 ? parts[parts.length-1] : nm;
+      const extra = parts.length>=2 ? parts.slice(0,-1).join(' / ') : '';
+      html += `<div class="teacher-note">👤 مرحبًا يا أ. <b>${esc(who)}</b>${extra?(' — '+esc(extra)):''} — يمكنك تعبئة مواضيع <b>حصصك أنت</b> فقط (المميّزة).</div>`;
+    }
+    html += '<div class="sched-scroll"><table class="plan"><thead><tr><th>اليوم</th><th>الحصة</th><th>المادة</th><th>المعلم</th><th style="min-width:200px">الموضوع</th></tr></thead><tbody>';
+    let lastDay='';
+    rows.forEach(r=>{
+      const subj = subjectsList.find(x=>x.id===r.a.subjectId);
+      const t = staffList.find(x=>x.id===r.a.teacherId);
+      const topic = (plansData?.[secId]?.[planWeek]?.[r.day]?.[r.p]) || '';
+      const dayCell = r.day!==lastDay ? `<td class="day-c">${r.day}</td>` : '<td class="day-c"></td>';
+      lastDay = r.day;
+      const mine = isTeacher && currentTeacher && r.a.teacherId===currentTeacher.id;
+      const editable = isAdmin || mine;
+      const topicCell = editable
+        ? `<input class="plan-topic" value="${esc(topic)}" placeholder="اكتب موضوع الحصة" onchange="savePlanTopic('${secId}','${r.day}',${r.p},this.value)" />`
+        : (topic ? esc(topic) : '<span class="plan-empty-topic">—</span>');
+      html += `<tr class="${mine?'plan-mine':''}">${dayCell}<td class="per-c">${toAr(r.p)}</td>
+        <td>${subj?`<span class="plan-subj" style="background:${subj.color}">${subj.icon||''} ${esc(subj.name)}</span>`:'—'}</td>
+        <td>${t?esc(dispName(t.name)):'—'}</td>
+        <td>${topicCell}</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+    wrap.innerHTML = html;
+  };
+  window.savePlanTopic = async (secId,day,p,val)=>{
+    const path = `plans/${secId}/${planWeek}/${day}/${p}`;
+    try{ if(val && val.trim()) await setData(fbChildRef(db,path), val.trim()); else await fbRemove(fbChildRef(db,path)); }
+    catch(e){ console.error(e); }
+  };
+  window.printPlan = ()=>{
+    if(!g('planSection') || !g('planSection').value){ alert('اختر فصلًا أولًا'); return; }
+    window.print();
+  };
+
+  /* ===========================================================
+     المتابعة (تعبئة الخطط)
+     =========================================================== */
+  function dayStatus(secId, week, day){
+    const slots = scheduleData?.[secId]?.[day] || {};
+    const periods = Object.keys(slots).filter(p=> slots[p]);
+    if(!periods.length) return null;
+    let filled = 0;
+    periods.forEach(p=>{ if(plansData?.[secId]?.[week]?.[day]?.[p]) filled++; });
+    return { total:periods.length, filled, complete: filled===periods.length };
+  }
+  function sectionHasSchedule(secId){
+    const days = scheduleData?.[secId] || {};
+    for(const d in days){ const s=days[d]||{}; for(const p in s){ if(s[p]) return true; } }
+    return false;
+  }
+  window.setFollowWeek = (w)=>{ followWeek = w; setFollowWeekActive(); renderFollow(); };
+  function setFollowWeekActive(){
+    document.querySelectorAll('#followWeekBar button').forEach(b=>b.classList.toggle('active', (+b.dataset.w)===followWeek));
+  }
+  window.openFromFollow = (secId, week)=>{
+    planWeek = week; setPlanWeekActive();
+    const sel = g('planSection'); if(sel) sel.value = secId;
+    renderPlan();
+    const pt = document.querySelector('.tab[data-tab="plan"]'); if(pt) pt.click();
+  };
+  window.renderFollow = ()=>{
+    const wrap = g('followWrap'), sum = g('followSummary'); if(!wrap) return;
+    const wb = g('followWeekBar');
+    if(wb && !wb.dataset.built){
+      let h=''; for(let w=1;w<=PLAN_WEEKS;w++) h+=`<button data-w="${w}" onclick="setFollowWeek(${w})">${toAr(w)}</button>`;
+      wb.innerHTML=h; wb.dataset.built='1'; setFollowWeekActive();
+    }
+    const withSched = sectionsList.filter(s=> sectionHasSchedule(s.id));
+    if(!withSched.length){ wrap.innerHTML='<div class="empty"><div class="big">🗓️</div><h3>لا توجد جداول بعد</h3></div>'; if(sum) sum.innerHTML=''; return; }
+    let doneCount=0;
+    let html='';
+    STAGES.forEach(st=>{
+      const inSt = withSched.filter(s=> gradeInfo(s.grade).stage===st).sort(secSort);
+      if(!inSt.length) return;
+      html += `<div class="sec-title">${st} <span class="ln"></span></div><div class="follow-grid">`;
+      inSt.forEach(s=>{
+        const days = DAYS.map(day=>({day, st:dayStatus(s.id, followWeek, day)})).filter(x=>x.st);
+        const remaining = days.filter(x=>!x.st.complete).length;
+        const complete = remaining===0;
+        if(complete) doneCount++;
+        const chips = days.map(x=>`<span class="fday ${x.st.complete?'done':'todo'}">${x.day}</span>`).join('');
+        html += `<div class="follow-card ${complete?'complete':''}">
+          <div class="follow-head"><span class="nm">${esc(secLabel(s))}</span>
+            <button class="follow-open" onclick="openFromFollow('${s.id}',${followWeek})">فتح ›</button></div>
+          <div class="follow-days">${chips}</div>
+          <div class="follow-meta ${complete?'done':''}">${complete?'✓ مكتمل':('متبق '+toAr(remaining)+' من '+toAr(days.length)+' أيام')}</div>
+        </div>`;
+      });
+      html += '</div>';
+    });
+    wrap.innerHTML = html;
+    if(sum) sum.innerHTML = `<div class="follow-sum">
+      <div class="box"><span class="n">${toAr(withSched.length)}</span> فصل</div>
+      <div class="box g"><span class="n">${toAr(doneCount)}</span> مكتمل</div>
+      <div class="box r"><span class="n">${toAr(withSched.length-doneCount)}</span> متبقٍ</div>
+    </div>`;
+  };
+
+  /* ===========================================================
+     روابط أولياء الأمور + وضع ولي الأمر
+     =========================================================== */
+  function parentUrl(secId){ return location.origin + location.pathname + '#p/' + secId; }
+  window.openParentLinks = ()=>{ renderParentLinks(); g('parentLinksModal').classList.add('show'); };
+  window.closeParentLinks = ()=> g('parentLinksModal').classList.remove('show');
+  function renderParentLinks(){
+    const wrap = g('parentLinksList'); if(!wrap) return;
+    let html='';
+    STAGES.forEach(st=>{
+      const inSt = sectionsList.filter(s=> gradeInfo(s.grade).stage===st).sort(secSort);
+      if(!inSt.length) return;
+      html += `<div class="sec-title">${st} <span class="ln"></span></div>`;
+      inSt.forEach(s=>{
+        html += `<div class="plink-row"><span class="plink-nm">${esc(secLabel(s))}</span>
+          <button class="btn btn-light" style="border:1px solid var(--line)" onclick="copyLink('${parentUrl(s.id)}',this)">📋 نسخ</button></div>`;
+      });
+    });
+    wrap.innerHTML = html || '<div class="empty"><div class="big">🏫</div><h3>لا توجد فصول</h3></div>';
+  }
+  window.copyLink = async (url, btn)=>{
+    try{ await navigator.clipboard.writeText(url); const o=btn.textContent; btn.textContent='✓ نُسخ'; setTimeout(()=>btn.textContent=o,1500); }
+    catch(e){ prompt('انسخ الرابط:', url); }
+  };
+  let parentApplied = false;
+  function applyParentIfNeeded(){
+    if(!parentSectionId || parentApplied) return;
+    const sel = g('planSection'); if(!sel) return;
+    if(sel.querySelector(`option[value="${parentSectionId}"]`)){
+      sel.value = parentSectionId;
+      const pt = document.querySelector('.tab[data-tab="plan"]'); if(pt) pt.click();
+      renderPlan();
+      parentApplied = true;
+    }
+  }
+
   // عرض أولي
   renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
-  refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda();
+  refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda(); fillToolSubjects();
+  refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded();
 
   /* ===========================================================
      تبديل التبويبات

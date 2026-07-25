@@ -357,6 +357,10 @@ body.parent #tab-plan .sched-controls{display:none}
 body.parent #tab-plan .page-head .btn.edit-only{display:none !important}
 .plink-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line)}
 .plink-nm{font-weight:700;color:var(--ink);font-size:14px}
+.acc-table{width:100%;border-collapse:collapse}
+.acc-table th,.acc-table td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:right;font-size:13.5px}
+.acc-table th{color:var(--navy);font-weight:800;font-size:12.5px;position:sticky;top:0;background:var(--card)}
+.acc-table td b{font-family:'Cairo'}
 table.plan tr.plan-mine td{background:#F2F8FF}
 table.plan tr.plan-mine .per-c,table.plan tr.plan-mine .day-c{background:#E6F1FB}
 @media print{
@@ -479,7 +483,10 @@ footer b{color:var(--navy)}
   <section class="panel active" id="tab-staff">
     <div class="page-head">
       <div class="ttl"><div class="badge">👥</div><div><h2>الكادر التعليمي</h2><p class="sub">المعلمون والإداريون في قسم البنين</p></div></div>
-      <button class="btn btn-primary edit-only" onclick="openStaffForm()">＋ إضافة موظف</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-light edit-only" style="border:1px solid var(--line)" onclick="openAccounts()">🔐 حسابات الدخول</button>
+        <button class="btn btn-primary edit-only" onclick="openStaffForm()">＋ إضافة موظف</button>
+      </div>
     </div>
     <div class="toolbar">
       <div class="search">
@@ -866,6 +873,21 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== حسابات الدخول ===================== -->
+<div class="modal-bg" id="accountsModal">
+  <div class="modal lg" style="max-width:760px;text-align:right">
+    <h3>🔐 حسابات دخول المعلمين</h3>
+    <p style="text-align:center">اسم الدخول يُولّد تلقائيًا (٠١، ٠٢…). كلمات المرور تُحفظ مشفّرة — انسخها/اطبعها عند التوليد لأنها لا تظهر لاحقًا.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px">
+      <button class="btn btn-primary" onclick="genAccounts(false)">＋ توليد لمن ليس له حساب</button>
+      <button class="btn btn-light" style="border:1px solid var(--line)" onclick="genAccounts(true)">🔄 توليد للجميع (استبدال)</button>
+      <button class="btn btn-light" style="border:1px solid var(--line)" onclick="printAccounts()">🖨️ طباعة القائمة</button>
+    </div>
+    <div id="accountsList" style="max-height:56vh;overflow:auto;margin-bottom:12px"></div>
+    <div class="row"><button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeAccounts()">إغلاق</button></div>
+  </div>
+</div>
+
 <!-- ===================== روابط أولياء الأمور ===================== -->
 <div class="modal-bg" id="parentLinksModal">
   <div class="modal lg" style="max-width:640px;text-align:right">
@@ -1110,7 +1132,7 @@ footer b{color:var(--navy)}
      =========================================================== */
   const g = id => document.getElementById(id);
   const esc = s => (''+ (s??'')).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const toAr = n => (''+ (n??'')).replace(/[0-9]/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+  const toAr = n => ''+ (n??'');   // أرقام إنجليزية
   // عرض الاسم: يقدّم اسم الأستاذ على الشعبة (إن كُتب بصيغة «الشعبة / الاسم»)
   const dispName = name => {
     const parts = (''+(name||'')).split('/').map(x=>x.trim()).filter(Boolean);
@@ -1161,7 +1183,8 @@ footer b{color:var(--navy)}
     // النصاب = عدد الحصص في الجدول (كل حصة = ١)، وإن لم يُجدول بعد فمجموع حصص الإسناد
     const schedCount = teacherSchedCount(s.id);
     const assignPeriods = myAssign.reduce((n,a)=> n + (parseInt(a.periods)||0), 0);
-    const autoPeriods = schedCount>0 ? schedCount : assignPeriods;
+    // النصاب = مجموع حصص الإسناد (ثابت ومتّسق)، وإن لم يُسند بعد فمن الجدول
+    const autoPeriods = assignPeriods>0 ? assignPeriods : schedCount;
     const autoSubjNames = [...new Set(myAssign.map(a=>a.subjectId).filter(Boolean))]
       .map(id => subjectsList.find(x=>x.id===id)?.name).filter(Boolean);
     const nisabShown = autoPeriods>0 ? autoPeriods : s.nisab;
@@ -1255,11 +1278,12 @@ footer b{color:var(--navy)}
     setTimeout(()=>g('fName').focus(),100);
   };
   window.closeStaffForm = ()=>{ g('staffModal').classList.remove('show'); g('staffErr').textContent=''; };
-  window.genPassword = ()=>{
+  function genPw(){
     const c='abcdefghjkmnpqrstuvwxyz23456789'; let p='';
     for(let i=0;i<6;i++) p += c[Math.floor(Math.random()*c.length)];
-    g('fPassword').value = p;
-  };
+    return p;
+  }
+  window.genPassword = ()=>{ g('fPassword').value = genPw(); };
 
   window.saveStaff = async ()=>{
     const name = g('fName').value.trim();
@@ -2002,6 +2026,64 @@ footer b{color:var(--navy)}
     try{ await navigator.clipboard.writeText(url); const o=btn.textContent; btn.textContent='✓ نُسخ'; setTimeout(()=>btn.textContent=o,1500); }
     catch(e){ prompt('انسخ الرابط:', url); }
   };
+  /* ===========================================================
+     شاشة حسابات الدخول
+     =========================================================== */
+  let sessionPass = {};   // كلمات المرور المولّدة في هذه الجلسة فقط (للعرض/الطباعة)
+  const accSort = (a,b)=> ((parseInt(a.username)||999)-(parseInt(b.username)||999)) || (a.name||'').localeCompare(b.name||'','ar');
+  window.openAccounts = ()=>{ renderAccounts(); g('accountsModal').classList.add('show'); };
+  window.closeAccounts = ()=> g('accountsModal').classList.remove('show');
+  function renderAccounts(){
+    const wrap = g('accountsList'); if(!wrap) return;
+    const list = staffList.slice().sort(accSort);
+    const rows = list.map(s=>{
+      const pw = sessionPass[s.id];
+      const pwCell = pw ? `<b style="color:var(--navy)">${esc(pw)}</b>`
+        : (s.passHash ? '<span style="color:var(--muted)">••••••</span>' : '<span style="color:var(--muted)">—</span>');
+      return `<tr>
+        <td>${esc(dispName(s.name))}</td>
+        <td>${s.username?('<b>'+esc(s.username)+'</b>'):'<span style="color:var(--muted)">—</span>'}</td>
+        <td>${pwCell}</td>
+        <td><button class="mini-btn" title="إعادة تعيين كلمة المرور" onclick="resetAccount('${s.id}')">🔄</button></td>
+      </tr>`;
+    }).join('');
+    wrap.innerHTML = `<table class="acc-table"><thead><tr><th>الاسم</th><th>اسم الدخول</th><th>كلمة المرور</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+  function nextUserNum(){
+    const used = staffList.map(s=>parseInt(s.username)).filter(n=>!isNaN(n));
+    return (used.length ? Math.max(...used) : 0) + 1;
+  }
+  window.genAccounts = async (all)=>{
+    if(all && !confirm('سيتم توليد كلمات مرور جديدة لكل المعلمين، وتتوقف كلماتهم القديمة. متابعة؟')) return;
+    const targets = staffList.filter(s=> all || !s.username || !s.passHash);
+    if(!targets.length){ alert('كل المعلمين لديهم حسابات بالفعل.'); return; }
+    let next = nextUserNum();
+    for(const s of targets){
+      const username = (s.username && /^\d+$/.test(s.username)) ? s.username : String(next++).padStart(2,'0');
+      const pw = genPw();
+      sessionPass[s.id] = pw;
+      await fbUpdate(fbChildRef(db,'staff/'+s.id), { username, passHash: await sha256(pw) });
+    }
+    renderAccounts();
+  };
+  window.resetAccount = async (id)=>{
+    const s = staffList.find(x=>x.id===id); if(!s) return;
+    const username = (s.username && /^\d+$/.test(s.username)) ? s.username : String(nextUserNum()).padStart(2,'0');
+    const pw = genPw();
+    sessionPass[id] = pw;
+    await fbUpdate(fbChildRef(db,'staff/'+id), { username, passHash: await sha256(pw) });
+    renderAccounts();
+  };
+  window.printAccounts = ()=>{
+    const list = staffList.slice().sort(accSort).filter(s=>s.username);
+    if(!list.length){ alert('لا توجد حسابات بعد. ولّد أولًا.'); return; }
+    const rows = list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(dispName(s.name))}</td><td>${esc(s.username)}</td><td>${sessionPass[s.id]?esc(sessionPass[s.id]):'••••••'}</td></tr>`).join('');
+    const w = window.open('','_blank','width=820,height=900');
+    if(!w){ alert('اسمح بالنوافذ المنبثقة للطباعة.'); return; }
+    w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>حسابات الدخول</title><style>body{font-family:Tahoma,Arial;padding:24px;color:#22293A}h2{color:#1E3A6E}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px;text-align:right;font-size:14px}th{background:#1E3A6E;color:#fff}.note{color:#888;font-size:12px;margin-top:12px}</style></head><body><h2>حسابات دخول المعلمين — منصة قائد</h2><table><thead><tr><th>#</th><th>الاسم</th><th>اسم الدخول</th><th>كلمة المرور</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">الكلمات التي تظهر •••• لم تُولّد في هذه الجلسة؛ ولّدها ثانيةً لعرضها.</p></body></html>');
+    w.document.close(); w.focus(); setTimeout(()=>{ try{ w.print(); }catch(e){} },400);
+  };
+
   let parentApplied = false;
   function applyParentIfNeeded(){
     if(!parentSectionId || parentApplied) return;

@@ -321,7 +321,9 @@ body.editor .sched-tools{display:block}
 table.plan{border-collapse:separate;border-spacing:0;width:100%;min-width:660px;background:var(--card)}
 table.plan th,table.plan td{border-bottom:1px solid var(--line);border-inline-start:1px solid var(--line);padding:8px 10px;text-align:center;font-size:13px;vertical-align:middle}
 table.plan thead th{background:var(--navy);color:#fff;font-weight:800;font-family:'Cairo'}
-table.plan .day-c{font-weight:800;color:var(--navy);background:var(--bg);white-space:nowrap}
+table.plan .day-c{font-family:'Cairo';font-weight:900;font-size:15px;color:var(--red);background:var(--card);white-space:nowrap;text-align:center;vertical-align:middle}
+table.plan .day-c .day-date{font-family:'Tajawal';font-weight:800;font-size:12px;color:var(--red);margin-top:4px;direction:ltr}
+table.plan tr.day-start td{border-top:3px solid var(--navy)}
 table.plan .per-c{font-weight:800;color:var(--navy);width:44px}
 .plan-subj{display:inline-block;font-weight:700;color:#fff;border-radius:8px;padding:4px 10px;font-size:12.5px}
 .plan-topic{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font-family:inherit;font-size:13px;background:var(--bg);min-width:170px}
@@ -357,12 +359,29 @@ body.parent #tab-plan .sched-controls{display:none}
 body.parent #tab-plan .page-head .btn.edit-only{display:none !important}
 .plink-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line)}
 .plink-nm{font-weight:700;color:var(--ink);font-size:14px}
+/* روابط (أساس/القدرات/التحصيلي) */
+.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.link-card{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;box-shadow:var(--shadow-sm)}
+.link-ic{width:44px;height:44px;border-radius:12px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.link-main{flex:1;min-width:0}
+.link-desc{font-weight:800;color:var(--ink);font-size:14.5px;line-height:1.3}
+.link-url{color:var(--blue);font-size:12px;text-decoration:none;word-break:break-all;display:block;margin-top:2px}
+.link-open{width:38px;height:38px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:16px}
+.link-acts{display:none;gap:6px}
+body.editor .link-card .link-acts{display:flex}
+/* شريط شرائح (شُعب الكادر) */
+.pillbar{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none;margin-bottom:6px}
+.pillbar::-webkit-scrollbar{display:none}
+.pillbar button{border:1px solid var(--line);background:var(--card);cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;color:var(--muted);padding:8px 14px;border-radius:30px;flex-shrink:0;transition:.15s;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.pillbar button.active{background:var(--grad);color:#fff;border-color:transparent;box-shadow:var(--shadow-sm)}
+.pillbar button .cnt{background:rgba(0,0,0,.08);border-radius:20px;padding:1px 8px;font-size:11.5px;font-weight:800}
+.pillbar button.active .cnt{background:rgba(255,255,255,.25)}
 .acc-table{width:100%;border-collapse:collapse}
 .acc-table th,.acc-table td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:right;font-size:13.5px}
 .acc-table th{color:var(--navy);font-weight:800;font-size:12.5px;position:sticky;top:0;background:var(--card)}
 .acc-table td b{font-family:'Cairo'}
 table.plan tr.plan-mine td{background:#F2F8FF}
-table.plan tr.plan-mine .per-c,table.plan tr.plan-mine .day-c{background:#E6F1FB}
+table.plan tr.plan-mine .per-c{background:#E6F1FB}
 @media print{
   .topbar,.tabs-wrap,footer,.week-bar,.setup-warn,.page-head .btn,.sched-controls{display:none !important}
   body::before{display:none !important}
@@ -403,11 +422,12 @@ body.editor .exam-card .exam-acts{display:flex}
    ============================================================ */
 .modal-bg{
   position:fixed;inset:0;background:rgba(21,42,82,.55);backdrop-filter:blur(4px);
-  display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  display:none;align-items:flex-start;justify-content:center;z-index:100;padding:20px;overflow-y:auto;
 }
 .modal-bg.show{display:flex}
 .modal{
-  background:#fff;border-radius:22px;padding:30px 26px;width:100%;max-width:380px;
+  background:#fff;border-radius:22px;padding:30px 26px;width:100%;max-width:380px;margin:auto;
+  max-height:calc(100vh - 40px);overflow-y:auto;
   box-shadow:0 30px 60px -20px rgba(21,42,82,.6);text-align:center;animation:pop .25s ease;
 }
 @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
@@ -493,8 +513,9 @@ footer b{color:var(--navy)}
         <span class="si">🔍</span>
         <input type="text" id="staffSearch" placeholder="ابحث بالاسم، الوظيفة، المادة…" oninput="renderStaff()" />
       </div>
-      <div class="count-pill" id="staffCount">٠ موظف</div>
+      <div class="count-pill" id="staffCount">0 موظف</div>
     </div>
+    <div class="pillbar" id="staffSectionBar"></div>
     <div class="staff-grid" id="staffGrid"></div>
     <div class="empty" id="staffEmpty" style="display:none">
       <div class="big">👥</div><h3>لا يوجد كادر بعد</h3>
@@ -595,6 +616,7 @@ footer b{color:var(--navy)}
     </div>
     <div class="sched-controls">
       <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="planSection" onchange="renderPlan()"></select></div>
+      <div class="fld edit-only" style="max-width:190px"><label>تاريخ أحد الأسبوع الأول</label><input type="date" id="planStart" onchange="setPlanStart(this.value)" /></div>
     </div>
     <div class="week-bar" id="planWeekBar"></div>
     <div id="planWrap"></div>
@@ -631,37 +653,31 @@ footer b{color:var(--navy)}
   <!-- ===== أساس ===== -->
   <section class="panel" id="tab-asas">
     <div class="page-head">
-      <div class="ttl"><div class="badge">🧭</div><div><h2>أساس</h2><p class="sub">منصة «أساس» ومتابعتها</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة بيان</button>
+      <div class="ttl"><div class="badge">🧭</div><div><h2>أساس</h2></div></div>
+      <button class="btn btn-primary edit-only" onclick="openLinkForm('asas')">＋ إضافة رابط</button>
     </div>
-    <div class="empty">
-      <div class="big">🧭</div><h3>تبويب «أساس» قيد الإنشاء</h3>
-      <p>سنحدد سويًا ما تريد عرضه ومتابعته هنا من بيانات نظام «أساس».</p>
-    </div>
+    <div class="links-grid" id="links-asas"></div>
+    <div class="empty" id="linksEmpty-asas" style="display:none"><div class="big">🧭</div><h3>لا توجد روابط بعد</h3></div>
   </section>
 
   <!-- ===== القدرات ===== -->
   <section class="panel" id="tab-qudurat">
     <div class="page-head">
-      <div class="ttl"><div class="badge">🧠</div><div><h2>القدرات</h2><p class="sub">اختبار القدرات العامة ونتائجه</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة نتيجة</button>
+      <div class="ttl"><div class="badge">🧠</div><div><h2>القدرات</h2></div></div>
+      <button class="btn btn-primary edit-only" onclick="openLinkForm('qudurat')">＋ إضافة رابط</button>
     </div>
-    <div class="empty">
-      <div class="big">🧠</div><h3>تبويب «القدرات» قيد الإنشاء</h3>
-      <p>متابعة درجات الطلاب في اختبار القدرات، نسب الإنجاز، والمقارنات.</p>
-    </div>
+    <div class="links-grid" id="links-qudurat"></div>
+    <div class="empty" id="linksEmpty-qudurat" style="display:none"><div class="big">🧠</div><h3>لا توجد روابط بعد</h3></div>
   </section>
 
   <!-- ===== التحصيلي ===== -->
   <section class="panel" id="tab-tahsili">
     <div class="page-head">
-      <div class="ttl"><div class="badge">📈</div><div><h2>التحصيلي</h2><p class="sub">الاختبار التحصيلي ونتائجه</p></div></div>
-      <button class="btn btn-primary edit-only">＋ إضافة نتيجة</button>
+      <div class="ttl"><div class="badge">📈</div><div><h2>التحصيلي</h2></div></div>
+      <button class="btn btn-primary edit-only" onclick="openLinkForm('tahsili')">＋ إضافة رابط</button>
     </div>
-    <div class="empty">
-      <div class="big">📈</div><h3>تبويب «التحصيلي» قيد الإنشاء</h3>
-      <p>متابعة درجات الطلاب في الاختبار التحصيلي حسب المواد العلمية، ونسب التقدم.</p>
-    </div>
+    <div class="links-grid" id="links-tahsili"></div>
+    <div class="empty" id="linksEmpty-tahsili" style="display:none"><div class="big">📈</div><h3>لا توجد روابط بعد</h3></div>
   </section>
 
   <!-- ===== الاختبارات ===== -->
@@ -669,7 +685,7 @@ footer b{color:var(--navy)}
     <div class="page-head">
       <div class="ttl"><div class="badge">📝</div><div><h2>الاختبارات</h2></div></div>
     </div>
-    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
       <div class="subnav" id="examFilterBar" style="margin:0">
         <button class="active" data-ef="upcoming" onclick="setExamFilter(this)">📌 القادمة</button>
         <button data-ef="all" onclick="setExamFilter(this)">الكل</button>
@@ -677,6 +693,12 @@ footer b{color:var(--navy)}
       </div>
       <div style="flex:1"></div>
       <button class="btn btn-primary edit-only" onclick="openExamForm()">＋ إضافة اختبار</button>
+    </div>
+    <div class="subnav" id="examStageBar" style="margin-bottom:16px">
+      <button class="active" data-es="all" onclick="setExamStage(this)">كل المراحل</button>
+      <button data-es="ابتدائي" onclick="setExamStage(this)">🟢 ابتدائي</button>
+      <button data-es="متوسط" onclick="setExamStage(this)">🔵 متوسط</button>
+      <button data-es="ثانوي" onclick="setExamStage(this)">🟣 ثانوي</button>
     </div>
     <div id="examsWrap"></div>
     <div class="empty" id="examsEmpty" style="display:none"><div class="big">📝</div><h3>لا توجد اختبارات</h3></div>
@@ -727,13 +749,9 @@ footer b{color:var(--navy)}
       <div class="fld"><label>الوظيفة</label><input type="text" id="fJob" placeholder="معلم رياضيات / وكيل…" list="jobList" />
         <datalist id="jobList"><option value="مدير المدرسة"><option value="وكيل مدرسة"><option value="موجه طلابي"><option value="معلم لغة عربية"><option value="معلم رياضيات"><option value="معلم علوم"><option value="معلم لغة إنجليزية"><option value="معلم إسلامية"><option value="معلم اجتماعيات"><option value="معلم حاسب"><option value="معلم فنية"><option value="معلم بدنية"><option value="إداري"></datalist>
       </div>
-      <div class="fld"><label>الجنسية</label><input type="text" id="fNat" placeholder="سعودي / مصري…" list="natList" />
-        <datalist id="natList"><option value="سعودي"><option value="مصري"><option value="أردني"><option value="يمني"><option value="سوري"><option value="فلسطيني"><option value="سوداني"></datalist>
-      </div>
       <div class="fld"><label>رقم الجوال</label><input type="tel" id="fPhone" placeholder="05XXXXXXXX" inputmode="tel" />
         <div class="hint">يُستخدم لزر واتساب (أرقام سعودية تلقائيًا)</div>
       </div>
-      <div class="fld"><label>النصاب (عدد الحصص)</label><input type="number" id="fNisab" min="0" placeholder="مثال: 24" inputmode="numeric" /></div>
       <div class="fld full"><label>المواد</label><input type="text" id="fSubjects" placeholder="مثال: رياضيات، إحصاء" /></div>
       <div class="fld full"><label>المرحلة / الصف</label><input type="text" id="fGrade" placeholder="مثال: ثانوي — 11a، 12b" /></div>
 
@@ -873,6 +891,22 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== نموذج الرابط ===================== -->
+<div class="modal-bg" id="linkModal">
+  <div class="modal lg">
+    <h3 id="linkFormTitle">إضافة رابط</h3>
+    <div class="form-grid">
+      <div class="fld full"><label>الوصف *</label><input type="text" id="linkDesc" placeholder="مثال: دخول منصة أساس" /></div>
+      <div class="fld full"><label>الرابط *</label><input type="url" id="linkUrl" placeholder="https://..." dir="ltr" style="text-align:left" /></div>
+    </div>
+    <div class="err" id="linkErr" style="text-align:center"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeLinkForm()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveLink()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===================== حسابات الدخول ===================== -->
 <div class="modal-bg" id="accountsModal">
   <div class="modal lg" style="max-width:760px;text-align:right">
@@ -948,6 +982,8 @@ footer b{color:var(--navy)}
   let examsRef = null, examsList = [], editExamId = null;
   let agendaRef = null, agendaList = [], editAgendaId = null;
   let plansRef = null, plansData = {}, planWeek = 1, followWeek = 1;
+  let linksRef = null, linksData = {}, editLinkCat = null, editLinkId = null;
+  let examStageFilter = 'all', staffSectionFilter = null;
   let currentTeacher = null;   // بيانات المعلم عند دخوله (وضع المعلم)
   // وضع ولي الأمر: رابط #p/<sectionId> يفتح خطة الفصل للمشاهدة فقط
   let parentSectionId = null;
@@ -992,6 +1028,7 @@ footer b{color:var(--navy)}
       examsRef    = ref(db, 'exams');
       agendaRef   = ref(db, 'agenda');
       plansRef    = ref(db, 'plans');
+      linksRef    = ref(db, 'links');
 
       // استماع فوري لبيانات الكادر
       onValue(staffRef, (snap)=>{
@@ -999,7 +1036,7 @@ footer b{color:var(--navy)}
         staffList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderStaff(); renderSections(); refreshAssignSectionPicker(); renderAssign();
         refreshSchedPickers(); renderSchedSection(); renderSchedTeacher();
-        refreshPlanPicker(); renderPlan();
+        refreshPlanPicker(); renderPlan(); renderStaffSectionBar();
       });
       onValue(subjectsRef, (snap)=>{
         const v = snap.val() || {};
@@ -1010,12 +1047,12 @@ footer b{color:var(--navy)}
         const v = snap.val() || {};
         sectionsList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderSections(); refreshAssignSectionPicker(); refreshSchedPickers(); renderSchedSection();
-        refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded();
+        refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderStaffSectionBar();
       });
       onValue(assignRef, (snap)=>{
         const v = snap.val() || {};
         assignList = Object.keys(v).map(id => ({ id, ...v[id] }));
-        renderAssign(); renderStaff(); renderSchedSection(); renderSchedTeacher(); renderPlan();
+        renderAssign(); renderStaff(); renderSchedSection(); renderSchedTeacher(); renderPlan(); renderStaffSectionBar();
       });
       onValue(scheduleRef, (snap)=>{
         scheduleData = snap.val() || {};
@@ -1028,6 +1065,7 @@ footer b{color:var(--navy)}
       onValue(settingsRef, (snap)=>{
         settings = snap.val() || {};
         if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
+        if(g('planStart')) g('planStart').value = settings.planStart || '2026-08-30';
         renderSchedSection(); renderSchedTeacher(); renderPlan();
       });
       onValue(examsRef, (snap)=>{
@@ -1039,6 +1077,10 @@ footer b{color:var(--navy)}
         const v = snap.val() || {};
         agendaList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderAgenda();
+      });
+      onValue(linksRef, (snap)=>{
+        linksData = snap.val() || {};
+        renderAllLinks();
       });
 
       // استماع فوري لأي تغيير (المزامنة بين الأجهزة)
@@ -1192,7 +1234,6 @@ footer b{color:var(--navy)}
     const subjText   = autoSubjNames.length ? autoSubjNames.join('، ') : s.subjects;
 
     const chips = [];
-    if(s.nat)   chips.push(`<span class="chip navy">🌍 ${esc(s.nat)}</span>`);
     if(s.grade) chips.push(`<span class="chip">🏫 ${esc(s.grade)}</span>`);
     if(nisabShown!=null && nisabShown!=='') chips.push(`<span class="chip ${nisabAuto?'auto':'red'}">⏳ نصاب ${esc(toAr(nisabShown))}${nisabAuto?' •':''}</span>`);
     if(s.offDays && s.offDays.length) chips.push(`<span class="chip" style="color:#9A3412;border-color:#FED7AA;background:#FFF7ED">🚫 ${esc(s.offDays.join('، '))}</span>`);
@@ -1212,17 +1253,35 @@ footer b{color:var(--navy)}
     </div>`;
   }
 
+  // القسم التخصصي للموظف = الجزء قبل «/» في الاسم (مثل «ش اللغة العربية»)
+  function staffDept(s){
+    const parts = (''+(s.name||'')).split('/').map(x=>x.trim()).filter(Boolean);
+    return parts.length>=2 ? parts.slice(0,-1).join(' / ') : '';
+  }
+  window.setStaffDept = (idx)=>{ staffSectionFilter = (idx==null) ? null : (window.__depts||[])[idx]; renderStaffSectionBar(); renderStaff(); };
+  window.renderStaffSectionBar = ()=>{
+    const bar = g('staffSectionBar'); if(!bar) return;
+    const counts = {};
+    staffList.forEach(s=>{ const d = staffDept(s); if(d) counts[d]=(counts[d]||0)+1; });
+    const depts = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'ar'));
+    window.__depts = depts;
+    let html = `<button class="${!staffSectionFilter?'active':''}" onclick="setStaffDept(null)">الكل</button>`;
+    html += depts.map((d,i)=>`<button class="${staffSectionFilter===d?'active':''}" onclick="setStaffDept(${i})">${esc(d)} <span class="cnt">${counts[d]}</span></button>`).join('');
+    bar.innerHTML = html;
+    bar.style.display = depts.length ? 'flex' : 'none';
+  };
   window.renderStaff = ()=>{
     const grid = g('staffGrid'), empty = g('staffEmpty');
     const q = (g('staffSearch').value || '').trim().toLowerCase();
-    let list = staffList.slice().sort((a,b)=> (a.name||'').localeCompare(b.name||'','ar'));
-    if(q) list = list.filter(s => [s.name,s.job,s.subjects,s.nat,s.grade,s.phone].join(' ').toLowerCase().includes(q));
-    g('staffCount').textContent = toAr(q ? list.length : staffList.length) + ' موظف';
+    let list = staffList.slice().sort((a,b)=> (dispName(a.name)||'').localeCompare(dispName(b.name)||'','ar'));
+    if(staffSectionFilter){ list = list.filter(s=> staffDept(s)===staffSectionFilter); }
+    if(q) list = list.filter(s => [s.name,s.job,s.subjects,s.grade,s.phone].join(' ').toLowerCase().includes(q));
+    g('staffCount').textContent = toAr(list.length) + ' موظف';
     if(staffList.length === 0){ empty.style.display='block'; grid.innerHTML=''; return; }
     empty.style.display='none';
     grid.innerHTML = list.length
       ? list.map(cardHtml).join('')
-      : '<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>لا نتائج مطابقة للبحث</p></div>';
+      : '<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>لا نتائج مطابقة</p></div>';
   };
 
   window.showLightbox = (id)=>{
@@ -1260,8 +1319,8 @@ footer b{color:var(--navy)}
     const s = id ? staffList.find(x=>x.id===id) : null;
     g('staffFormTitle').textContent = id ? 'تعديل موظف' : 'إضافة موظف';
     g('fName').value = s?.name||''; g('fJob').value = s?.job||'';
-    g('fNat').value = s?.nat||'';   g('fPhone').value = s?.phone||'';
-    g('fNisab').value = s?.nisab||''; g('fSubjects').value = s?.subjects||'';
+    g('fPhone').value = s?.phone||'';
+    g('fSubjects').value = s?.subjects||'';
     g('fGrade').value = s?.grade||''; g('staffErr').textContent='';
     g('fUsername').value = s?.username || '';
     g('fPassword').value = '';
@@ -1292,8 +1351,8 @@ footer b{color:var(--navy)}
     const existing = editingId ? staffList.find(x=>x.id===editingId) : null;
     let photo = currentPhoto ? currentPhoto : (photoCleared ? '' : (existing?.photo || ''));
     const data = {
-      name, job:g('fJob').value.trim(), nat:g('fNat').value.trim(),
-      phone:g('fPhone').value.trim(), nisab:g('fNisab').value.trim(),
+      name, job:g('fJob').value.trim(),
+      phone:g('fPhone').value.trim(),
       subjects:g('fSubjects').value.trim(), grade:g('fGrade').value.trim(), photo,
       offDays: [...document.querySelectorAll('#offDaysBox .offday:checked')].map(cb=>cb.value),
       blockedPeriods: [...document.querySelectorAll('#blockPeriodsBox .blockperiod:checked')].map(cb=>parseInt(cb.value)),
@@ -1676,10 +1735,15 @@ footer b{color:var(--navy)}
     if(diff===-1) return ['past','أمس'];
     return ['past','منذ '+toAr(-diff)+' يوم'];
   }
+  window.setExamStage = (btn)=>{
+    document.querySelectorAll('#examStageBar button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); examStageFilter = btn.dataset.es; renderExams();
+  };
   window.renderExams = ()=>{
     const wrap = g('examsWrap'), empty = g('examsEmpty'); if(!wrap) return;
     const todayMs = (()=>{ const t=new Date(); t.setHours(0,0,0,0); return t.getTime(); })();
     let list = examsList.filter(e=>e.date);
+    if(examStageFilter!=='all') list = list.filter(e=> e.grade && gradeInfo(e.grade).stage===examStageFilter);
     if(examFilter==='upcoming') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() >= todayMs);
     else if(examFilter==='past') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() < todayMs);
     list.sort((a,b)=> examFilter==='past' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
@@ -1908,19 +1972,23 @@ footer b{color:var(--navy)}
       html += `<div class="teacher-note">👤 مرحبًا يا أ. <b>${esc(who)}</b>${extra?(' — '+esc(extra)):''} — يمكنك تعبئة مواضيع <b>حصصك أنت</b> فقط (المميّزة).</div>`;
     }
     html += '<div class="sched-scroll"><table class="plan"><thead><tr><th>اليوم</th><th>الحصة</th><th>المادة</th><th>المعلم</th><th style="min-width:200px">الموضوع</th></tr></thead><tbody>';
+    const dayCounts = {};
+    rows.forEach(r=> dayCounts[r.day] = (dayCounts[r.day]||0)+1);
     let lastDay='';
     rows.forEach(r=>{
       const subj = subjectsList.find(x=>x.id===r.a.subjectId);
       const t = staffList.find(x=>x.id===r.a.teacherId);
       const topic = (plansData?.[secId]?.[planWeek]?.[r.day]?.[r.p]) || '';
-      const dayCell = r.day!==lastDay ? `<td class="day-c">${r.day}</td>` : '<td class="day-c"></td>';
+      const isDayStart = r.day!==lastDay;
+      const dayDate = (r.day==='الأحد') ? `<div class="day-date">${fmtDM(weekSunday(planWeek))}</div>` : '';
+      const dayCell = isDayStart ? `<td class="day-c" rowspan="${dayCounts[r.day]}">${r.day}${dayDate}</td>` : '';
       lastDay = r.day;
       const mine = isTeacher && currentTeacher && r.a.teacherId===currentTeacher.id;
       const editable = isAdmin || mine;
       const topicCell = editable
         ? `<input class="plan-topic" value="${esc(topic)}" placeholder="اكتب موضوع الحصة" onchange="savePlanTopic('${secId}','${r.day}',${r.p},this.value)" />`
         : (topic ? esc(topic) : '<span class="plan-empty-topic">—</span>');
-      html += `<tr class="${mine?'plan-mine':''}">${dayCell}<td class="per-c">${toAr(r.p)}</td>
+      html += `<tr class="${mine?'plan-mine ':''}${isDayStart?'day-start':''}">${dayCell}<td class="per-c">${toAr(r.p)}</td>
         <td>${subj?`<span class="plan-subj" style="background:${subj.color}">${subj.icon||''} ${esc(subj.name)}</span>`:'—'}</td>
         <td>${t?esc(dispName(t.name)):'—'}</td>
         <td>${topicCell}</td></tr>`;
@@ -1928,6 +1996,12 @@ footer b{color:var(--navy)}
     html += '</tbody></table></div>';
     wrap.innerHTML = html;
   };
+  function weekSunday(week){
+    const base = new Date(((settings&&settings.planStart)||'2026-08-30')+'T00:00:00');
+    return new Date(base.getTime() + (week-1)*7*86400000);
+  }
+  function fmtDM(d){ return d.getDate() + ' / ' + (d.getMonth()+1); }
+  window.setPlanStart = async (v)=>{ if(!v) return; try{ await setData(fbChildRef(db,'settings/planStart'), v); }catch(e){ console.error(e); } };
   window.savePlanTopic = async (secId,day,p,val)=>{
     const path = `plans/${secId}/${planWeek}/${day}/${p}`;
     try{ if(val && val.trim()) await setData(fbChildRef(db,path), val.trim()); else await fbRemove(fbChildRef(db,path)); }
@@ -2096,10 +2170,58 @@ footer b{color:var(--navy)}
     }
   }
 
+  /* ===========================================================
+     الروابط: أساس / القدرات / التحصيلي
+     =========================================================== */
+  const LINK_CATS = ['asas','qudurat','tahsili'];
+  window.renderAllLinks = ()=> LINK_CATS.forEach(renderLinks);
+  window.renderLinks = (cat)=>{
+    const grid = g('links-'+cat), empty = g('linksEmpty-'+cat); if(!grid) return;
+    const obj = linksData?.[cat] || {};
+    const list = Object.keys(obj).map(id=>({id,...obj[id]}));
+    if(!list.length){ grid.innerHTML=''; if(empty) empty.style.display='block'; return; }
+    if(empty) empty.style.display='none';
+    grid.innerHTML = list.map(l=>{
+      const url = l.url||'';
+      const safe = /^https?:\/\//i.test(url) ? url : ('https://'+url);
+      return `<div class="link-card">
+        <div class="link-ic">🔗</div>
+        <div class="link-main">
+          <div class="link-desc">${esc(l.desc||'')}</div>
+          <a class="link-url" href="${esc(safe)}" target="_blank" rel="noopener" dir="ltr">${esc(url)}</a>
+        </div>
+        <a class="link-open" href="${esc(safe)}" target="_blank" rel="noopener" title="فتح">↗</a>
+        <div class="link-acts">
+          <button class="mini-btn" onclick="openLinkForm('${cat}','${l.id}')">✏️</button>
+          <button class="mini-btn" onclick="deleteLink('${cat}','${l.id}')">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+  };
+  window.openLinkForm = (cat, id)=>{
+    editLinkCat = cat; editLinkId = id||null;
+    const l = id ? (linksData?.[cat]?.[id]||{}) : null;
+    g('linkFormTitle').textContent = id ? 'تعديل رابط' : 'إضافة رابط';
+    g('linkDesc').value = l?.desc||''; g('linkUrl').value = l?.url||'';
+    g('linkErr').textContent=''; g('linkModal').classList.add('show');
+  };
+  window.closeLinkForm = ()=> g('linkModal').classList.remove('show');
+  window.saveLink = async ()=>{
+    const desc = g('linkDesc').value.trim(), url = g('linkUrl').value.trim();
+    if(!desc){ g('linkErr').textContent='أدخل الوصف'; return; }
+    if(!url){ g('linkErr').textContent='أدخل الرابط'; return; }
+    try{
+      if(editLinkId) await fbUpdate(fbChildRef(db,'links/'+editLinkCat+'/'+editLinkId), {desc,url});
+      else await fbPush(fbChildRef(db,'links/'+editLinkCat), {desc,url});
+      closeLinkForm();
+    }catch(e){ g('linkErr').textContent='تعذّر الحفظ: '+(e.code||e.message); }
+  };
+  window.deleteLink = async (cat,id)=>{ if(!confirm('حذف هذا الرابط؟')) return; try{ await fbRemove(fbChildRef(db,'links/'+cat+'/'+id)); }catch(e){ alert('تعذّر الحذف'); } };
+
   // عرض أولي
   renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
   refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda(); fillToolSubjects();
-  refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded();
+  refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderAllLinks(); renderStaffSectionBar();
 
   /* ===========================================================
      تبديل التبويبات

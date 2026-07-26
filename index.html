@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>منصة قائد | مدارس الأندلس الأهلية</title>
+<title>منصة موهوب | مدارس الأندلس الأهلية</title>
 <meta name="theme-color" content="#1E3A6E" />
 <link rel="icon" href="Qaed_mark.png" />
 
@@ -463,7 +463,7 @@ footer b{color:var(--navy)}
   <div class="brand">
     <div class="logo"><img src="Qaed_mark.png" alt="شعار قائد" /></div>
     <div class="titles">
-      <h1>منصة قائد</h1>
+      <h1>منصة موهوب</h1>
       <p>مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · بنين</p>
     </div>
   </div>
@@ -472,6 +472,7 @@ footer b{color:var(--navy)}
       <span class="sync-dot" id="syncDot"></span>
       <span class="txt" id="syncTxt">جارٍ الاتصال…</span>
     </div>
+    <button class="btn btn-light edit-only" id="permsBtn" onclick="openPerms()" title="ما يظهر لكل دور" style="font-size:16px;padding:9px 12px">👁️</button>
     <button class="btn btn-light" id="loginBtn" onclick="openLogin()" title="دخول المحرر" style="font-size:18px;padding:9px 13px">🔑</button>
   </div>
 </header>
@@ -567,6 +568,7 @@ footer b{color:var(--navy)}
   <section class="panel" id="tab-schedule">
     <div class="page-head">
       <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2></div></div>
+      <button class="btn btn-primary edit-only" onclick="openGenerator()">⚙️ توليد الجدول تلقائيًا</button>
     </div>
     <div class="subnav">
       <button class="active" data-sched="bySection" onclick="switchSched(this)">🏫 حسب الفصل</button>
@@ -708,8 +710,8 @@ footer b{color:var(--navy)}
 </main>
 
 <footer>
-  <b>منصة قائد</b> · مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · (بنين)<br>
-  <span style="opacity:.7">Qaed Learning Platform</span>
+  <b>منصة موهوب</b> · مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · (بنين)<br>
+  <span style="opacity:.7">Mawhoob Learning Platform</span>
 </footer>
 
 <!-- ===================== نافذة دخول المحرر ===================== -->
@@ -891,6 +893,31 @@ footer b{color:var(--navy)}
   </div>
 </div>
 
+<!-- ===================== الصلاحيات (ما يظهر لكل دور) ===================== -->
+<div class="modal-bg" id="permsModal">
+  <div class="modal lg" style="max-width:560px;text-align:right">
+    <h3>👁️ ما يظهر لكل دور</h3>
+    <p style="text-align:center">حدّد التبويبات التي يراها كل دور. <b>المحرر</b> يرى الكل، و<b>ولي الأمر</b> يرى خطة فصله فقط.</p>
+    <table class="acc-table" id="permsTable"></table>
+    <div class="row" style="margin-top:14px"><button class="btn btn-primary" onclick="closePerms()">تم</button></div>
+  </div>
+</div>
+
+<!-- ===================== توليد الجدول ===================== -->
+<div class="modal-bg" id="genModal">
+  <div class="modal lg" style="max-width:640px;text-align:right">
+    <h3>⚙️ توليد الجدول تلقائيًا</h3>
+    <p style="text-align:center">يوزّع حصص الإسناد على الأيام والحصص محترمًا القيود، ثم يمكنك تعديله يدويًا.</p>
+    <div id="genBody">
+      <div style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;padding:12px 15px;border-radius:12px;font-size:13.5px;font-weight:600;margin-bottom:14px">
+        ⚠️ سيُنشئ جدولًا جديدًا لكل الفصول و<b>يستبدل الجدول الحالي بالكامل</b>. القيود المُحترمة: تعارض المعلمين، أيام الغياب، الحصص المحجوزة، أقصى حصص/يوم، وتوزيع المادة على أيام مختلفة.
+      </div>
+      <div class="row"><button class="btn btn-ghost" style="background:var(--bg);color:var(--muted)" onclick="closeGenerator()">إلغاء</button><button class="btn btn-primary" onclick="runGenerator()">⚙️ توليد الآن</button></div>
+    </div>
+    <div id="genResult" style="display:none"></div>
+  </div>
+</div>
+
 <!-- ===================== نموذج الرابط ===================== -->
 <div class="modal-bg" id="linkModal">
   <div class="modal lg">
@@ -1067,6 +1094,8 @@ footer b{color:var(--navy)}
         if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
         if(g('planStart')) g('planStart').value = settings.planStart || '2026-08-30';
         renderSchedSection(); renderSchedTeacher(); renderPlan();
+        if(window.applyVisibility) applyVisibility();
+        if(g('permsModal') && g('permsModal').classList.contains('show')) renderPerms();
       });
       onValue(examsRef, (snap)=>{
         const v = snap.val() || {};
@@ -1106,6 +1135,7 @@ footer b{color:var(--navy)}
     const lb=document.getElementById('loginBtn'); lb.innerHTML='🔓'; lb.title='محرر — اضغط للخروج';
     if(window.renderSchedSection){ renderSchedSection(); }
     if(window.renderPlan){ renderPlan(); }
+    if(window.applyVisibility){ applyVisibility(); }
   }
   function applyTeacher(t){
     currentTeacher = t;
@@ -1114,6 +1144,7 @@ footer b{color:var(--navy)}
     noteEl.disabled = true;
     const lb=document.getElementById('loginBtn'); lb.innerHTML='👤'; lb.title='معلم: '+t.name+' — اضغط للخروج';
     if(window.renderPlan){ renderPlan(); }
+    if(window.applyVisibility){ applyVisibility(); }
     const pt=document.querySelector('.tab[data-tab="plan"]'); if(pt) pt.click();
   }
   function applyViewer(){
@@ -1124,6 +1155,7 @@ footer b{color:var(--navy)}
     const lb=document.getElementById('loginBtn'); lb.innerHTML='🔑'; lb.title='تسجيل الدخول';
     if(window.renderSchedSection){ renderSchedSection(); }
     if(window.renderPlan){ renderPlan(); }
+    if(window.applyVisibility){ applyVisibility(); }
   }
 
   // حفظ الملاحظة المشتركة (للمحرر فقط)
@@ -2154,7 +2186,7 @@ footer b{color:var(--navy)}
     const rows = list.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(dispName(s.name))}</td><td>${esc(s.username)}</td><td>${sessionPass[s.id]?esc(sessionPass[s.id]):'••••••'}</td></tr>`).join('');
     const w = window.open('','_blank','width=820,height=900');
     if(!w){ alert('اسمح بالنوافذ المنبثقة للطباعة.'); return; }
-    w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>حسابات الدخول</title><style>body{font-family:Tahoma,Arial;padding:24px;color:#22293A}h2{color:#1E3A6E}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px;text-align:right;font-size:14px}th{background:#1E3A6E;color:#fff}.note{color:#888;font-size:12px;margin-top:12px}</style></head><body><h2>حسابات دخول المعلمين — منصة قائد</h2><table><thead><tr><th>#</th><th>الاسم</th><th>اسم الدخول</th><th>كلمة المرور</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">الكلمات التي تظهر •••• لم تُولّد في هذه الجلسة؛ ولّدها ثانيةً لعرضها.</p></body></html>');
+    w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>حسابات الدخول</title><style>body{font-family:Tahoma,Arial;padding:24px;color:#22293A}h2{color:#1E3A6E}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px;text-align:right;font-size:14px}th{background:#1E3A6E;color:#fff}.note{color:#888;font-size:12px;margin-top:12px}</style></head><body><h2>حسابات دخول المعلمين — منصة موهوب</h2><table><thead><tr><th>#</th><th>الاسم</th><th>اسم الدخول</th><th>كلمة المرور</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">الكلمات التي تظهر •••• لم تُولّد في هذه الجلسة؛ ولّدها ثانيةً لعرضها.</p></body></html>');
     w.document.close(); w.focus(); setTimeout(()=>{ try{ w.print(); }catch(e){} },400);
   };
 
@@ -2218,10 +2250,112 @@ footer b{color:var(--navy)}
   };
   window.deleteLink = async (cat,id)=>{ if(!confirm('حذف هذا الرابط؟')) return; try{ await fbRemove(fbChildRef(db,'links/'+cat+'/'+id)); }catch(e){ alert('تعذّر الحذف'); } };
 
+  /* ===========================================================
+     مُولِّد الجدول التلقائي
+     =========================================================== */
+  window.openGenerator = ()=>{ g('genBody').style.display='block'; g('genResult').style.display='none'; g('genModal').classList.add('show'); };
+  window.closeGenerator = ()=> g('genModal').classList.remove('show');
+
+  function buildSchedule(){
+    const P = periodsCount();
+    const staffById = {}; staffList.forEach(s=> staffById[s.id]=s);
+    // كوّن قائمة الحصص المطلوبة من الإسناد
+    let lessons = [];
+    assignList.forEach(a=>{
+      if(!a.subjectId || !a.teacherId) return;
+      const n = parseInt(a.periods)||0;
+      for(let i=0;i<n;i++) lessons.push({ sectionId:a.sectionId, subjectId:a.subjectId, teacherId:a.teacherId, assignId:a.id });
+    });
+    const availOf = (tid)=>{ const s=staffById[tid]||{}; const off=new Set(s.offDays||[]); const bl=new Set((s.blockedPeriods||[]).map(Number)); let n=0; DAYS.forEach(d=>{ if(off.has(d))return; for(let p=1;p<=P;p++) if(!bl.has(p)) n++; }); return n; };
+    lessons.sort((a,b)=> availOf(a.teacherId)-availOf(b.teacherId));
+    const sched={}, tBusy={}, tCount={}, secSubjDay={};
+    const ens=(o,k,f)=>{ if(!o[k]) o[k]=f(); return o[k]; };
+    const unplaced=[];
+    lessons.forEach(L=>{
+      const s = staffById[L.teacherId]||{};
+      const off = new Set(s.offDays||[]);
+      const blocked = new Set((s.blockedPeriods||[]).map(Number));
+      const maxPD = parseInt(s.maxPerDay)||P;
+      let best=null, bestScore=Infinity;
+      for(const day of DAYS){
+        if(off.has(day)) continue;
+        const cnt = (ens(tCount,L.teacherId,()=>({}))[day]||0);
+        if(cnt>=maxPD) continue;
+        const secDay = ens(ens(sched,L.sectionId,()=>({})), day, ()=>({}));
+        const busyDay = ens(ens(tBusy,L.teacherId,()=>({})), day, ()=>new Set());
+        const subjSet = ens(ens(secSubjDay,L.sectionId,()=>({})), day, ()=>new Set());
+        for(let p=1;p<=P;p++){
+          if(blocked.has(p)) continue;
+          if(secDay[p]) continue;
+          if(busyDay.has(p)) continue;
+          let score = cnt + p*0.1 + (subjSet.has(L.subjectId)?100:0);
+          if(score<bestScore){ bestScore=score; best={day,p,secDay,busyDay,subjSet}; }
+        }
+      }
+      if(best){
+        best.secDay[best.p]=L.assignId; best.busyDay.add(best.p);
+        tCount[L.teacherId][best.day]=(tCount[L.teacherId][best.day]||0)+1;
+        best.subjSet.add(L.subjectId);
+      } else unplaced.push(L);
+    });
+    return { sched, unplaced, total:lessons.length };
+  }
+
+  window.runGenerator = async ()=>{
+    if(!assignList.length){ alert('لا يوجد إسناد بعد. أدخِل الإسناد أولًا في «الفصول والمواد ← الإسناد».'); return; }
+    const res = buildSchedule();
+    try{ await setData(scheduleRef, res.sched); }
+    catch(e){ alert('تعذّر الحفظ: '+(e.code||e.message)); return; }
+    // عرض النتيجة
+    g('genBody').style.display='none';
+    const placed = res.total - res.unplaced.length;
+    let html = `<div style="background:#DCFCE7;border:1px solid #86EFAC;color:#166534;padding:12px 15px;border-radius:12px;font-weight:800;margin-bottom:12px">✓ تم توليد الجدول — وُضعت ${toAr(placed)} حصة من ${toAr(res.total)}.</div>`;
+    if(res.unplaced.length){
+      const byKey={};
+      res.unplaced.forEach(L=>{ const sec=sectionsList.find(x=>x.id===L.sectionId); const subj=subjectsList.find(x=>x.id===L.subjectId); const t=staffList.find(x=>x.id===L.teacherId); const k=(sec?secLabel(sec):'?')+' | '+(subj?subj.name:'?')+' | '+(t?dispName(t.name):'?'); byKey[k]=(byKey[k]||0)+1; });
+      html += `<div style="background:#FEE2E2;border:1px solid #FCA5A5;color:#991B1B;padding:12px 15px;border-radius:12px;font-weight:600;font-size:13px">⚠️ لم تُوضع ${toAr(res.unplaced.length)} حصة (ازدحام/قيود). عالِجها يدويًا أو خفّف القيود:<div style="margin-top:8px;max-height:200px;overflow:auto">${Object.keys(byKey).map(k=>`<div style="padding:3px 0">• ${esc(k)} <b>×${toAr(byKey[k])}</b></div>`).join('')}</div></div>`;
+    }
+    html += `<div class="row" style="margin-top:12px"><button class="btn btn-primary" onclick="closeGenerator()">تم — عرض الجدول</button></div>`;
+    g('genResult').innerHTML = html; g('genResult').style.display='block';
+  };
+
+  /* ===========================================================
+     الصلاحيات: ما يظهر لكل دور
+     =========================================================== */
+  const VIS_TABS = [
+    {k:'staff',ar:'الكادر التعليمي'},{k:'classes',ar:'الفصول والمواد'},{k:'schedule',ar:'الجدول الدراسي'},
+    {k:'plan',ar:'الخطة الأسبوعية'},{k:'follow',ar:'المتابعة'},{k:'agenda',ar:'الأجندة التعليمية'},
+    {k:'asas',ar:'أساس'},{k:'qudurat',ar:'القدرات'},{k:'tahsili',ar:'التحصيلي'},{k:'exams',ar:'الاختبارات'}
+  ];
+  function roleNow(){ const c=document.body.classList; if(c.contains('parent'))return'parent'; if(c.contains('editor'))return'editor'; if(c.contains('teacher'))return'teacher'; return'viewer'; }
+  function tabAllowed(k, role){
+    if(role==='editor') return true;
+    if(role==='parent') return k==='plan';
+    const v = (settings.vis && settings.vis[role]) || {};
+    return v[k]!==false;   // ظاهر افتراضيًا ما لم يُمنع
+  }
+  window.applyVisibility = ()=>{
+    const role = roleNow();
+    if(role==='parent') return;
+    VIS_TABS.forEach(t=>{ const btn=document.querySelector(`.tab[data-tab="${t.k}"]`); if(btn) btn.style.display = tabAllowed(t.k,role)?'':'none'; });
+    const active = document.querySelector('.tab.active');
+    if(active && active.style.display==='none'){ const first=[...document.querySelectorAll('.tab')].find(b=>b.style.display!=='none'); if(first) first.click(); }
+  };
+  function renderPerms(){
+    const t=g('permsTable'); if(!t) return;
+    t.innerHTML = '<thead><tr><th>التبويب</th><th style="text-align:center">👤 المعلم</th><th style="text-align:center">👁️ المشاهد</th></tr></thead><tbody>' +
+      VIS_TABS.map(tb=>`<tr><td>${tb.ar}</td>
+        <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--blue)" ${tabAllowed(tb.k,'teacher')?'checked':''} onchange="setPerm('${tb.k}','teacher',this.checked)"></td>
+        <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--blue)" ${tabAllowed(tb.k,'viewer')?'checked':''} onchange="setPerm('${tb.k}','viewer',this.checked)"></td></tr>`).join('') + '</tbody>';
+  }
+  window.setPerm = async (k, role, checked)=>{ try{ await setData(fbChildRef(db,'settings/vis/'+role+'/'+k), checked); }catch(e){ console.error(e); } };
+  window.openPerms = ()=>{ renderPerms(); g('permsModal').classList.add('show'); };
+  window.closePerms = ()=> g('permsModal').classList.remove('show');
+
   // عرض أولي
   renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
   refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda(); fillToolSubjects();
-  refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderAllLinks(); renderStaffSectionBar();
+  refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderAllLinks(); renderStaffSectionBar(); applyVisibility();
 
   /* ===========================================================
      تبديل التبويبات

@@ -393,7 +393,8 @@ body.editor .link-card .link-acts{display:flex}
 table.plan tr.plan-mine td{background:#F2F8FF}
 table.plan tr.plan-mine .per-c{background:#E6F1FB}
 @media print{
-  .topbar,.tabs-wrap,footer,.week-bar,.setup-warn,.page-head .btn,.sched-controls{display:none !important}
+  .topbar,.tabs-wrap,footer,.week-bar,.setup-warn,.page-head .btn,.sched-controls,
+  .subnav,.sched-tools,.pillbar,#examStageBar,.toolbar,.landing,#schedSubjTally{display:none !important}
   body::before{display:none !important}
   .panel:not(.active){display:none !important}
   .container{padding:0}
@@ -402,6 +403,10 @@ table.plan tr.plan-mine .per-c{background:#E6F1FB}
   table.plan{min-width:0;width:100%}
   .plan-topic{border:none !important;background:none !important;padding:2px !important}
   .sched-scroll{overflow:visible !important;border:none !important;box-shadow:none !important}
+  /* الجدول الدراسي عند الطباعة */
+  table.sched{min-width:0;width:100%}
+  .cell-pick{border:none !important;background:transparent !important;-webkit-appearance:none;appearance:none;text-align:center;color:#000}
+  #schedSectionWrap::before,#schedTeacherWrap::before{content:attr(data-print);display:block;font-family:'Cairo';font-weight:900;font-size:18px;color:#1E3A6E;margin:0 0 12px;text-align:center}
 }
 
 /* ============================================================
@@ -592,6 +597,7 @@ footer b{color:var(--navy)}
   <section class="panel" id="tab-schedule">
     <div class="page-head">
       <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2></div></div>
+      <button class="btn btn-light" style="border:1px solid var(--line)" onclick="printSchedule()">🖨️ طباعة</button>
     </div>
     <div class="subnav">
       <button class="active" data-sched="bySection" onclick="switchSched(this)">🏫 حسب الفصل</button>
@@ -641,7 +647,7 @@ footer b{color:var(--navy)}
     </div>
     <div class="sched-controls">
       <div class="fld" style="flex:1;min-width:200px;max-width:280px"><label>الفصل</label><select id="planSection" onchange="renderPlan()"></select></div>
-      <div class="fld edit-only" style="max-width:190px"><label>تاريخ أحد الأسبوع الأول</label><input type="date" id="planStart" onchange="setPlanStart(this.value)" /></div>
+      <div class="fld edit-only" style="max-width:190px"><label>تاريخ الأحد (هذا الأسبوع)</label><input type="date" id="planStart" onchange="setWeekDate(this.value)" /></div>
     </div>
     <div class="week-bar" id="planWeekBar"></div>
     <div id="planWrap"></div>
@@ -1115,7 +1121,6 @@ footer b{color:var(--navy)}
       onValue(settingsRef, (snap)=>{
         settings = snap.val() || {};
         if(g('schedPeriods')) g('schedPeriods').value = periodsCount();
-        if(g('planStart')) g('planStart').value = settings.planStart || '2026-08-30';
         renderSchedSection(); renderSchedTeacher(); renderPlan();
         if(window.applyVisibility) applyVisibility();
         if(g('permsModal') && g('permsModal').classList.contains('show')) renderPerms();
@@ -1698,11 +1703,19 @@ footer b{color:var(--navy)}
     return n;
   }
 
+  window.printSchedule = ()=>{
+    const bySection = g('sched-bySection') && g('sched-bySection').classList.contains('active');
+    if(bySection && (!g('schedSection') || !g('schedSection').value)){ alert('اختر فصلًا أولًا'); return; }
+    if(!bySection && (!g('schedTeacher') || !g('schedTeacher').value)){ alert('اختر معلمًا أولًا'); return; }
+    window.print();
+  };
   window.renderSchedSection = ()=>{
     const wrap = g('schedSectionWrap'), tallyWrap = g('schedSubjTally');
     if(!wrap) return;
     const secId = g('schedSection') ? g('schedSection').value : '';
     if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">🗓️</div><h3>اختر فصلًا لعرض جدوله</h3></div>'; if(tallyWrap) tallyWrap.innerHTML=''; return; }
+    const _sec = sectionsList.find(x=>x.id===secId);
+    wrap.dataset.print = _sec ? ('جدول ' + secLabel(_sec)) : 'الجدول الدراسي';
     const assigns = assignList.filter(a=>a.sectionId===secId && a.subjectId);
     const editor = document.body.classList.contains('editor');
     const P = periodsCount();
@@ -1755,6 +1768,8 @@ footer b{color:var(--navy)}
     const wrap = g('schedTeacherWrap'); if(!wrap) return;
     const tId = g('schedTeacher') ? g('schedTeacher').value : '';
     if(!tId){ wrap.innerHTML = '<div class="empty"><div class="big">👤</div><h3>اختر معلمًا لعرض جدوله</h3></div>'; return; }
+    const _t = staffList.find(x=>x.id===tId);
+    wrap.dataset.print = _t ? ('جدول المعلم: ' + dispName(_t.name)) : 'جدول المعلم';
     const P = periodsCount();
     let html = '<div class="sched-scroll"><table class="sched"><thead><tr><th class="per-h"></th>'+DAYS.map(d=>`<th>${d}</th>`).join('')+'</tr></thead><tbody>';
     for(let p=1;p<=P;p++){
@@ -2023,6 +2038,7 @@ footer b{color:var(--navy)}
   window.setPlanWeek = (w)=>{ planWeek = w; setPlanWeekActive(); renderPlan(); };
   window.renderPlan = ()=>{
     const wrap = g('planWrap'); if(!wrap) return;
+    if(g('planStart')) g('planStart').value = weekSundayISO(planWeek);   // تاريخ أحد الأسبوع الحالي
     const secId = g('planSection') ? g('planSection').value : '';
     if(!secId){ wrap.innerHTML = '<div class="empty"><div class="big">📖</div><h3>اختر فصلًا لعرض خطته الأسبوعية</h3></div>'; return; }
     const P = periodsCount();
@@ -2059,7 +2075,7 @@ footer b{color:var(--navy)}
       const mine = isTeacher && currentTeacher && r.a.teacherId===currentTeacher.id;
       const editable = isAdmin || mine;
       const topicCell = editable
-        ? `<input class="plan-topic" value="${esc(topic)}" placeholder="اكتب موضوع الحصة" onchange="savePlanTopic('${secId}','${r.day}',${r.p},this.value)" />`
+        ? `<input class="plan-topic" maxlength="100" value="${esc(topic)}" placeholder="اكتب موضوع الحصة (100 حرف كحدّ أقصى)" onchange="savePlanTopic('${secId}','${r.day}',${r.p},this.value)" />`
         : (topic ? esc(topic) : '<span class="plan-empty-topic">—</span>');
       html += `<tr class="${mine?'plan-mine ':''}${isDayStart?'day-start':''}">${dayCell}<td class="per-c">${toAr(r.p)}</td>
         <td>${subj?`<span class="plan-subj" style="background:${subj.color}">${subj.icon||''} ${esc(subj.name)}</span>`:'—'}</td>
@@ -2070,14 +2086,19 @@ footer b{color:var(--navy)}
     wrap.innerHTML = html;
   };
   function weekSunday(week){
-    const base = new Date(((settings&&settings.planStart)||'2026-08-30')+'T00:00:00');
-    return new Date(base.getTime() + (week-1)*7*86400000);
+    const wd = (settings && settings.weekDates) || {};
+    if(wd[week]) return new Date(wd[week]+'T00:00:00');
+    const anchor = wd[1] || (settings && settings.planStart) || '2026-08-30';
+    return new Date(new Date(anchor+'T00:00:00').getTime() + (week-1)*7*86400000);
   }
+  function weekSundayISO(week){ const d=weekSunday(week); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function fmtDM(d){ return d.getDate() + ' / ' + (d.getMonth()+1); }
-  window.setPlanStart = async (v)=>{ if(!v) return; try{ await setData(fbChildRef(db,'settings/planStart'), v); }catch(e){ console.error(e); } };
+  // تاريخ أحد الأسبوع الحالي يدويًا (لكل أسبوع تاريخه)
+  window.setWeekDate = async (v)=>{ if(!v) return; try{ await setData(fbChildRef(db,'settings/weekDates/'+planWeek), v); }catch(e){ console.error(e); } };
   window.savePlanTopic = async (secId,day,p,val)=>{
     const path = `plans/${secId}/${planWeek}/${day}/${p}`;
-    try{ if(val && val.trim()) await setData(fbChildRef(db,path), val.trim()); else await fbRemove(fbChildRef(db,path)); }
+    val = (val||'').trim().slice(0,100);
+    try{ if(val) await setData(fbChildRef(db,path), val); else await fbRemove(fbChildRef(db,path)); }
     catch(e){ console.error(e); }
   };
   window.printPlan = ()=>{

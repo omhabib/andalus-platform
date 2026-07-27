@@ -349,6 +349,18 @@ table.plan .per-c{font-weight:800;color:var(--navy);width:44px}
 .follow-sum .box.g .n{color:#166534}
 .follow-sum .box.r .n{color:var(--red)}
 /* روابط أولياء الأمور + وضع ولي الأمر */
+/* صفحة الدخول الافتتاحية */
+.landing{position:fixed;inset:0;z-index:200;background:var(--grad);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+body.editor .landing, body.teacher .landing, body.parent .landing{display:none}
+.landing-card{background:#fff;border-radius:24px;padding:34px 28px;width:100%;max-width:390px;text-align:center;box-shadow:0 30px 70px -20px rgba(0,0,0,.5);margin:auto}
+.landing-logo{width:88px;height:88px;border-radius:22px;background:var(--bg);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.landing-logo img{width:100%;height:100%;object-fit:contain;padding:10px}
+.landing-card h1{font-family:'Cairo';font-weight:900;font-size:26px;color:var(--navy);margin:0 0 6px}
+.landing-sub{color:var(--muted);font-size:12.5px;font-weight:600;margin:0 0 22px;line-height:1.6}
+.landing-card input{width:100%;border:1.5px solid var(--line);border-radius:13px;padding:13px 14px;font-family:inherit;font-size:15px;text-align:center;margin-bottom:12px}
+.landing-card input:focus{outline:none;border-color:var(--blue)}
+.landing-card .err{color:var(--red);font-size:13px;font-weight:700;min-height:18px;margin-bottom:8px}
+.landing-note{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;font-weight:600;line-height:1.7}
 .parent-hd{font-family:'Cairo';font-weight:900;font-size:19px;color:var(--navy);margin:0 0 14px}
 body:not(.parent) .parent-hd{display:none}
 body.parent .topbar-actions{display:none}
@@ -455,6 +467,20 @@ footer b{color:var(--navy)}
 </style>
 </head>
 <body class="viewer">
+
+<!-- ===================== صفحة الدخول الافتتاحية ===================== -->
+<div id="landing" class="landing">
+  <div class="landing-card">
+    <div class="landing-logo"><img src="Qaed_mark.png" alt="" /></div>
+    <h1>منصة موهوب</h1>
+    <p class="landing-sub">مدارس الأندلس الأهلية للموهوبين · فرع الشاطئ · بنين</p>
+    <input type="text" id="landUser" placeholder="اسم الدخول" autocomplete="username" onkeydown="if(event.key==='Enter')doLanding()" />
+    <input type="password" id="landPw" placeholder="كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLanding()" />
+    <div class="err" id="landErr"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:15px" onclick="doLanding()">دخول</button>
+    <div class="landing-note">👪 أولياء الأمور: استخدموا رابط الفصل المُرسَل من المدرسة.</div>
+  </div>
+</div>
 
 <!-- ===================== الترويسة ===================== -->
 <header class="topbar">
@@ -1181,6 +1207,19 @@ footer b{color:var(--navy)}
     document.getElementById('userInput').value='';
     document.getElementById('pwInput').value='';
     document.getElementById('pwErr').textContent='';
+  };
+  window.doLanding = async ()=>{
+    const u = document.getElementById('landUser').value.trim();
+    const pw = document.getElementById('landPw').value;
+    const errEl = document.getElementById('landErr');
+    if(!pw){ errEl.textContent='أدخل كلمة المرور'; return; }
+    if(u){
+      const hash = await sha256(pw);
+      const t = staffList.find(s=> s.username && s.username.toLowerCase()===u.toLowerCase() && s.passHash===hash);
+      if(t){ applyTeacher(t); document.getElementById('landPw').value=''; errEl.textContent=''; return; }
+    }
+    if((!u || u.toLowerCase()==='admin' || u==='مدير') && pw===EDITOR_PASSWORD){ applyEditor('محرر'); document.getElementById('landPw').value=''; errEl.textContent=''; return; }
+    errEl.textContent = 'عفوًا، بيانات الدخول غير صحيحة';
   };
   window.doLogin = async ()=>{
     const u = document.getElementById('userInput').value.trim();

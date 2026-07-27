@@ -352,11 +352,9 @@ table.plan .per-c{font-weight:800;color:var(--navy);width:44px}
 .parent-hd{font-family:'Cairo';font-weight:900;font-size:19px;color:var(--navy);margin:0 0 14px}
 body:not(.parent) .parent-hd{display:none}
 body.parent .topbar-actions{display:none}
-body.parent .tabs-wrap{display:none}
-body.parent .panel{display:none !important}
-body.parent #tab-plan{display:block !important}
 body.parent #tab-plan .sched-controls{display:none}
-body.parent #tab-plan .page-head .btn.edit-only{display:none !important}
+body.parent .page-head .btn.edit-only{display:none !important}
+body.parent #examStageBar{display:none}
 .plink-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line)}
 .plink-nm{font-weight:700;color:var(--ink);font-size:14px}
 /* روابط (أساس/القدرات/التحصيلي) */
@@ -568,7 +566,6 @@ footer b{color:var(--navy)}
   <section class="panel" id="tab-schedule">
     <div class="page-head">
       <div class="ttl"><div class="badge">🗓️</div><div><h2>الجدول الدراسي</h2></div></div>
-      <button class="btn btn-primary edit-only" onclick="openGenerator()">⚙️ توليد الجدول تلقائيًا</button>
     </div>
     <div class="subnav">
       <button class="active" data-sched="bySection" onclick="switchSched(this)">🏫 حسب الفصل</button>
@@ -1074,7 +1071,7 @@ footer b{color:var(--navy)}
         const v = snap.val() || {};
         sectionsList = Object.keys(v).map(id => ({ id, ...v[id] }));
         renderSections(); refreshAssignSectionPicker(); refreshSchedPickers(); renderSchedSection();
-        refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderStaffSectionBar();
+        refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderStaffSectionBar(); renderExams();
       });
       onValue(assignRef, (snap)=>{
         const v = snap.val() || {};
@@ -1257,7 +1254,7 @@ footer b{color:var(--navy)}
     // النصاب = عدد الحصص في الجدول (كل حصة = ١)، وإن لم يُجدول بعد فمجموع حصص الإسناد
     const schedCount = teacherSchedCount(s.id);
     const assignPeriods = myAssign.reduce((n,a)=> n + (parseInt(a.periods)||0), 0);
-    // النصاب = مجموع حصص الإسناد (ثابت ومتّسق)، وإن لم يُسند بعد فمن الجدول
+    // النصاب = مجموع حصص الإسناد (يتحدّث مباشرة عند إضافة/حذف مادة أو تغيير حصصها في الإسناد)
     const autoPeriods = assignPeriods>0 ? assignPeriods : schedCount;
     const autoSubjNames = [...new Set(myAssign.map(a=>a.subjectId).filter(Boolean))]
       .map(id => subjectsList.find(x=>x.id===id)?.name).filter(Boolean);
@@ -1775,6 +1772,11 @@ footer b{color:var(--navy)}
     const wrap = g('examsWrap'), empty = g('examsEmpty'); if(!wrap) return;
     const todayMs = (()=>{ const t=new Date(); t.setHours(0,0,0,0); return t.getTime(); })();
     let list = examsList.filter(e=>e.date);
+    // وضع ولي الأمر: اختبارات فصله فقط
+    if(document.body.classList.contains('parent') && parentSectionId){
+      const psec = sectionsList.find(x=>x.id===parentSectionId);
+      if(psec) list = list.filter(e=> e.grade==psec.grade && e.sec===psec.sec);
+    }
     if(examStageFilter!=='all') list = list.filter(e=> e.grade && gradeInfo(e.grade).stage===examStageFilter);
     if(examFilter==='upcoming') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() >= todayMs);
     else if(examFilter==='past') list = list.filter(e=> new Date(e.date+'T00:00:00').getTime() < todayMs);
@@ -2330,23 +2332,25 @@ footer b{color:var(--navy)}
   function roleNow(){ const c=document.body.classList; if(c.contains('parent'))return'parent'; if(c.contains('editor'))return'editor'; if(c.contains('teacher'))return'teacher'; return'viewer'; }
   function tabAllowed(k, role){
     if(role==='editor') return true;
-    if(role==='parent') return k==='plan';
+    if(role==='parent'){                              // قائمة بيضاء: فقط ما سُمح صراحةً
+      const v = settings.vis && settings.vis.parent;
+      if(v) return v[k]===true;
+      return k==='plan' || k==='exams';               // الافتراضي
+    }
     const v = (settings.vis && settings.vis[role]) || {};
-    return v[k]!==false;   // ظاهر افتراضيًا ما لم يُمنع
+    return v[k]!==false;   // مشاهد/معلم: ظاهر ما لم يُمنع
   }
   window.applyVisibility = ()=>{
     const role = roleNow();
-    if(role==='parent') return;
     VIS_TABS.forEach(t=>{ const btn=document.querySelector(`.tab[data-tab="${t.k}"]`); if(btn) btn.style.display = tabAllowed(t.k,role)?'':'none'; });
     const active = document.querySelector('.tab.active');
-    if(active && active.style.display==='none'){ const first=[...document.querySelectorAll('.tab')].find(b=>b.style.display!=='none'); if(first) first.click(); }
+    if(!active || active.style.display==='none'){ const first=[...document.querySelectorAll('.tab')].find(b=>b.style.display!=='none'); if(first) first.click(); }
   };
   function renderPerms(){
     const t=g('permsTable'); if(!t) return;
-    t.innerHTML = '<thead><tr><th>التبويب</th><th style="text-align:center">👤 المعلم</th><th style="text-align:center">👁️ المشاهد</th></tr></thead><tbody>' +
-      VIS_TABS.map(tb=>`<tr><td>${tb.ar}</td>
-        <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--blue)" ${tabAllowed(tb.k,'teacher')?'checked':''} onchange="setPerm('${tb.k}','teacher',this.checked)"></td>
-        <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--blue)" ${tabAllowed(tb.k,'viewer')?'checked':''} onchange="setPerm('${tb.k}','viewer',this.checked)"></td></tr>`).join('') + '</tbody>';
+    const box=(k,role)=>`<td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--blue)" ${tabAllowed(k,role)?'checked':''} onchange="setPerm('${k}','${role}',this.checked)"></td>`;
+    t.innerHTML = '<thead><tr><th>التبويب</th><th style="text-align:center">👤 المعلم</th><th style="text-align:center">👪 ولي الأمر</th><th style="text-align:center">👁️ المشاهد</th></tr></thead><tbody>' +
+      VIS_TABS.map(tb=>`<tr><td>${tb.ar}</td>${box(tb.k,'teacher')}${box(tb.k,'parent')}${box(tb.k,'viewer')}</tr>`).join('') + '</tbody>';
   }
   window.setPerm = async (k, role, checked)=>{ try{ await setData(fbChildRef(db,'settings/vis/'+role+'/'+k), checked); }catch(e){ console.error(e); } };
   window.openPerms = ()=>{ renderPerms(); g('permsModal').classList.add('show'); };

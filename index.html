@@ -401,11 +401,15 @@ table.plan tr.plan-mine .per-c{background:#E6F1FB}
   body{background:#fff}
   .print-head{display:block !important;font-family:'Cairo';font-weight:900;font-size:18px;color:#1E3A6E;margin:0 0 12px;text-align:center}
   table.plan{min-width:0;width:100%}
-  .plan-topic{border:none !important;background:none !important;padding:2px !important}
+  .plan-topic{border:none !important;background:none !important;padding:2px !important;color:#111 !important}
+  table.plan .plan-subj{color:#111 !important;background:transparent !important;border:1px solid #ccc;padding:3px 8px}
   .sched-scroll{overflow:visible !important;border:none !important;box-shadow:none !important}
   /* الجدول الدراسي عند الطباعة */
   table.sched{min-width:0;width:100%}
-  .cell-pick{border:none !important;background:transparent !important;-webkit-appearance:none;appearance:none;text-align:center;color:#000}
+  table.sched .cell{color:#111 !important;background:transparent !important;border:1px solid #ccc;margin:2px}
+  table.sched .cell .t{color:#555 !important;opacity:1 !important}
+  table.sched .cell.empty{color:#999 !important;border-color:transparent}
+  .cell-pick{border:none !important;background:transparent !important;-webkit-appearance:none;appearance:none;text-align:center;color:#000 !important}
   #schedSectionWrap::before,#schedTeacherWrap::before{content:attr(data-print);display:block;font-family:'Cairo';font-weight:900;font-size:18px;color:#1E3A6E;margin:0 0 12px;text-align:center}
 }
 
@@ -2420,6 +2424,16 @@ footer b{color:var(--navy)}
   renderSubjects(); renderSections(); refreshAssignSectionPicker(); renderAssign();
   refreshSchedPickers(); renderSchedSection(); renderSchedTeacher(); renderExams(); renderAgenda(); fillToolSubjects();
   refreshPlanPicker(); renderPlan(); renderFollow(); applyParentIfNeeded(); renderAllLinks(); renderStaffSectionBar(); applyVisibility();
+
+  // عند الطباعة: اعرض الجداول للقراءة (نص داكن) بدل قوائم التحرير، ثم أعِدها
+  window.addEventListener('beforeprint', ()=>{
+    if(document.body.classList.contains('editor')){ document.body.classList.add('_wasEditor'); document.body.classList.remove('editor'); }
+    renderSchedSection(); renderSchedTeacher(); renderPlan();
+  });
+  window.addEventListener('afterprint', ()=>{
+    if(document.body.classList.contains('_wasEditor')){ document.body.classList.remove('_wasEditor'); document.body.classList.add('editor'); }
+    renderSchedSection(); renderSchedTeacher(); renderPlan();
+  });
 
   /* ===========================================================
      تبديل التبويبات
